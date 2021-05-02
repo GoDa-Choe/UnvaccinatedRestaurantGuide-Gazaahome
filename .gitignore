@@ -128,7 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+
+################################
+################################
+
+
 # Pycharm
 .idea/
 
 staticfiles
+uitilcommand.txt
