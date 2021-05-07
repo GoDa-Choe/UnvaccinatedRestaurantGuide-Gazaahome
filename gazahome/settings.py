@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # cloudinary
+    'cloudinary_storage',
+    'cloudinary',
+
     # user defined apps
     'forum',
 ]
@@ -135,3 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # heroku setup
 django_heroku.settings(locals())
+
+# cloudinary setup
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hyzq6bxmk',
+    'API_KEY': '217448345872764',
+    'API_SECRET': '1B_R5UkX2JqAnr_d9PCpD2ldPHE',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
