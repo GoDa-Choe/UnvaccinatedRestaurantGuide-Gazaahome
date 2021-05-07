@@ -6,6 +6,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    head_image = models.ImageField(upload_to='forum/images/%Y/%m/%d/', blank=True)
 
     # author 추후 추가예정
 
