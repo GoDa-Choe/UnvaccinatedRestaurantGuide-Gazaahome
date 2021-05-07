@@ -1,16 +1,12 @@
 from django.shortcuts import render
 from forum.models import Post
+from django.views.generic import ListView
 
 
-def index(request):
-    posts = Post.objects.all().order_by('-pk')
-    context_data = {'posts': posts}
-
-    return render(
-        request,
-        'forum/index.html',
-        context_data
-    )
+class PostList(ListView):
+    model = Post
+    template_name = 'forum/post_list.html'
+    ordering = '-pk'
 
 
 def detail(request, pk):
