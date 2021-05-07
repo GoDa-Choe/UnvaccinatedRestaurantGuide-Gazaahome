@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from forum.models import Post
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 class PostList(ListView):
@@ -9,12 +9,6 @@ class PostList(ListView):
     ordering = '-pk'
 
 
-def detail(request, pk):
-    post = Post.objects.get(pk=pk)
-    context_data = {'post': post}
-
-    return render(
-        request,
-        'forum/detail.html',
-        context_data
-    )
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'forum/post_detail.html'
