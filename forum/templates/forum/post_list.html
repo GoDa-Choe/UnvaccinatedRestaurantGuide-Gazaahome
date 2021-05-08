@@ -5,9 +5,14 @@
 
     <!-- Blog Post -->
     {% for post in post_list %}
-        <div class="card mb-4">
+        <div class="card mb-4" id="post-{{ post.pk }}">
             {#<img class="card-img-top" src="{{ post.head_image.url }}" alt="Card image cap">#}
             <div class="card-body">
+                {% if post.category %}
+                    <span class="badge badge-secondary float-right">{{ post.category }}</span>
+                {% else %}
+                    <span class="badge badge-secondary float-right">미분류</span>
+                {% endif %}
                 <h2 class="card-title">{{ post.title }}</h2>
                 <p class="card-text">{{ post.content|truncatewords:20 }}</p>
                 <a href="{% url 'detail' post.pk %}" class="btn btn-primary">Read More &rarr;</a>
