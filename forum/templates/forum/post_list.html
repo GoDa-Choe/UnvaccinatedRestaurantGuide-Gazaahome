@@ -15,7 +15,7 @@
 
             <div class="card-footer text-muted">
                 Posted on {{ post.created_at }} by
-                <a href="#">작성자명(개발예정)</a>
+                <a href="#">{{ post.author|upper }}</a>
             </div>
         </div>
     {% endfor %}
