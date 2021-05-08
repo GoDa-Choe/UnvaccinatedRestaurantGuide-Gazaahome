@@ -3,6 +3,28 @@ from forum.models import Post, Category
 from django.views.generic import ListView, DetailView
 
 
+def category_post(request, slug):
+    if slug == 'no_category':
+        category = '미분류'
+        post_list = Post.objects.filter(category=None)
+    else:
+        category = Category.objects.get(slug=slug)
+        post_list = Post.objects.filter(category=category)
+
+    context = {
+        'post_list': post_list,
+        'categories': Category.objects.all(),
+        'num_noncategory_posts': Post.objects.filter(category=None).count(),
+        'category': category
+    }
+
+    return render(
+        request,
+        'forum/post_list.html',
+        context,
+    )
+
+
 class PostList(ListView):
     model = Post
     template_name = 'forum/post_list.html'

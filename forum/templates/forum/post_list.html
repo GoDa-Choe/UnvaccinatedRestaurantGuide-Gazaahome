@@ -1,7 +1,9 @@
 {% extends 'forum/base.html' %}
 
 {% block main-area %}
-    <h1>Forum</h1>
+    <h1>
+        Forum {% if category %}<span class="badge badge-secondary float-right">{{ category }}</span>{% endif %}
+    </h1>
 
     <!-- Blog Post -->
     {% for post in post_list %}
