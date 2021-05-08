@@ -44,6 +44,15 @@
 
         <hr/>
 
+        <!-- Tags-->
+        {% if post.tags.exists %}
+            <i class="fas fa-tags"></i>
+            {% for tag in post.tags.iterator %}
+                <a href="{% url 'tag_post' tag.slug %}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
+            {% endfor %}
+        {% endif %}
+
+
     </div>
 
     <div id="comment-area">

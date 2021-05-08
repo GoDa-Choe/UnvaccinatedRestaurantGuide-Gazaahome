@@ -1,6 +1,24 @@
 from django.shortcuts import render
-from forum.models import Post, Category
+from forum.models import Post, Category, Tag
 from django.views.generic import ListView, DetailView
+
+
+def tag_post(request, slug):
+    tag = Tag.objects.get(slug=slug)
+    post_list = tag.post_set.all()
+
+    context = {
+        'post_list': post_list.order_by('-pk'),
+        'tag': tag,
+        'categories': Category.objects.all(),
+        'num_noncategory_posts': Post.objects.filter(category=None).count(),
+    }
+
+    return render(
+        request,
+        'forum/post_list.html',
+        context,
+    )
 
 
 def category_post(request, slug):
@@ -12,7 +30,7 @@ def category_post(request, slug):
         post_list = Post.objects.filter(category=category)
 
     context = {
-        'post_list': post_list,
+        'post_list': post_list.order_by('-pk'),
         'categories': Category.objects.all(),
         'num_noncategory_posts': Post.objects.filter(category=None).count(),
         'category': category

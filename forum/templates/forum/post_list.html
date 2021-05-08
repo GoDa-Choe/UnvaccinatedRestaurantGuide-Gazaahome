@@ -2,7 +2,9 @@
 
 {% block main-area %}
     <h1>
-        Forum {% if category %}<span class="badge badge-secondary float-right">{{ category }}</span>{% endif %}
+        Forum
+        {% if category %}<span class="badge badge-secondary float-right">{{ category }}</span>{% endif %}
+        {% if tag %}<span class="badge badge-success float-right"><i class="fas fa-tags"></i> {{ tag }}</span>{% endif %}
     </h1>
 
     <!-- Blog Post -->
@@ -17,6 +19,14 @@
                 {% endif %}
                 <h2 class="card-title">{{ post.title }}</h2>
                 <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                {% if post.tags.exists %}
+                    <i class="fas fa-tags"></i>
+                    {% for tag in post.tags.iterator %}
+                        <a href="{% url 'tag_post' tag.slug %}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {% endif %}
                 <a href="{% url 'detail' post.pk %}" class="btn btn-primary">Read More &rarr;</a>
             </div>
 
