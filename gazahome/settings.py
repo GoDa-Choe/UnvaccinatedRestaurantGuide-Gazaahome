@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # library
+    'crispy_forms',
+
     # cloudinary
     'cloudinary_storage',
     'cloudinary',
@@ -147,3 +150,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': '1B_R5UkX2JqAnr_d9PCpD2ldPHE',
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# crispy setup
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

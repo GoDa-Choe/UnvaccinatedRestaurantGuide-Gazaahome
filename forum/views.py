@@ -8,7 +8,7 @@ from django.utils.text import slugify
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'head_image', 'category', 'tags']
+    fields = ['title', 'content', 'head_image', 'category']
     template_name = 'forum/post_update_form.html'
 
     def dispatch(self, request, *args, **kwargs):
