@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('forum/', include('forum.urls')),
     path('admin/', admin.site.urls),
+
+    path('markdownx/', include('markdownx.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
