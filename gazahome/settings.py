@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # library
     'crispy_forms',
+    'markdownx',
 
     # cloudinary
     'cloudinary_storage',
