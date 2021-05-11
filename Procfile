@@ -1,3 +1,2 @@
-release: python manage.py makemigrations
-release: python manage.py migrate
+release: bash release.sh
 web: gunicorn gazahome.wsgi
