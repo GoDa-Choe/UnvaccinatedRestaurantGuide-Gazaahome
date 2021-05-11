@@ -7,6 +7,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
 
+from hitcount.views import HitCountDetailView
+
 
 class CommentUpdate(LoginRequiredMixin, UpdateView):
     model = Comment
@@ -176,9 +178,10 @@ class PostList(ListView):
         return context
 
 
-class PostDetail(DetailView):
+class PostDetail(HitCountDetailView):
     model = Post
     template_name = 'forum/post_detail.html'
+    count_hit = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data()

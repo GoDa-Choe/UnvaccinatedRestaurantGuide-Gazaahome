@@ -35,13 +35,16 @@
             <!-- recent posts-->
             <div class="col-lg-5">
                 <div class="card" style="width: 25rem;">
-                    <div class="card-header">최근 게시글</div>
+                    <div class="card-header fw-bold">최근 게시글</div>
                     <ul class="list-group list-group-flush">
                         {% for recent_post in recent_posts %}
                             <a href="{% url 'detail' recent_post.pk %}" class="list-group-item list-group-item-action">
                                 <div class="ms-2 me-auto">
-                                    <div class="font-weight-bold">{{ recent_post.title|truncatechars:25 }}</div>
-                                    <small>{{ recent_post.content|cut:"#"|cut:"`"|truncatechars_html:25|safe }}</small>
+                                    <h6 class="fw-bold">{{ recent_post.title|truncatechars:25 }}</h6>
+                                    <div class="d-flex justify-content-between">
+                                        <small>{{ recent_post.content|cut:"#"|cut:"`"|truncatechars_html:35|safe }}</small>
+                                        <span class="badge bg-primary text-light">{{ recent_post.hit_count.hits }}</span>
+                                    </div>
                                 </div>
                             </a>
                         {% endfor %}

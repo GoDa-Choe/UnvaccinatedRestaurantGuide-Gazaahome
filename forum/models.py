@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdown
 
+from hitcount.models import HitCountMixin
+from hitcount.settings import MODEL_HITCOUNT
+from django.contrib.contenttypes.fields import GenericRelation
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
@@ -24,12 +28,17 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 
-class Post(models.Model):
+class Post(models.Model, HitCountMixin):
     title = models.CharField(max_length=30)
     content = MarkdownxField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     head_image = models.ImageField(upload_to='forum/images/%Y/%m/%d/', blank=True)
+
+    # hit_counts
+    hit_count_generic = GenericRelation(
+        MODEL_HITCOUNT, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
 
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
