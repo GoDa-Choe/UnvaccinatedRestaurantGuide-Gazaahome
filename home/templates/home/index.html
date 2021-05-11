@@ -41,7 +41,7 @@
                             <a href="{% url 'detail' recent_post.pk %}" class="list-group-item list-group-item-action">
                                 <div class="ms-2 me-auto">
                                     <h6 class="fw-bold">{{ recent_post.title|truncatechars:25 }}</h6>
-                                    <div class="d-flex justify-content-between">
+                                      <div class="d-flex justify-content-between">
                                         <small>{{ recent_post.content|cut:"#"|cut:"`"|truncatechars_html:35|safe }}</small>
                                         <span class="badge bg-primary text-light">{{ recent_post.hit_count.hits }}</span>
                                     </div>
