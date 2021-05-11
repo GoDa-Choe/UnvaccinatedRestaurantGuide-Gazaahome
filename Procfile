@@ -1,2 +1,2 @@
-release: ./release-tasks.sh
+release: bash release-task.sh
 web: gunicorn gazahome.wsgi
