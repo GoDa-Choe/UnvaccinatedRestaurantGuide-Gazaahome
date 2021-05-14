@@ -50,18 +50,16 @@
             <div class="card my-4" id="categories-card">
                 <h5 class="card-header">Categories</h5>
                 <div class="card-body">
-
-                    <div class="row">
-                        <ul>
-                            {% for category in categories %}
-                                <li>
-                                    <a href="{% url 'category_post' category.slug %}">{{ category }}({{ category.post_set.count }})</a>
-                                </li>
-                            {% endfor %}
-                            <li>
-                                <a href="/forum/category/no_category">미분류({{ num_noncategory_posts }})</a>
-                            </li>
-                        </ul>
+                    <div class="list-group list-group-flush">
+                        {% for category in categories %}
+                            <a class="list-group-item"
+                               href="{% url 'category_post' category.slug %}">
+                                {{ category }}({{ category.post_set.count }})
+                            </a>
+                        {% endfor %}
+                        <a class="list-group-item"
+                           href="/forum/category/no_category">미분류({{ num_noncategory_posts }})
+                        </a>
                     </div>
                 </div>
             </div>
