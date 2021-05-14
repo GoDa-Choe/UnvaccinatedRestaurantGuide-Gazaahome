@@ -1,0 +1,67 @@
+{% extends 'forum/base.html' %}
+
+{% block main-area %}
+
+    <a class="btn btn-outline-primary btn-sm float-end"
+       href="{% url 'workday:create' %}"><i class="fas fa-pen">
+        새로 만들기
+    </i></a>
+
+    <h1 class="mb-3">
+        실출근 계산기
+    </h1>
+
+    <!-- Work days Calculator -->
+    {% if user.is_authenticated %}
+        {% for calculator in calculator_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ calculator.name }}</h2>
+                    <p class="card-text">{{ calculator.start_date }}</p>
+                    <p class="card-text">{{ calculator.end_date }}</p>
+                </div>
+
+                <div class="card-footer text-muted">
+                    전역까지 00일...
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <ul class="pagination justify-content-center mb-4">
+
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-arrow-left"></i> 이전
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><i class="fas fa-arrow-left"></i> 이전</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item">
+                <span class="page-link">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        다음 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">다음 <i class="fas fa-arrow-right"></i></a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+{% endblock %}

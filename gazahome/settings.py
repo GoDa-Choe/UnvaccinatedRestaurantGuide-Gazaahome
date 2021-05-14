@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     # apps
     'forum',
     'home',
+    'workday',
 ]
 
 MIDDLEWARE = [

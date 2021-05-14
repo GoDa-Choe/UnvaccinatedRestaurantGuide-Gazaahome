@@ -14,6 +14,9 @@
                     <a class="nav-link" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'workday:index' %}">실출근 계산기</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">게시판</a>
                 </li>
                 <li class="nav-item">
@@ -43,7 +46,9 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/accounts/logout/">Log Out</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     {% else %}
