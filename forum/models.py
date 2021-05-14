@@ -40,6 +40,9 @@ class Post(models.Model, HitCountMixin):
         MODEL_HITCOUNT, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
 
+    # likes
+    likes = models.ManyToManyField(User, related_name="likers")
+
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
@@ -53,6 +56,9 @@ class Post(models.Model, HitCountMixin):
 
     def get_content_markdown(self):
         return markdown(self.content)
+
+    def num_likes(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):

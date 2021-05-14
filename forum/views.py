@@ -1,13 +1,27 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from forum.models import Post, Category, Tag, Comment
 from forum.forms import CommentForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
-from django.shortcuts import get_object_or_404
-
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from hitcount.views import HitCountDetailView
+
+
+@require_POST
+@login_required
+def like(request, pk):
+    post = get_object_or_404(Post, pk=request.POST.get('post_id'))
+    if post.likes.filter(pk=request.user.pk).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return HttpResponseRedirect(reverse('detail', args=(pk,)))
 
 
 class CommentUpdate(LoginRequiredMixin, UpdateView):
@@ -188,5 +202,12 @@ class PostDetail(HitCountDetailView):
         context['categories'] = Category.objects.all()
         context['num_noncategory_posts'] = Post.objects.filter(category=None).count()
         context['comment_form'] = CommentForm
+
+        likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
+        liked = False
+        if likes_connected.likes.filter(pk=self.request.user.pk).exists():
+            liked = True
+        context['num_likes'] = likes_connected.num_likes()
+        context['is_liked'] = liked
 
         return context
