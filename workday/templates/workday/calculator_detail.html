@@ -1,0 +1,81 @@
+{% extends 'forum/base_full_width.html' %}
+
+{% block head-title %}
+    {{ calculator.name }}
+{% endblock %}
+
+{% block main-area %}
+
+    <div class="container my-3">
+        <hr/>
+        <h2 class="my-3">{{ calculator.name }}</h2>
+        <h3>복무 시작일 : {{ calculator.start_date }}</h3>
+        <h3>전역일 : {{ calculator.end_date }}</h3>
+        <hr/>
+
+        <hr/>
+        <h2 class="my-3">{{ today }}</h2>
+        <h3>복무 기간 : {{ service_days }}</h3>
+        <h3>지난 날 : {{ serviced_days }}</h3>
+        <h3>퍼센트 : {{ percent }}%</h3>
+        <h3>남은 실출근 일수 : {{ workdays }}</h3>
+        <hr/>
+
+
+        {#        {% for month_block in blocked_service_days %}#}
+        {#            <div class="col text-center mx-0 px-0">#}
+        {#                <span>{{ month_block.0.month }}</span>#}
+        {#                <div class="btn-group" role="group" aria-label="Basic example">#}
+        {#                    {% for date in month_block %}#}
+        {#                        <button type="button" class="text-center btn btn-outline-secondary">{{ date.day }}</button>#}
+        {#                    {% endfor %}#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        {% endfor %}#}
+
+        <div class="row">
+            {% for month_block in blocked_service_days %}
+                <div class="col my-3">
+                    <div class="card" style="width: 23.5rem">
+                        <div class="card-header text-center">
+                            <h5>{{ month_block.0.0.year }}-{{ month_block.0.0.month }}</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% if forloop.first %}
+                                <button type="button"
+                                        class="text-center btn btn-warning">{{ calculator.start_date|date:'d' }}</button>
+                            {% endif %}
+
+
+
+
+
+                            {% for date in month_block %}
+
+                                {% if date.1 %}
+                                    <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                           autocomplete="off">
+                                {% else %}
+                                    <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                           autocomplete="off" checked>
+                                {% endif %}
+                                <label class="btn btn-outline-secondary"
+                                       for="{{ date.0|date:'Y-m-d' }}">{{ date.0|date:'d' }}</label>
+                            {% endfor %}
+
+                            {% if forloop.last %}
+                                <button type="button"
+                                        class="text-center btn btn-warning">{{ calculator.end_date|date:'d' }}</button>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

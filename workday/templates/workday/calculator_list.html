@@ -1,4 +1,8 @@
-{% extends 'forum/base.html' %}
+{% extends 'forum/base_full_width.html' %}
+
+{% block head-title %}
+    임시
+{% endblock %}
 
 {% block main-area %}
 
@@ -24,6 +28,7 @@
                 <div class="card-footer text-muted">
                     전역까지 00일...
                 </div>
+                <a href="{% url 'workday:detail' calculator.pk %}" class="btn btn-primary">Read More &rarr;</a>
             </div>
         {% endfor %}
     {% endif %}
