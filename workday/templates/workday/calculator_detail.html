@@ -4,6 +4,15 @@
     {{ calculator.name }}
 {% endblock %}
 
+{% block custom_style %}
+    <style>
+        .btn-size {
+            width: 44px;
+            height: 38px;
+        }
+    </style>
+{% endblock %}
+
 {% block main-area %}
 
     <div class="container my-3">
@@ -54,33 +63,31 @@
 
                         <div class="card-body">
                             {% for weekday in weekdays %}
-                                <button type="button" class="text-center btn text-dark"
-                                        style="width: 43.63px">
+                                <button type="button" class="text-center btn text-dark btn-size">
                                     {{ weekday }}
                                 </button>
                             {% endfor %}
 
                             {% for date in month_block %}
                                 {% if date == None %}
-                                    <button type="button" class="text-center btn"
-                                            style="width: 43.63px; height: 38px" disabled></button>
+                                    <button type="button" class="text-center btn btn-size" disabled></button>
                                 {% else %}
                                     {% if date in leaves %}
-                                        <button type="button" class="text-center btn btn-primary">
+                                        <button type="button" class="text-center btn btn-primary btn-size">
                                             {{ date|date:'d' }}
                                         </button>
                                     {% else %}
                                         {% if date in serviced_days %}
-                                            <button type="button" class="text-center btn btn-secondary">
+                                            <button type="button" class="text-center btn btn-secondary btn-size">
                                                 {{ date|date:'d' }}
                                             </button>
                                         {% else %}
                                             {% if date in workdays %}
-                                                <button type="button" class="text-center btn btn-outline-secondary">
+                                                <button type="button" class="text-center btn btn-outline-secondary btn-size">
                                                     {{ date|date:'d' }}
                                                 </button>
                                             {% else %}
-                                                <button type="button" class="text-center btn btn-secondary">
+                                                <button type="button" class="text-center btn btn-secondary btn-size">
                                                     {{ date|date:'d' }}
                                                 </button>
                                             {% endif %}
@@ -90,8 +97,9 @@
                             {% endfor %}
 
                             {% if forloop.last %}
-                                <button type="button"
-                                        class="text-center btn btn-warning">{{ calculator.end_date|date:'d' }}</button>
+                                <button type="button" class="text-center btn btn-warning btn-size">
+                                    {{ calculator.end_date|date:'d' }}
+                                </button>
                             {% endif %}
 
                         </div>
