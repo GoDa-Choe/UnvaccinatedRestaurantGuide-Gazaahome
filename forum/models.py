@@ -60,6 +60,9 @@ class Post(models.Model, HitCountMixin):
     def num_likes(self):
         return self.likes.count()
 
+    def num_comments(self):
+        return self.comment_set.count()
+
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
