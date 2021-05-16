@@ -34,3 +34,11 @@ class Leave(models.Model):
 
     def days(self):
         return self.end_date - self.start_date + timedelta(days=1)
+
+    def get_leaves(self):
+        leaves = []
+        current = self.start_date
+        while current <= self.end_date:
+            leaves.append(current)
+            current += timedelta(days=1)
+        return leaves

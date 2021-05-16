@@ -78,7 +78,13 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         serviced_days = make_days.make_serviced_days(begin_service)
         remaining_days = service_days - serviced_days
 
+        leaves = []
+        leave_list = ob.leave_set.all()
+        for leave in leave_list:
+            leaves.extend(leave.get_leaves())
+
         workdays = make_days.make_work_days(service_days)
+        workdays -= set(leaves)
 
         temp = []
         for month in blocked_service_days:
@@ -104,6 +110,7 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         context['percent'] = f'{len(serviced_days) / len(service_days) * 100 :.2f}'
         context['today'] = datetime.date.today()
         context['remaining_days'] = remaining_days
+        context['leaves'] = leaves
         return context
 
 

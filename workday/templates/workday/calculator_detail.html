@@ -15,10 +15,10 @@
 
         <hr/>
         <h2 class="my-3">{{ today }}</h2>
-        <h3>복무 기간 : {{ service_days }}</h3>
-        <h3>지난 날 : {{ serviced_days }}</h3>
+        <h3>전역까지 : {{ service_days }}</h3>
+        <h3>복무 일수 : {{ serviced_days }}</h3>
         <h3>퍼센트 : {{ percent }}%</h3>
-        <h3>남은 실출근 일수 : {{ workdays }}</h3>
+        <h3>남은 실출근 : {{ workdays }}</h3>
         <hr/>
 
 
@@ -38,17 +38,17 @@
                 </a>
             {% endif %}
 
-            <p>{{ forloop.counter }}시작일 : {{ leave.start_date }} 종료일 : {{ leave.start_date }} 기간
-                : {{ leave.days.days }}</p>
+            <p>{{ forloop.counter }}. 시작일:{{ leave.start_date|date:'Y-m-d' }} | 종료일:{{ leave.start_date|date:'Y-m-d' }}
+                | 기간:{{ leave.days.days }}</p>
         {% endfor %}
         <hr/>
 
+        <p>
+            {% for leave in leaves %}
+                <span>{{ leave|date:'Y-m-d' }}</span>
+            {% endfor %}
+        </p>
 
-        <h2 class="my-3">{{ today }}</h2>
-        <h3>복무 기간 : {{ service_days }}</h3>
-        <h3>지난 날 : {{ serviced_days }}</h3>
-        <h3>퍼센트 : {{ percent }}%</h3>
-        <h3>남은 실출근 일수 : {{ workdays }}</h3>
         <hr/>
 
 
@@ -80,15 +80,21 @@
                             {% endif %}
 
                             {% for date in month_block %}
-                                {% if date.1 %}
-                                    <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
-                                           autocomplete="off">
+                                {% if date.0 in leaves %}
+                                    <button type="button" class="text-center btn btn-primary">
+                                        {{ date.0|date:'d' }}
+                                    </button>
                                 {% else %}
-                                    <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
-                                           autocomplete="off" checked>
+                                    {% if date.1 %}
+                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                               autocomplete="off">
+                                    {% else %}
+                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                               autocomplete="off" checked>
+                                    {% endif %}
+                                    <label class="btn btn-outline-secondary"
+                                           for="{{ date.0|date:'Y-m-d' }}">{{ date.0|date:'d' }}</label>
                                 {% endif %}
-                                <label class="btn btn-outline-secondary"
-                                       for="{{ date.0|date:'Y-m-d' }}">{{ date.0|date:'d' }}</label>
                             {% endfor %}
 
                             {% if forloop.last %}
