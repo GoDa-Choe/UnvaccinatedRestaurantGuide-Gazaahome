@@ -11,7 +11,7 @@ from django.core.exceptions import PermissionDenied
 from workday.forms import CalculatorForm, LeaveForm
 from workday.implement import create_block, make_days
 
-locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')
 
 
 class CalculatorCreate(LoginRequiredMixin, CreateView):
