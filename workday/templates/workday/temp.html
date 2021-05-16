@@ -15,10 +15,10 @@
 
         <hr/>
         <h2 class="my-3">{{ today }}</h2>
-        <h3>전역까지 : {{ service_days|length }}</h3>
-        <h3>복무 일수 : {{ serviced_days|length }}</h3>
+        <h3>전역까지 : {{ service_days }}</h3>
+        <h3>복무 일수 : {{ serviced_days }}</h3>
         <h3>퍼센트 : {{ percent }}%</h3>
-        <h3>남은 실출근 : {{ workdays|length }}</h3>
+        <h3>남은 실출근 : {{ workdays }}</h3>
         <hr/>
 
 
@@ -43,49 +43,56 @@
         {% endfor %}
         <hr/>
 
+        <p>
+            {% for leave in leaves %}
+                <span>{{ leave|date:'Y-m-d' }}</span>
+            {% endfor %}
+        </p>
+
+        <hr/>
+
+        {#        {% for month_block in blocked_service_days %}#}
+        {#            <div class="col text-center mx-0 px-0">#}
+        {#                <span>{{ month_block.0.month }}</span>#}
+        {#                <div class="btn-group" role="group" aria-label="Basic example">#}
+        {#                    {% for date in month_block %}#}
+        {#                        <button type="button" class="text-center btn btn-outline-secondary">{{ date.day }}</button>#}
+        {#                    {% endfor %}#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        {% endfor %}#}
 
         <div class="row">
             {% for month_block in blocked_service_days %}
                 <div class="col my-3">
                     <div class="card" style="width: 23.5rem">
                         <div class="card-header text-center">
-                            <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
+                            <h5>{{ month_block.0.0.year }}-{{ month_block.0.0.month }}</h5>
                         </div>
 
                         <div class="card-body">
-                            {% for weekday in weekdays %}
-                                <button type="button" class="text-center btn text-dark"
-                                        style="width: 43.63px">
-                                    {{ weekday }}
+
+                            {% if forloop.first %}
+                                <button type="button" class="text-center btn btn-warning">
+                                    {{ calculator.start_date|date:'d' }}
                                 </button>
-                            {% endfor %}
+                            {% endif %}
 
                             {% for date in month_block %}
-                                {% if date == None %}
-                                    <button type="button" class="text-center btn"
-                                            style="width: 43.63px; height: 38px" disabled></button>
+                                {% if date.0 in leaves %}
+                                    <button type="button" class="text-center btn btn-primary">
+                                        {{ date.0|date:'d' }}
+                                    </button>
                                 {% else %}
-                                    {% if date in leaves %}
-                                        <button type="button" class="text-center btn btn-primary">
-                                            {{ date|date:'d' }}
-                                        </button>
+                                    {% if date.1 %}
+                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                               autocomplete="off">
                                     {% else %}
-                                        {% if date in serviced_days %}
-                                            <button type="button" class="text-center btn btn-secondary">
-                                                {{ date|date:'d' }}
-                                            </button>
-                                        {% else %}
-                                            {% if date in workdays %}
-                                                <button type="button" class="text-center btn btn-outline-secondary">
-                                                    {{ date|date:'d' }}
-                                                </button>
-                                            {% else %}
-                                                <button type="button" class="text-center btn btn-secondary">
-                                                    {{ date|date:'d' }}
-                                                </button>
-                                            {% endif %}
-                                        {% endif %}
+                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
+                                               autocomplete="off" checked>
                                     {% endif %}
+                                    <label class="btn btn-outline-secondary"
+                                           for="{{ date.0|date:'Y-m-d' }}">{{ date.0|date:'d' }}</label>
                                 {% endif %}
                             {% endfor %}
 

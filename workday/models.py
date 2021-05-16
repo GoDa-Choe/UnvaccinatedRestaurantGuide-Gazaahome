@@ -42,3 +42,16 @@ class Leave(models.Model):
             leaves.append(current)
             current += timedelta(days=1)
         return leaves
+
+
+class Dayoff(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    date = models.DateField()
+
+    # ForeignKeys
+    calculator = models.ForeignKey(Calculator, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.date} :: {self.calculator} :: {self.calculator.author}"

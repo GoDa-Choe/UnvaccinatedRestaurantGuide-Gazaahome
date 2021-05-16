@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 from workday.forms import CalculatorForm, LeaveForm
 from workday.implement import create_block, make_days
 
+
 # locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')
 
 
@@ -72,8 +73,10 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         end_service = ob.end_date
 
         service_days = make_days.make_service_days(begin_service, end_service)
+
         blocked_service_days = \
             create_block.make_blocked_service_days(service_days, begin_service, end_service)
+        blocked_service_days[-1].pop()
 
         serviced_days = make_days.make_serviced_days(begin_service)
         remaining_days = service_days - serviced_days
@@ -86,31 +89,26 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         workdays = make_days.make_work_days(service_days)
         workdays -= set(leaves)
 
-        temp = []
+        first_weekday = []
         for month in blocked_service_days:
-            temp1 = []
-            for day in month:
-                if day in serviced_days:
-                    temp1.append((day, False))
-                else:
-                    if day in workdays:
-                        temp1.append((day, True))
-                    else:
-                        temp1.append((day, False))
-            temp.append(temp1)
+            first_weekday.append(month[0].weekday())
 
-        temp[0].pop(0)
-        temp[-1].pop()
+        for i in range(len(first_weekday)):
+            count = first_weekday[i]
+            for j in range(count):
+                blocked_service_days[i].insert(0, None)
 
-        # context['blocked_service_days'] = blocked_service_days
-        context['blocked_service_days'] = temp
-        context['service_days'] = len(service_days)
-        context['serviced_days'] = len(serviced_days)
-        context['workdays'] = len(workdays)
+        weekdays = ['월', '활', '수', '목', '금', '토', '일']
+
+        context['blocked_service_days'] = blocked_service_days
+        context['service_days'] = service_days
+        context['serviced_days'] = serviced_days
+        context['workdays'] = workdays
         context['percent'] = f'{len(serviced_days) / len(service_days) * 100 :.2f}'
         context['today'] = datetime.date.today()
         context['remaining_days'] = remaining_days
         context['leaves'] = leaves
+        context['weekdays'] = weekdays
         return context
 
 
