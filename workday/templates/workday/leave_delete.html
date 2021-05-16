@@ -1,0 +1,21 @@
+{% extends 'forum/base_full_width.html' %}
+{% load crispy_forms_filters %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    휴가 삭제
+{% endblock %}
+
+{% block main-area %}
+
+    <h1>휴가 삭제하기</h1>
+    <p>{{ forloop.counter }}시작일 : {{ leave.start_date }} 종료일 : {{ leave.start_date }} 기간
+        : {{ leave.days.days }}</p>
+    <hr>
+    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary float-end">삭제</button>
+    </form>
+
+{% endblock %}

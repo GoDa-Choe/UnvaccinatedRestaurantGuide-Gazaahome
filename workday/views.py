@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView
-from workday.models import Calculator
+from django.views.generic import ListView, DetailView
+from django.views.generic import CreateView, DeleteView, UpdateView
+from workday.models import Calculator, Leave
 import locale, datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from workday.forms import CalculatorForm
+from workday.forms import CalculatorForm, LeaveForm
 from workday.implement import create_block, make_days
 
 locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')
@@ -104,3 +105,40 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         context['today'] = datetime.date.today()
         context['remaining_days'] = remaining_days
         return context
+
+
+class LeaveCreate(LoginRequiredMixin, CreateView):
+    model = Leave
+    form_class = LeaveForm
+
+    def dispatch(self, request, *args, **kwargs):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        if current_calculator.author == self.request.user:
+            return super(LeaveCreate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def form_valid(self, form):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        form.instance.calculator = current_calculator
+        response = super(LeaveCreate, self).form_valid(form)
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy('workday:detail', args=(self.kwargs['pk'],))
+
+
+class LeaveDelete(LoginRequiredMixin, DeleteView):
+    model = Leave
+    form_class = LeaveForm
+    template_name = 'workday/leave_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['cal'])
+        if current_calculator.author == self.request.user:
+            return super(LeaveDelete, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def get_success_url(self):
+        return reverse_lazy('workday:detail', args=(self.kwargs['cal'],))
