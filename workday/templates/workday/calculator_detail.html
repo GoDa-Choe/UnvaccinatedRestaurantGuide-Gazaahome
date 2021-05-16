@@ -7,107 +7,106 @@
 {% block custom_style %}
     <style>
         .my-btn-size {
-            width: 44px;
-            height: 38px;
+            width: 12%;
+            min-width: 3rem;
+            height: 3rem;
         }
     </style>
 {% endblock %}
 
 {% block main-area %}
 
-    <div class="container my-3">
-        <hr/>
-        <h2 class="my-3">{{ calculator.name }}</h2>
-        <h3>복무 시작일 : {{ calculator.start_date }}</h3>
-        <h3>전역일 : {{ calculator.end_date }}</h3>
-        <hr/>
 
-        <hr/>
-        <h2 class="my-3">{{ today }}</h2>
-        <h3>전역까지 : {{ service_days|length }}</h3>
-        <h3>복무 일수 : {{ serviced_days|length }}</h3>
-        <h3>퍼센트 : {{ percent }}%</h3>
-        <h3>남은 실출근 : {{ workdays|length }}</h3>
-        <hr/>
+    <hr/>
+    <h2 class="my-3">{{ calculator.name }}</h2>
+    <h3>복무 시작일 : {{ calculator.start_date }}</h3>
+    <h3>전역일 : {{ calculator.end_date }}</h3>
+    <hr/>
+
+    <hr/>
+    <h2 class="my-3">{{ today }}</h2>
+    <h3>전역까지 : {{ service_days|length }}</h3>
+    <h3>복무 일수 : {{ serviced_days|length }}</h3>
+    <h3>퍼센트 : {{ percent }}%</h3>
+    <h3>남은 실출근 : {{ workdays|length }}</h3>
+    <hr/>
 
 
+    {% if user == calculator.author %}
+        <a class="btn btn-info btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
+           role="button">
+            <i class="fas fa-pen"> 휴가 등록</i>
+        </a>
+    {% endif %}
+    <h2>휴가 목록</h2>
+    {% for leave in calculator.leave_set.all %}
         {% if user == calculator.author %}
-            <a class="btn btn-info btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
+            <a class="btn btn-info btn-sm float-end"
+               href="{% url 'workday:delete_leave' calculator.pk leave.pk %}"
                role="button">
-                <i class="fas fa-pen"> 휴가 등록</i>
+                <i class="fas fa-pen"> 휴가 삭제</i>
             </a>
         {% endif %}
-        <h2>휴가 목록</h2>
-        {% for leave in calculator.leave_set.all %}
-            {% if user == calculator.author %}
-                <a class="btn btn-info btn-sm float-end"
-                   href="{% url 'workday:delete_leave' calculator.pk leave.pk %}"
-                   role="button">
-                    <i class="fas fa-pen"> 휴가 삭제</i>
-                </a>
-            {% endif %}
 
-            <p>{{ forloop.counter }}. 시작일:{{ leave.start_date|date:'Y-m-d' }} | 종료일:{{ leave.start_date|date:'Y-m-d' }}
-                | 기간:{{ leave.days.days }}</p>
-        {% endfor %}
-        <hr/>
+        <p>{{ forloop.counter }}. 시작일:{{ leave.start_date|date:'Y-m-d' }} | 종료일:{{ leave.start_date|date:'Y-m-d' }}
+            | 기간:{{ leave.days.days }}</p>
+    {% endfor %}
+    <hr/>
 
 
-        <div class="row">
-            {% for month_block in blocked_service_days %}
-                <div class="col my-3">
-                    <div class="card" style="width: 23.5rem">
-                        <div class="card-header text-center">
-                            <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
-                        </div>
+    <div class="row">
+        {% for month_block in blocked_service_days %}
+            <div class="col my-3 d-flex justify-content-center text-center">
+                <div class="card" style="min-width: 400px;max-width: 550px;">
+                    <div class="card-header">
+                        <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
+                    </div>
 
-                        <div class="card-body">
-                            {% for weekday in weekdays %}
-                                <button type="button" class="text-center btn text-dark my-btn-size">
-                                    {{ weekday }}
-                                </button>
-                            {% endfor %}
+                    <div class="card-body">
+                        {% for weekday in weekdays %}
+                            <button type="button" class="btn text-dark my-btn-size">
+                                {{ weekday }}
+                            </button>
+                        {% endfor %}
 
-                            {% for date in month_block %}
-                                {% if date == None %}
-                                    <button type="button" class="text-center btn my-btn-size" disabled></button>
+                        {% for date in month_block %}
+                            {% if date == None %}
+                                <button type="button" class="btn my-btn-size" disabled></button>
+                            {% else %}
+                                {% if date in leaves %}
+                                    <button type="button" class="btn btn-primary my-btn-size">
+                                        {{ date|date:'d' }}
+                                    </button>
                                 {% else %}
-                                    {% if date in leaves %}
-                                        <button type="button" class="text-center btn btn-primary my-btn-size">
+                                    {% if date in serviced_days %}
+                                        <button type="button" class="btn btn-secondary my-btn-size">
                                             {{ date|date:'d' }}
                                         </button>
                                     {% else %}
-                                        {% if date in serviced_days %}
-                                            <button type="button" class="text-center btn btn-secondary my-btn-size">
+                                        {% if date in workdays %}
+                                            <button type="button"
+                                                    class="btn btn-outline-secondary my-btn-size">
                                                 {{ date|date:'d' }}
                                             </button>
                                         {% else %}
-                                            {% if date in workdays %}
-                                                <button type="button" class="text-center btn btn-outline-secondary my-btn-size">
-                                                    {{ date|date:'d' }}
-                                                </button>
-                                            {% else %}
-                                                <button type="button" class="text-center btn btn-secondary my-btn-size">
-                                                    {{ date|date:'d' }}
-                                                </button>
-                                            {% endif %}
+                                            <button type="button" class="btn btn-secondary my-btn-size">
+                                                {{ date|date:'d' }}
+                                            </button>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            {% endfor %}
-
-                            {% if forloop.last %}
-                                <button type="button" class="text-center btn btn-warning my-btn-size">
-                                    {{ calculator.end_date|date:'d' }}
-                                </button>
                             {% endif %}
+                        {% endfor %}
 
-                        </div>
+{#                        {% if forloop.last %}#}
+{#                            <button type="button" class="text-center btn btn-warning my-btn-size">#}
+{#                                {{ calculator.end_date|date:'d' }}#}
+{#                            </button>#}
+{#                        {% endif %}#}
                     </div>
-
                 </div>
-            {% endfor %}
-
-        </div>
+            </div>
+        {% endfor %}
     </div>
+
 {% endblock %}

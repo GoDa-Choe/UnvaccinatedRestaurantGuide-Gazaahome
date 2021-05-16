@@ -76,7 +76,7 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
 
         blocked_service_days = \
             create_block.make_blocked_service_days(service_days, begin_service, end_service)
-        blocked_service_days[-1].pop()
+        # blocked_service_days[-1].pop()
 
         serviced_days = make_days.make_serviced_days(begin_service)
         remaining_days = service_days - serviced_days
@@ -90,13 +90,18 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         workdays -= set(leaves)
 
         first_weekday = []
+        last_weekday = []
         for month in blocked_service_days:
             first_weekday.append(month[0].weekday())
+            last_weekday.append(month[-1].weekday())
 
-        for i in range(len(first_weekday)):
-            count = first_weekday[i]
-            for j in range(count):
+        for i in range(len(blocked_service_days)):
+            first_count = first_weekday[i]
+            last_count = 6 - last_weekday[i]
+            for j in range(first_count):
                 blocked_service_days[i].insert(0, None)
+            for j in range(last_count):
+                blocked_service_days[i].append(None)
 
         weekdays = ['월', '활', '수', '목', '금', '토', '일']
 
