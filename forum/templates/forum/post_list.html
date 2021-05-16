@@ -36,39 +36,37 @@
                 <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action" style="border: 0">
                     <div class="d-flex text-muted pt-3">
                         <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                            <div class="d-flex justify-content-between">
-                                <h3 class="h6 text-dark">{{ post.title }}</h3>
-                                <div class="d-inline">
-                                    {% if post.tags.exists %}
-                                        {% comment %}<i class="fas fa-tags"></i>{% endcomment %}
-                                        {% for tag in post.tags.iterator %}
-                                            <span class="badge rounded-pill" style="background-color: #9F81F7">
-                                            {{ tag }}
-                                            </span>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
 
+                            <h3 class="h6 text-dark">{{ post.title }}</h3>
 
                             <p class="pb-0 mb-1 lh-sm">
                                 {{ post.content|cut:"#"|cut:"`"|truncatechars_html:80|safe }}
                             </p>
                             <div class="d-flex text-muted justify-content-between">
-
                                 <div class="d-inline">
                                     <strong class="text-gray-dark">{{ post.author }}</strong>
                                     <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
                                 </div>
 
-                                <div class="d-inline">
+                                <div class="d-inline mb-1">
                                     <div class="d-inline"><i class="fas fa-heart"></i> {{ post.num_likes }}&nbsp;</div>
-                                    <div class="d-inline"><i class="far fa-comment"></i> {{ post.num_comments }}&nbsp;</div>
+                                    <div class="d-inline"><i class="far fa-comment"></i> {{ post.num_comments }}&nbsp;
+                                    </div>
                                     <div class="d-inline"><i class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
                                 </div>
-
-
                             </div>
+
+                            <div class="d-inline">
+                                {% if post.tags.exists %}
+                                    <i class="fas fa-tags"></i>
+                                    {% for tag in post.tags.iterator %}
+                                        <span class="badge rounded-pill" style="background-color: #9F81F7">
+                                            {{ tag }}
+                                            </span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
                         </div>
                     </div>
                 </a>
