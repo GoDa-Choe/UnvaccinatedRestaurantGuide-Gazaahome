@@ -28,3 +28,11 @@ def make_work_days(service_days):
 
     work_days = service_days - days_off
     return work_days
+
+
+def get_holidays():
+    return holidays.holidays_2021 | holidays.holidays_2022
+
+
+def get_weekends():
+    return holidays.weekends_2021 | holidays.weekends_2022

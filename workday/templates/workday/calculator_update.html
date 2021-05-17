@@ -45,11 +45,12 @@
                                 {% elif date in serviced_days %}
                                     <button type="button"
                                             class="btn btn-secondary my-btn-size">{{ date|date:'d' }}</button>
-                                    {% comment %}{% elif date in dayoff %}
-                                <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}" autocomplete="off"
-                                name="{{ date|date:'Y-m-d' }}" value="on" checked>
-                                <label class="btn btn-outline-secondary my-btn-size" for="{{ date|date:'Y-m-d' }}">
-                                    {{ date|date:'d' }}</label>{% endcomment %}
+                                {% elif date in dayoffs %}
+                                    <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
+                                           autocomplete="off"
+                                           name="{{ date|date:'Y-m-d' }}" value="on" checked>
+                                    <label class="btn btn-outline-secondary my-btn-size" for="{{ date|date:'Y-m-d' }}">
+                                        {{ date|date:'d' }}</label>
                                 {% else %}
                                     <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
                                            autocomplete="off"

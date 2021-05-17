@@ -21,7 +21,18 @@ class CalculatorCreate(LoginRequiredMixin, CreateView):
         current_user = self.request.user
         if current_user.is_authenticated:
             form.instance.author = current_user
+
+            holidays = make_days.get_holidays()
+            weekends = make_days.get_weekends()
             response = super(CalculatorCreate, self).form_valid(form)
+
+            for holiday in holidays:
+                record = Dayoff(date=holiday, calculator=form.instance)
+                record.save()
+
+            for weekend in weekends:
+                record = Dayoff(date=weekend, calculator=form.instance)
+                record.save()
 
             return response
         else:
@@ -57,11 +68,6 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         else:
             raise PermissionDenied
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['object'] = get_object_or_404(Board, pk=self.kwargs['pk'])
-    #     return context
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -73,7 +79,6 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
 
         blocked_service_days = \
             create_block.make_blocked_service_days(service_days, begin_service, end_service)
-        # blocked_service_days[-1].pop()
 
         serviced_days = make_days.make_serviced_days(begin_service)
         remaining_days = service_days - serviced_days
@@ -83,8 +88,15 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         for leave in leave_list:
             leaves.extend(leave.get_leaves())
 
-        workdays = make_days.make_work_days(service_days)
-        workdays -= set(leaves)
+        dayoffs = []
+        dayoff_list = ob.dayoff_set.all()
+        for dayoff in dayoff_list:
+            dayoffs.append(dayoff.date)
+
+        holidays = make_days.get_holidays()
+        weekends = make_days.get_weekends()
+
+        workdays = remaining_days - set(dayoffs) - set(leaves)
 
         first_weekday = []
         last_weekday = []
@@ -111,6 +123,7 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         context['remaining_days'] = remaining_days
         context['leaves'] = leaves
         context['weekdays'] = weekdays
+        context['dayoffs'] = dayoffs
         return context
 
 
@@ -182,8 +195,15 @@ class CalculatorUpdate(LoginRequiredMixin, View):
         for leave in leave_list:
             leaves.extend(leave.get_leaves())
 
-        workdays = make_days.make_work_days(service_days)
-        workdays -= set(leaves)
+        dayoffs = []
+        dayoff_list = ob.dayoff_set.all()
+        for dayoff in dayoff_list:
+            dayoffs.append(dayoff.date)
+
+        holidays = make_days.get_holidays()
+        weekends = make_days.get_weekends()
+
+        workdays = remaining_days - set(dayoffs) - set(leaves)
 
         first_weekday = []
         last_weekday = []
@@ -212,6 +232,8 @@ class CalculatorUpdate(LoginRequiredMixin, View):
         context['remaining_days'] = remaining_days
         context['leaves'] = leaves
         context['weekdays'] = weekdays
+        context['dayoffs'] = dayoffs
+
         return render(request, 'workday/calculator_update.html', context=context)
 
     def post(self, request, *args, **kwargs):

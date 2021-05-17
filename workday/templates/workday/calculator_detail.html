@@ -56,6 +56,11 @@
     {% endfor %}
     <hr/>
 
+    <h2>휴일 목록</h2>
+    {% for dayoff in dayoffs %}
+        <span>{{ dayoff|date:'Y-m-d' }}</span>
+    {% endfor %}
+    <hr/>
 
     <div class="row">
         {% for month_block in blocked_service_days %}
@@ -79,10 +84,11 @@
                                 <button type="button" class="btn btn-warning my-btn-size">{{ date|date:'d' }}</button>
                             {% elif date in leaves %}
                                 <button type="button" class="btn btn-primary my-btn-size">{{ date|date:'d' }}</button>
-                            {% elif date in serviced_days or date not in workdays %}
+                            {% elif date in serviced_days or date in dayoffs %}
                                 <button type="button" class="btn btn-secondary my-btn-size">{{ date|date:'d' }}</button>
-                            {% else %} {% comment %} date in workdays {% endcomment %}
-                                <button type="button" class="btn btn-outline-secondary my-btn-size">{{ date|date:'d' }}</button>
+                            {% else %}
+                                <button type="button"
+                                        class="btn btn-outline-secondary my-btn-size">{{ date|date:'d' }}</button>
                             {% endif %}
                         {% endfor %}
 
