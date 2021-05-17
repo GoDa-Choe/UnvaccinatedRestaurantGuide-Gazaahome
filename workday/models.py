@@ -54,4 +54,4 @@ class Dayoff(models.Model):
     calculator = models.ForeignKey(Calculator, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.date} :: {self.calculator} :: {self.calculator.author}"
+        return f"{self.date} :: {self.calculator.name} :: {self.calculator.author}"

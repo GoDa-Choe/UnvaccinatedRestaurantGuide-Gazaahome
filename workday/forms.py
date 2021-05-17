@@ -1,4 +1,4 @@
-from workday.models import Calculator, Leave
+from workday.models import Calculator, Leave, Dayoff
 from django.forms import ModelForm
 
 
@@ -21,3 +21,9 @@ class LeaveForm(ModelForm):
             'start_date': '휴가 시작일',
             'end_date': '휴가 종료일',
         }
+
+
+class DayoffForm(ModelForm):
+    class Meta:
+        model = Dayoff
+        fields = ('date', 'calculator')

@@ -31,6 +31,9 @@
     <h3>남은 실출근 : {{ workdays|length }}</h3>
     <hr/>
 
+    <a href="{% url 'workday:update' calculator.pk %}"> 달력 수정</a>
+
+    <hr/>
 
     {% if user == calculator.author %}
         <a class="btn btn-info btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
@@ -72,37 +75,17 @@
                         {% for date in month_block %}
                             {% if date == None %}
                                 <button type="button" class="btn my-btn-size" disabled></button>
-                            {% else %}
-                                {% if date in leaves %}
-                                    <button type="button" class="btn btn-primary my-btn-size">
-                                        {{ date|date:'d' }}
-                                    </button>
-                                {% else %}
-                                    {% if date in serviced_days %}
-                                        <button type="button" class="btn btn-secondary my-btn-size">
-                                            {{ date|date:'d' }}
-                                        </button>
-                                    {% else %}
-                                        {% if date in workdays %}
-                                            <button type="button"
-                                                    class="btn btn-outline-secondary my-btn-size">
-                                                {{ date|date:'d' }}
-                                            </button>
-                                        {% else %}
-                                            <button type="button" class="btn btn-secondary my-btn-size">
-                                                {{ date|date:'d' }}
-                                            </button>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
+                            {% elif date == calculator.start_date or date == calculator.end_date %}
+                                <button type="button" class="btn btn-warning my-btn-size">{{ date|date:'d' }}</button>
+                            {% elif date in leaves %}
+                                <button type="button" class="btn btn-primary my-btn-size">{{ date|date:'d' }}</button>
+                            {% elif date in serviced_days or date not in workdays %}
+                                <button type="button" class="btn btn-secondary my-btn-size">{{ date|date:'d' }}</button>
+                            {% else %} {% comment %} date in workdays {% endcomment %}
+                                <button type="button" class="btn btn-outline-secondary my-btn-size">{{ date|date:'d' }}</button>
                             {% endif %}
                         {% endfor %}
 
-{#                        {% if forloop.last %}#}
-{#                            <button type="button" class="text-center btn btn-warning my-btn-size">#}
-{#                                {{ calculator.end_date|date:'d' }}#}
-{#                            </button>#}
-{#                        {% endif %}#}
                     </div>
                 </div>
             </div>

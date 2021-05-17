@@ -1,112 +1,13 @@
 {% extends 'forum/base_full_width.html' %}
 
 {% block head-title %}
-    {{ calculator.name }}
+    임시
 {% endblock %}
 
 {% block main-area %}
 
-    <div class="container my-3">
-        <hr/>
-        <h2 class="my-3">{{ calculator.name }}</h2>
-        <h3>복무 시작일 : {{ calculator.start_date }}</h3>
-        <h3>전역일 : {{ calculator.end_date }}</h3>
-        <hr/>
+    {{ post }}
+    <hr>
+    {{ dayoffs }}
 
-        <hr/>
-        <h2 class="my-3">{{ today }}</h2>
-        <h3>전역까지 : {{ service_days }}</h3>
-        <h3>복무 일수 : {{ serviced_days }}</h3>
-        <h3>퍼센트 : {{ percent }}%</h3>
-        <h3>남은 실출근 : {{ workdays }}</h3>
-        <hr/>
-
-
-        {% if user == calculator.author %}
-            <a class="btn btn-info btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
-               role="button">
-                <i class="fas fa-pen"> 휴가 등록</i>
-            </a>
-        {% endif %}
-        <h2>휴가 목록</h2>
-        {% for leave in calculator.leave_set.all %}
-            {% if user == calculator.author %}
-                <a class="btn btn-info btn-sm float-end"
-                   href="{% url 'workday:delete_leave' calculator.pk leave.pk %}"
-                   role="button">
-                    <i class="fas fa-pen"> 휴가 삭제</i>
-                </a>
-            {% endif %}
-
-            <p>{{ forloop.counter }}. 시작일:{{ leave.start_date|date:'Y-m-d' }} | 종료일:{{ leave.start_date|date:'Y-m-d' }}
-                | 기간:{{ leave.days.days }}</p>
-        {% endfor %}
-        <hr/>
-
-        <p>
-            {% for leave in leaves %}
-                <span>{{ leave|date:'Y-m-d' }}</span>
-            {% endfor %}
-        </p>
-
-        <hr/>
-
-        {#        {% for month_block in blocked_service_days %}#}
-        {#            <div class="col text-center mx-0 px-0">#}
-        {#                <span>{{ month_block.0.month }}</span>#}
-        {#                <div class="btn-group" role="group" aria-label="Basic example">#}
-        {#                    {% for date in month_block %}#}
-        {#                        <button type="button" class="text-center btn btn-outline-secondary">{{ date.day }}</button>#}
-        {#                    {% endfor %}#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        {% endfor %}#}
-
-        <div class="row">
-            {% for month_block in blocked_service_days %}
-                <div class="col my-3">
-                    <div class="card" style="width: 23.5rem">
-                        <div class="card-header text-center">
-                            <h5>{{ month_block.0.0.year }}-{{ month_block.0.0.month }}</h5>
-                        </div>
-
-                        <div class="card-body">
-
-                            {% if forloop.first %}
-                                <button type="button" class="text-center btn btn-warning">
-                                    {{ calculator.start_date|date:'d' }}
-                                </button>
-                            {% endif %}
-
-                            {% for date in month_block %}
-                                {% if date.0 in leaves %}
-                                    <button type="button" class="text-center btn btn-primary">
-                                        {{ date.0|date:'d' }}
-                                    </button>
-                                {% else %}
-                                    {% if date.1 %}
-                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
-                                               autocomplete="off">
-                                    {% else %}
-                                        <input type="checkbox" class="btn-check" id="{{ date.0|date:'Y-m-d' }}"
-                                               autocomplete="off" checked>
-                                    {% endif %}
-                                    <label class="btn btn-outline-secondary"
-                                           for="{{ date.0|date:'Y-m-d' }}">{{ date.0|date:'d' }}</label>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if forloop.last %}
-                                <button type="button"
-                                        class="text-center btn btn-warning">{{ calculator.end_date|date:'d' }}</button>
-                            {% endif %}
-
-                        </div>
-                    </div>
-
-                </div>
-            {% endfor %}
-
-        </div>
-    </div>
 {% endblock %}
