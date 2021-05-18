@@ -1,4 +1,4 @@
-{% extends 'forum/base_full_width.html' %}
+{% extends 'forum/base.html' %}
 {% load static %}
 
 {% block head-title %}
@@ -14,55 +14,172 @@
 {% endblock %}
 
 {% block main-area %}
+    <div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 lh-1">Bootstrap</h1>
+            <small>Since 2011</small>
+        </div>
+    </div>
 
 
-    <hr/>
-    <h2 class="my-3">{{ calculator.name }}</h2>
-    <h3>복무 시작일 : {{ calculator.start_date }}</h3>
-    <h3>전역일 : {{ calculator.end_date }}</h3>
-    <hr/>
+    <div class="my-3 p-3 rounded shadow-sm">
 
-    <hr/>
-    <h2 class="my-3">{{ today }}</h2>
-    <h3>전역까지 : {{ service_days|length }}</h3>
-    <h3>복무 일수 : {{ serviced_days|length }}</h3>
-    <h3>퍼센트 : {{ percent }}%</h3>
-    <h3>남은 실출근 : {{ workdays|length }}</h3>
-    <hr/>
 
-    <a href="{% url 'workday:update' calculator.pk %}"> 달력 수정</a>
+        <article class="mb-5">
+            <h1 class="mt-4">{{ calculator.name }}</h1>
 
-    <hr/>
+            <div class="d-flex align-items-center">
+                <p class="d-inline mx-2">
+                    {{ calculator.author }}
+                </p>
+                <p class="d-inline text-muted mx-2">
+                    {{ calculator.created_at|date:'Y-m-d H:i' }}
+                </p>
+            </div>
 
+            <hr>
+
+            <div class="container my-5">
+                <h3 class="text-center my-0">복무 계산기</h3>
+                <div class="d-flex justify-content-between align-items-center text-muted">
+                    <div class="d-inline">
+                        <p class="text-start my-0"><small>입대</small></p>
+                        <p class="text-start my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-end my-0"><small>전역</small></p>
+                        <p class="text-end my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ percent }}%"
+                         aria-valuenow="{{ percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-inline">
+                        <p class="text-center my-0">복무 기간</p>
+                        <p class="text-center my-0">{{ service_days|length }}일</p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-center my-0">복무 일수</p>
+                        <p class="text-center my-0">{{ serviced_days|length }}일</p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-center my-0 fw-bold">남은 복무</p>
+                        <p class="text-center my-0 fw-bold">{{ remaining_days|length }}일</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container my-5">
+                <h3 class="text-center my-0">실출근 계산기</h3>
+                <div class="d-flex justify-content-between align-items-center text-muted">
+                    <div class="d-inline">
+                        <p class="text-start my-0"><small>오늘</small></p>
+                        <p class="text-start my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-end my-0"><small>막출</small></p>
+                        <p class="text-end my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
+                         style="width: {{ percent }}%"
+                         aria-valuenow="{{ percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-inline">
+                        <p class="text-center my-0">출근 기간</p>
+                        <p class="text-center my-0">{{ workdays|length }}일</p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-center my-0">출근 일수</p>
+                        <p class="text-center my-0">{{ workdays|length }}일</p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-center my-0 fw-bold">남은 출근</p>
+                        <p class="text-center my-0 fw-bold">{{ workdays|length }}일</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <!-- Leaves Table -->
     {% if user == calculator.author %}
-        <a class="btn btn-info btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
+        <a class="btn btn-outline-secondary btn-sm float-end" href="{% url 'workday:create_leave' calculator.pk %}"
            role="button">
-            <i class="fas fa-pen"> 휴가 등록</i>
+            등록
         </a>
     {% endif %}
-    <h2>휴가 목록</h2>
-    {% for leave in calculator.leave_set.all %}
-        {% if user == calculator.author %}
-            <a class="btn btn-info btn-sm float-end"
-               href="{% url 'workday:delete_leave' calculator.pk leave.pk %}"
-               role="button">
-                <i class="fas fa-pen"> 휴가 삭제</i>
-            </a>
-        {% endif %}
+    <h3>휴가 목록</h3>
 
-        <p>{{ forloop.counter }}. 시작일:{{ leave.start_date|date:'Y-m-d' }} | 종료일:{{ leave.start_date|date:'Y-m-d' }}
-            | 기간:{{ leave.days.days }}</p>
-    {% endfor %}
-    <hr/>
+    <table class="table table-hover my-2">
+        <thead>
+        <tr class="text-center">
+            <th scope="col">#</th>
+            <th scope="col">종류</th>
+            <th scope="col">출발</th>
+            <th scope="col">복귀</th>
+            <th scope="col">기간</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for leave in calculator.leave_set.all %}
+            <tr class="text-center">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>연가</td>
+                <td>{{ leave.start_date|date:'y-m-d' }}</td>
+                <td>{{ leave.end_date|date:'y-m-d' }}</td>
+                <td>{{ leave.days.days }}</td>
+                <td>
+                    {% if user == calculator.author %}
+                        <a class="btn btn-close float-end"
+                           href="{% url 'workday:delete_leave' calculator.pk leave.pk %}"
+                           role="button">
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="text-center">
+            <th scope="row">계</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>00</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
 
-    <h2>휴일 목록</h2>
-    {% for dayoff in dayoffs %}
-        <span>{{ dayoff|date:'Y-m-d' }}</span>
-    {% endfor %}
-    <hr/>
+
+    <div class="d-flex justify-content-between mt-5">
+        <div class="d-inline">
+            <button type="button" class="btn btn-sm btn-secondary mx-1">휴일</button>
+            <button type="button" class="btn btn-sm btn-primary mx-1">휴가</button>
+            <button type="button" class="btn btn-sm btn-warning mx-1">전역</button>
+        </div>
+
+        <div class="d-inline">
+            <a href="{% url 'workday:update' calculator.pk %}" role="button" class="btn btn-sm btn-outline-success">
+                휴일
+                수정</a>
+        </div>
+    </div>
 
 
-    <div class="row justify-content-center">
+
+    <div class="row justify-content-between">
         {% for month_block in blocked_service_days %}
             <div class="col-auto">
                 <div class="card text-center my-3" style="min-width: 350px; max-width: 380px">
