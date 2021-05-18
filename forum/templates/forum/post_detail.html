@@ -1,232 +1,234 @@
 {% extends 'forum/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
 
 {% block head-title %}
     {{ post.title }} - Forum
 {% endblock %}
 
 {% block main-area %}
-    <div id="post-area">
+    <div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 lh-1">Bootstrap</h1>
+            <small>Since 2011</small>
+        </div>
+    </div>
 
+    <!-- Category Scroll Bar -->
+    <div class="nav-scroller bg-body shadow-sm">
+        <nav class="nav nav-underline" aria-label="Secondary navigation">
+            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+            <a class="nav-link" href="#">
+                Friends
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">27</span>
+            </a>
+            <a class="nav-link" href="#">Explore</a>
+            <a class="nav-link" href="#">Suggestions</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            {% for category in categories %}
+                {% if category == post.category %}
+                    <a class="nav-link" href="{% url 'category_post' category.slug %}"
+                       style="color:#6f42c1;">
+                        {{ category }}
+                        <span class="badge text-dark rounded-pill align-text-bottom"
+                              style="background-color: #b4a0f0">
+                            {{ category.post_set.count }}
+                        </span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'category_post' category.slug %}">
+                        {{ category }}
+                        <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category.post_set.count }}</span>
+                    </a>
+                {% endif %}
+
+
+            {% endfor %}
+            <a class="nav-link" href="/forum/category/no_category">미분류({{ num_noncategory_posts }})
+            </a>
+        </nav>
+    </div>
+
+
+
+    <article>
         <!-- Title-->
         <h1 class="mt-4">
             {{ post.title }}
-            {% if post.category %}
-                <span class="badge badge-secondary float-end">{{ post.category }}</span>
-            {% else %}
-                <span class="badge badge-secondary float-end">미분류</span>
-            {% endif %}
         </h1>
 
-
-        <!-- Author-->
-        <p class="lead">
-            by {{ post.author|upper }}
-        </p>
-
-        <hr>
-
-        <!-- Post eidt-->
-        {% if user.is_authenticated and user == post.author %}
-            <a class="btn btn-info btn-sm float-end" href="{% url 'update' post.pk %}" role="button">
-                <i class="fas fa-pen"> Edit Post</i>
-            </a>
-        {% endif %}
-
-        <!-- Date and time-->
-        <p>Posted on {{ post.created_at }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-inline">
+                <p class="d-inline mx-2">
+                    {{ post.author|upper }}
+                </p>
+                <p class="d-inline text-muted mx-2">
+                    {{ post.created_at|date:'Y-m-d H:i' }}
+                </p>
+            </div>
+            <div class="d-inline">
+                <!-- Post eidt-->
+                {% if user.is_authenticated and user == post.author %}
+                    <a class="btn btn-outline-secondary" href="{% url 'update' post.pk %}" role="button">
+                        수정
+                    </a>
+                    <a class="btn btn-outline-secondary mx-2" href="{% url 'delete' post.pk %}" role="button">
+                        삭제
+                    </a>
+                {% endif %}
+            </div>
+        </div>
 
         <hr>
 
         <!-- Preview image-->
         {% if post.head_image %}
             <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="..."/>
-        {% else %}
-            {#<img class="img-fluid rounded" src="https://via.placeholder.com/900x300" alt="..."/>#}
         {% endif %}
-
 
         <!-- Post content-->
         <p>{{ post.get_content_markdown|safe }}</p>
 
         <!-- Tags-->
-        <div class="d-flex justify-content-end">
+        <div class="d-flex">
             {% if post.tags.exists %}
                 <i class="fas fa-tags"></i>
                 {% for tag in post.tags.iterator %}
-                    <a href="{% url 'tag_post' tag.slug %}"><span
-                            class="badge rounded-pill bg-warning mx-1">{{ tag }}</span></a>
+                    <span class="badge rounded-pill"
+                          style="background-color: #9F81F7">{{ tag }}</span>
                 {% endfor %}
             {% endif %}
         </div>
 
-        <hr/>
-
-
-        <!-- LIKES -->
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center my-3">
+            <!-- Likes -->
             {% if user.is_authenticated %}
                 <form action="{% url 'like' post.pk %}" method="POST">{% csrf_token %}
                     {% if is_liked %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-primary">
-                            {{ num_likes }} 좋아요
+                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn text-white"
+                                style="background-color: #6f42c1">
+                            좋아요 {{ num_likes }}
                         </button>
                     {% else %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-primary">
-                            {{ num_likes }} 좋아요
+                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn text-white"
+                                style="background-color: #6f42c1">
+                            좋아요 {{ num_likes }}
                         </button>
                     {% endif %}
                 </form>
             {% else %}
-                <button class="btn btn-primary"> {{ num_likes }} 좋아요</button>
+                <button class="btn text-white" style="background-color: #6f42c1"> {{ num_likes }} 좋아요</button>
             {% endif %}
-        </div>
 
-
-    </div>
-
-    <div id="comment-area">
-
-        <!-- Comments form-->
-        <div class="card my-4">
-            <h5 class="card-header">Leave a Comment :</h5>
-            <div class="card-body">
-
-                {% if user.is_authenticated %}
-                    <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}new_comment/">
-                        {% csrf_token %}
-                        <div class="form-group">{{ comment_form|crispy }}</div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
-                    </form>
-
-                {% else %}
-                    <a role="button" class="btn btn-outline-dark btn-block btn-sm" href="#"
-                       data-toggle="modal" data-target="#loginModal">
-                        Log in and leave a comment!
-                    </a>
-                {% endif %}
-
+            <!-- Hits -->
+            <div class="d-inline">
+                <button class="btn mx-3 text-white" style="background-color: #6f42c1">
+                    조회수 {{ post.hit_count.hits }}</button>
             </div>
         </div>
+    </article>
 
+
+    <!-- Comment-->
+    <div class="my-3 p-3 rounded shadow-sm">
+        <h4 class="border-bottom pb-2 mb-0">댓글</h4>
 
         {% if post.comment_set.exists %}
 
             {% for comment in post.comment_set.all reversed %}
 
-                <div class="media mb-4" id="comment-{{ comment.pk }}">
+                <div class="d-flex  pt-3">
+                    <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
 
-                    <div class="media-body">
-
-                        {% if user.is_authenticated and comment.author == user %}
-                            <div class="float-end">
-
-                                <a role="button" class="btn btn-sm btn-info float-end"
-                                   id="comment-{{ comment.pk }}-update-btn"
+                        <div class="float-end">
+                            {% if user.is_authenticated and comment.author == user %}
+                                <a role="button" class="btn btn-sm btn-outline-secondary"
                                    href="{% url 'comment_update' comment.pk %}">
                                     수정
                                 </a>
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
                                         data-bs-target="#deleteCommentModal-{{ comment.pk }}">
                                     삭제
                                 </button>
+                            {% endif %}
+                        </div>
 
-                            </div>
-                        {% endif %}
-
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1"
-                             aria-labelledby="deleteModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <del>{{ comment.content|linebreaks }}</del>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
-                                        </button>
-                                        <a role="button" class="btn btn-danger"
-                                           href=" {% url 'comment_delete'  comment.pk %}  ">삭제</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="d-inline">
+                            <strong class="text-gray-dark">{{ comment.author.username }}</strong>
+                            <div class="d-inline text-muted">{{ comment.modified_at|date:'Y-m-d H:i:s' }}</div>
                         </div>
 
 
-                        <div class="container">
-                            <span class="fw-bold">
-                                {{ comment.author.username }} &nbsp;&nbsp;
-                            </span>
-                            <span class="text-muted"><small>{{ comment.modified_at|date:'Y-m-d H:i:s' }}</small></span>
-                            <p>{{ comment.content|linebreaks }}</p>
+                        <p class="small lh-sm text-muted">{{ comment.content|linebreaks }}</p>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1"
+                     aria-labelledby="deleteModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <del>{{ comment.content|linebreaks }}</del>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
+                                </button>
+                                <a role="button" class="btn btn-danger"
+                                   href=" {% url 'comment_delete'  comment.pk %}  ">삭제</a>
+                            </div>
                         </div>
-                        <hr>
                     </div>
                 </div>
             {% endfor %}
         {% endif %}
+
+        <!-- Comments form-->
+        <div class="card my-4">
+            <div class="card-body">
+                {% if user.is_authenticated %}
+                    <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}new_comment/">
+                        {% csrf_token %}
+                        <div class="form-group">{{ comment_form|crispy }}</div>
+                        <button class="btn btn-primary float-end mt-1" type="submit">작성</button>
+                    </form>
+
+                {% else %}
+                    <button type="button" class="btn btn-sm btn-block " data-bs-toggle="modal"
+                            data-bs-target="#loginModal" style="border-color: #9F81F7">
+                        로그인 후 댓글을 작성할 수 있습니다.
+                    </button>
+                {% endif %}
+
+            </div>
+        </div>
     </div>
+
+
 
 {% endblock %}
 
 
 
-{% comment %}
-    <div class="my-3 p-3 rounded shadow-sm">
-
-        <div class="d-flex justify-content-between border-bottom pb-2 mb-0">
-            <h2 class="h5">
-                {% if category %}
-                    {{ category }}
-                {% else %}
-                    모든 게시글
-                {% endif %}
-            </h2>
-            <small><a href="#">새로운 게시글</a> </small>
-        </div>
 
 
-        <div class="list-group-flush">
 
 
-            <!-- Blog Post -->
-            {% for post in post_list %}
-
-            {% endfor %}
 
 
-        </div>
-    </div>{% endcomment %}
 
-
-<!-- Button trigger modal -->
-
-
-<!-- Modal -->
-<div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="delteModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>

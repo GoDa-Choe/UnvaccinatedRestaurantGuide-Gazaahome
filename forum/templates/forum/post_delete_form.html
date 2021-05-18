@@ -1,0 +1,25 @@
+{% extends 'forum/base_full_width.html' %}
+{% load crispy_forms_filters %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    Delete Post - Forum
+{% endblock %}
+
+{% block main-area %}
+
+    <h1>Delete Post</h1>
+    <hr>
+
+    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+        <p>정말로 "{{ post.title }}을/를 삭제하시겠습니까?"</p>
+        <br>
+
+        <button type="submit" class="btn btn-primary float-end">
+            삭제
+        </button>
+    </form>
+
+{% endblock %}

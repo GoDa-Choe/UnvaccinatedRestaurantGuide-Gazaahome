@@ -5,6 +5,7 @@ urlpatterns = [
     path('tag/<str:slug>/', views.tag_post, name='tag_post'),
     path('category/<str:slug>/', views.category_post, name='category_post'),
 
+    path('delete_post/<int:pk>/', views.PostDelete.as_view(), name='delete'),
     path('update_post/<int:pk>/', views.PostUpdate.as_view(), name='update'),
     path('create_post/', views.PostCreate.as_view(), name='create'),
 

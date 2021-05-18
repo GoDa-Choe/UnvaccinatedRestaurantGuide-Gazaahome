@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -63,6 +63,27 @@ def new_comment(request, pk):
             return redirect(post.get_absolute_url())
     else:
         raise PermissionDenied
+
+
+class PostDelete(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'forum/post_delete_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        if post.author == self.request.user:
+            return super(PostDelete, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDelete, self).get_context_data(**kwargs)
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        context['post'] = post
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('index')
 
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
