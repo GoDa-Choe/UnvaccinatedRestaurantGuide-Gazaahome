@@ -112,7 +112,7 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
             for j in range(last_count):
                 blocked_service_days[i].append(None)
 
-        weekdays = ['월', '활', '수', '목', '금', '토', '일']
+        weekdays = ['월', '화', '수', '목', '금', '토', '일']
 
         context['blocked_service_days'] = blocked_service_days
         context['service_days'] = service_days

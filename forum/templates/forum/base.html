@@ -3,7 +3,13 @@
 
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="게시판">
+    <meta name="author" content="goda studio">
+    <meta name="version" content="GazaHome alpha">
+
+
     <title>{% block head-title %}Forum{% endblock %}</title>
 
     <!-- Favicon-->
@@ -25,37 +31,14 @@
 <!-- Navigation Bar -->
 {% include 'forum/navbar.html' %}
 
+
 <div class="container my-3">
-    <div class="row">
-        <div class="col-md-8 col-lg-9" id="main-area">
-            <!-- main-area -->
-            {% block main-area %}{% endblock %}
-        </div>
-
-        <div class="col-md-4 col-lg-3">
 
 
-            <!-- Categories Widget -->
-            <div class="card my-4" id="categories-card">
-                <h5 class="card-header">Categories</h5>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        {% for category in categories %}
-                            <a class="list-group-item"
-                               href="{% url 'category_post' category.slug %}">
-                                {{ category }}({{ category.post_set.count }})
-                            </a>
-                        {% endfor %}
-                        <a class="list-group-item"
-                           href="/forum/category/no_category">미분류({{ num_noncategory_posts }})
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <!-- main-area -->
+    {% block main-area %}{% endblock %}
 
 
-        </div>
-    </div>
 </div>
 
 <!-- Footer -->

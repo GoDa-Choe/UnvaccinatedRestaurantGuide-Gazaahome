@@ -1,17 +1,8 @@
 {% extends 'forum/base_full_width.html' %}
 
+
 {% block head-title %}
     {{ calculator.name }}
-{% endblock %}
-
-{% block custom_style %}
-    <style>
-        .my-btn-size {
-            width: 12%;
-            min-width: 3rem;
-            height: 3rem;
-        }
-    </style>
 {% endblock %}
 
 {% block main-area %}
@@ -62,33 +53,35 @@
     {% endfor %}
     <hr/>
 
-    <div class="row">
+
+    <div class="row justify-content-center">
         {% for month_block in blocked_service_days %}
-            <div class="col my-3 d-flex justify-content-center text-center">
-                <div class="card" style="min-width: 400px;max-width: 550px;">
+            <div class="col-auto">
+                <div class="card text-center my-3" style="min-width: 350px; max-width: 380px">
                     <div class="card-header">
                         <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body px-0">
                         {% for weekday in weekdays %}
-                            <button type="button" class="btn text-dark my-btn-size">
+                            <button type="button" class="btn text-dark"
+                                    style="padding-right: 0.801rem; padding-left: 0.801rem">
                                 {{ weekday }}
                             </button>
                         {% endfor %}
 
                         {% for date in month_block %}
                             {% if date == None %}
-                                <button type="button" class="btn my-btn-size" disabled></button>
+                                <button type="button" class="btn text-white" disabled>00</button>
                             {% elif date == calculator.start_date or date == calculator.end_date %}
-                                <button type="button" class="btn btn-warning my-btn-size">{{ date|date:'d' }}</button>
+                                <button type="button" class="btn btn-warning">{{ date|date:'d' }}</button>
                             {% elif date in leaves %}
-                                <button type="button" class="btn btn-primary my-btn-size">{{ date|date:'d' }}</button>
+                                <button type="button" class="btn btn-primary">{{ date|date:'d' }}</button>
                             {% elif date in serviced_days or date in dayoffs %}
-                                <button type="button" class="btn btn-secondary my-btn-size">{{ date|date:'d' }}</button>
+                                <button type="button" class="btn btn-secondary">{{ date|date:'d' }}</button>
                             {% else %}
                                 <button type="button"
-                                        class="btn btn-outline-secondary my-btn-size">{{ date|date:'d' }}</button>
+                                        class="btn btn-outline-secondary">{{ date|date:'d' }}</button>
                             {% endif %}
                         {% endfor %}
 
@@ -97,5 +90,7 @@
             </div>
         {% endfor %}
     </div>
+
+
 
 {% endblock %}
