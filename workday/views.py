@@ -238,8 +238,7 @@ class CalculatorUpdate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         calculator = Calculator.objects.get(pk=self.kwargs['pk'])
-        past_dayoffs = calculator.dayoff_set.all().delete()
-
+        calculator.dayoff_set.all().delete()
         dayoffs = request.POST.getlist('dayoffs')
 
         if dayoffs:
