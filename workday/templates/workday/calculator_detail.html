@@ -40,7 +40,7 @@
             <hr>
 
             <div class="container my-5">
-                <h3 class="text-center my-0">복무 계산기</h3>
+                <h3 class="text-center my-0">군복무 계산기</h3>
                 <div class="d-flex justify-content-between align-items-center text-muted">
                     <div class="d-inline">
                         <p class="text-start my-0"><small>입대</small></p>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="d-inline">
                         <p class="text-end my-0"><small>전역</small></p>
-                        <p class="text-end my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                        <p class="text-end my-0"><small>{{ calculator.end_date|date:'Y-m-d' }}</small></p>
                     </div>
                 </div>
 
@@ -62,16 +62,16 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-inline">
-                        <p class="text-center my-0">복무 기간</p>
-                        <p class="text-center my-0">{{ service_days|length }}일</p>
-                    </div>
-                    <div class="d-inline">
                         <p class="text-center my-0">복무 일수</p>
                         <p class="text-center my-0">{{ serviced_days|length }}일</p>
                     </div>
                     <div class="d-inline">
+                        <p class="text-center my-0">복무 기간</p>
+                        <p class="text-center my-0">{{ num_service_days }}일</p>
+                    </div>
+                    <div class="d-inline">
                         <p class="text-center my-0 fw-bold">남은 복무</p>
-                        <p class="text-center my-0 fw-bold">{{ remaining_days|length }}일</p>
+                        <p class="text-center my-0 fw-bold">{{ num_remain_days }}일</p>
                     </div>
                 </div>
             </div>
@@ -80,34 +80,26 @@
                 <h3 class="text-center my-0">실출근 계산기</h3>
                 <div class="d-flex justify-content-between align-items-center text-muted">
                     <div class="d-inline">
-                        <p class="text-start my-0"><small>오늘</small></p>
+                        <p class="text-start my-0"><small>입대</small></p>
                         <p class="text-start my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
                     </div>
                     <div class="d-inline">
                         <p class="text-end my-0"><small>막출</small></p>
-                        <p class="text-end my-0"><small>{{ calculator.start_date|date:'Y-m-d' }}</small></p>
+                        <p class="text-end my-0"><small>{{ end_workday|date:'Y-m-d' }}</small></p>
                     </div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
-                         style="width: {{ percent }}%"
-                         aria-valuenow="{{ percent }}"
+                         style="width: {{ workday_percent }}%"
+                         aria-valuenow="{{ workday_percent }}"
                          aria-valuemin="0" aria-valuemax="100">
-                        {{ percent }}%
+                        {{ workday_percent }}%
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-inline">
-                        <p class="text-center my-0">출근 기간</p>
-                        <p class="text-center my-0">{{ workdays|length }}일</p>
-                    </div>
-                    <div class="d-inline">
-                        <p class="text-center my-0">출근 일수</p>
-                        <p class="text-center my-0">{{ workdays|length }}일</p>
-                    </div>
+                <div class="d-flex justify-content-end align-items-center">
                     <div class="d-inline">
                         <p class="text-center my-0 fw-bold">남은 출근</p>
-                        <p class="text-center my-0 fw-bold">{{ workdays|length }}일</p>
+                        <p class="text-center my-0 fw-bold">{{ num_workdays }}일</p>
                     </div>
                 </div>
             </div>
@@ -156,74 +148,78 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>00</td>
+            <td class="fw-bold">{{ num_leaves }}</td>
             <td></td>
         </tr>
         </tbody>
     </table>
 
 
-    <div class="d-flex justify-content-between mt-5">
-        <div class="d-inline">
-            <button type="button" class="btn btn-sm btn-secondary mx-1">휴일</button>
-            <button type="button" class="btn btn-sm btn-primary mx-1">휴가</button>
-            <button type="button" class="btn btn-sm btn-warning mx-1">전역</button>
+
+
+
+
+        <div class="d-flex justify-content-between mt-5">
+            <div class="d-inline">
+                <button type="button" class="btn btn-sm btn-secondary mx-1">휴일</button>
+                <button type="button" class="btn btn-sm btn-primary mx-1">휴가</button>
+                <button type="button" class="btn btn-sm btn-warning mx-1">전역</button>
+            </div>
+
+            <div class="d-inline">
+                <a href="{% url 'workday:update' calculator.pk %}" role="button" class="btn btn-sm btn-outline-success">
+                    휴일 수정
+                </a>
+            </div>
         </div>
 
-        <div class="d-inline">
-            <a href="{% url 'workday:update' calculator.pk %}" role="button" class="btn btn-sm btn-outline-success">
-                휴일
-                수정</a>
-        </div>
-    </div>
+        <div class="row justify-content-evenly">
+            {% for month, month_block in blocked_service_days %}
+                <div class="col-auto">
+                    <div class="card text-center my-3" style="min-width: 350px; max-width: 380px">
+                        <div class="card-header">
+                            <h5>{{ month.year }}-{{ month.month }}</h5>
+                        </div>
 
-
-
-    <div class="row justify-content-between">
-        {% for month_block in blocked_service_days %}
-            <div class="col-auto">
-                <div class="card text-center my-3" style="min-width: 350px; max-width: 380px">
-                    <div class="card-header">
-                        <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
-                    </div>
-
-                    <div class="card-body px-0">
-                        {% for weekday in weekdays %}
-                            <button type="button" class="btn text-dark" style="width: 44px">
-                                <span>{{ weekday }}</span>
-                            </button>
-                        {% endfor %}
-
-                        {% for date in month_block %}
-                            {% if date == None %}
-                                <button type="button" class="btn text-white my-1" disabled style="width: 44px">
-                                    <span class="bt-ft">00</span>
+                        <div class="card-body px-0" style="min-height: 300px">
+                            {% for weekday in weekdays %}
+                                <button type="button" class="btn text-dark" style="width: 44px">
+                                    <span>{{ weekday }}</span>
                                 </button>
-                            {% elif date == calculator.start_date or date == calculator.end_date %}
-                                <button type="button" class="btn btn-warning my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ date|date:'d' }}</span>
-                                </button>
-                            {% elif date in leaves %}
-                                <button type="button" class="btn btn-primary my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ date|date:'d' }}</span>
-                                </button>
-                            {% elif date in serviced_days or date in dayoffs %}
-                                <button type="button" class="btn btn-secondary my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ date|date:'d' }}</span>
-                                </button>
-                            {% else %}
-                                <button type="button" class="btn btn-outline-secondary my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ date|date:'d' }}</span>
-                                </button>
-                            {% endif %}
-                        {% endfor %}
+                            {% endfor %}
 
+                            {% for date in month_block %}
+                                {% if date == None %}
+                                    <button type="button" class="btn text-white my-1" disabled style="width: 44px">
+                                        <span class="bt-ft">00</span>
+                                    </button>
+                                {% elif date == today %}
+                                    <button type="button" class="btn btn-success my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% elif date == calculator.end_date %}
+                                    <button type="button" class="btn btn-warning my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% elif date in leaves %}
+                                    <button type="button" class="btn btn-primary my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% elif date in serviced_days or date in dayoffs %}
+                                    <button type="button" class="btn btn-secondary my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-outline-secondary my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-
-
+            {% endfor %}
+        </div>
 
 {% endblock %}

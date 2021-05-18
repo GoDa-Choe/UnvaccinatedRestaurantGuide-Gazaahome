@@ -11,6 +11,8 @@ from django.core.exceptions import PermissionDenied
 from workday.forms import CalculatorForm, LeaveForm, DayoffForm
 from workday.implement import create_block, make_days
 
+from workday.library import calculator_lib
+
 
 class CalculatorCreate(LoginRequiredMixin, CreateView):
     model = Calculator
@@ -69,62 +71,14 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
             raise PermissionDenied
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(CalculatorDetail, self).get_context_data(**kwargs)
+        calculator = self.get_object()
+        new = calculator_lib.get_workday_from_calculator(calculator)
+        context.update(new)
 
-        ob = self.get_object()
-        begin_service = ob.start_date
-        end_service = ob.end_date
-
-        service_days = make_days.make_service_days(begin_service, end_service)
-
-        blocked_service_days = \
-            create_block.make_blocked_service_days(service_days, begin_service, end_service)
-
-        serviced_days = make_days.make_serviced_days(begin_service)
-        remaining_days = service_days - serviced_days
-
-        leaves = []
-        leave_list = ob.leave_set.all()
-        for leave in leave_list:
-            leaves.extend(leave.get_leaves())
-
-        dayoffs = []
-        dayoff_list = ob.dayoff_set.all()
-        for dayoff in dayoff_list:
-            dayoffs.append(dayoff.date)
-
-        holidays = make_days.get_holidays()
-        weekends = make_days.get_weekends()
-
-        workdays = remaining_days - set(dayoffs) - set(leaves)
-
-        first_weekday = []
-        last_weekday = []
-        for month in blocked_service_days:
-            first_weekday.append(month[0].weekday())
-            last_weekday.append(month[-1].weekday())
-
-        for i in range(len(blocked_service_days)):
-            first_count = first_weekday[i]
-            last_count = 6 - last_weekday[i]
-            for j in range(first_count):
-                blocked_service_days[i].insert(0, None)
-            for j in range(last_count):
-                blocked_service_days[i].append(None)
-
-        weekdays = ['월', '화', '수', '목', '금', '토', '일']
-
-        context['blocked_service_days'] = blocked_service_days
-        context['service_days'] = service_days
-        context['serviced_days'] = serviced_days
-        context['workdays'] = workdays
-        context['percent'] = f'{len(serviced_days) / len(service_days) * 100 :.2f}'
-        context['today'] = datetime.date.today()
-        context['remaining_days'] = remaining_days
-        context['leaves'] = leaves
-        context['weekdays'] = weekdays
-        context['dayoffs'] = dayoffs
         return context
+
+
 
 
 class LeaveCreate(LoginRequiredMixin, CreateView):
