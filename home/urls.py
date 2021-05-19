@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from home import views
 
+app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
     # path('about/', views.about, name='about'),

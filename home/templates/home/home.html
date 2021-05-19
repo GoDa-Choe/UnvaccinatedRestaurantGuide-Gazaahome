@@ -1,0 +1,397 @@
+<!doctype html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="게시판">
+    <meta name="author" content="goda studio">
+    <meta name="version" content="GazaHome alpha">
+    <title>{% block head-title %}집에 가자!{% endblock %}</title>
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/"/>
+
+    <!-- Font Awesome-->
+    <script src="https://kit.fontawesome.com/b9b1f40479.js" crossorigin="anonymous"></script>
+
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'forum/bootstrap/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
+
+    <!-- Custom styles for this template-->
+    {% block custom_style %}
+        <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap"
+              rel="stylesheet">
+        <link href="{% static 'home/css/home.css' %}" rel="stylesheet" type="text/css" media="screen">
+    {% endblock %}
+</head>
+<body>
+
+
+<div class="container">
+
+</div>
+
+<main class="container">
+    {% include 'forum/navbar.html' %}
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-warning">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">실출근 계산기</h1>
+            <p class="lead my-2">Multiple lines of text that form the lede.</p>
+            <p class="my1">Multiple lines of text that form the lede.</p>
+            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+        </div>
+    </div>
+
+    {% if calculator %}
+        <div class="row mb-3">
+
+            <div class="col">
+                <h3 class="text-center my-0">군복무</h3>
+                <div class="d-flex justify-content-between align-items-end text-muted">
+                    <p class="d-inline text-start my-0 small"><small>{{ calculator.start_date|date:'Y/m/d' }}</small>
+                    </p>
+                    <div class="d-inline">
+                        <p class="text-end my-0 small"><small>전역</small></p>
+                        <p class="text-end my-0 small"><small>{{ calculator.end_date|date:'Y/m/d' }}</small></p>
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ percent }}%"
+                         aria-valuenow="{{ percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <p class="text-center my-0 fw-bold small">D-{{ num_remain_days }}</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <h3 class="text-center my-0">실출근</h3>
+                <div class="d-flex justify-content-between align-items-end text-muted">
+                    <p class="d-inline text-start my-0 small"><small>{{ calculator.start_date|date:'Y/m/d' }}</small>
+                    </p>
+                    <div class="d-inline">
+                        <p class="text-end my-0 small"><small>막출</small></p>
+                        <p class="text-end my-0 small"><small>{{ end_workday|date:'Y/m/d' }}</small></p>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                         role="progressbar"
+                         style="width: {{ workday_percent }}%"
+                         aria-valuenow="{{ workday_percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ workday_percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <p class="text-center my-0 fw-bold small">D-{{ num_workdays }}</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    {% endif %}
+
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
+                    <!-- Popular Post/most hits-->
+                    <div class="list-group-flush">
+                        {% for post in popular_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between">
+                                            <div class="d-inline">
+                                                <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart"></i> {{ post.num_likes }}&nbsp;
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment"></i> {{ post.num_comments }}&nbsp;
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-success">좋아요 많은 게시글</strong>
+                    <!-- Most Likes-->
+                    <div class="list-group-flush">
+                        {% for post in most_likes_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between">
+                                            <div class="d-inline">
+                                                <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart"></i> {{ post.num_likes }}&nbsp;
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment"></i> {{ post.num_comments }}&nbsp;
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                실출근 계산기 어떻게 사용하나요?
+            </h3>
+
+            <article class="blog-post">
+                <h2 class="blog-post-title">안녕하세요</h2>
+                <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+
+                <p>This blog post shows a few different types of content that’s supported and styled with Bootstrap.
+                    Basic typography, lists, tables, images, code, and more are all supported as expected.</p>
+                <hr>
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <h2>Blockquotes</h2>
+                <p>This is an example blockquote in action:</p>
+                <blockquote class="blockquote">
+                    <p>Quoted text goes here.</p>
+                </blockquote>
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <h3>Example lists</h3>
+                <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other
+                    highly repetitive body text used throughout. This is an example unordered list:</p>
+                <ul>
+                    <li>First list item</li>
+                    <li>Second list item with a longer description</li>
+                    <li>Third list item to close it out</li>
+                </ul>
+                <p>And this is an ordered list:</p>
+                <ol>
+                    <li>First list item</li>
+                    <li>Second list item with a longer description</li>
+                    <li>Third list item to close it out</li>
+                </ol>
+                <p>And this is a definiton list:</p>
+                <dl>
+                    <dt>HyperText Markup Language (HTML)</dt>
+                    <dd>The language used to describe and define the content of a Web page</dd>
+                    <dt>Cascading Style Sheets (CSS)</dt>
+                    <dd>Used to describe the appearance of Web content</dd>
+                    <dt>JavaScript (JS)</dt>
+                    <dd>The programming language used to build advanced Web sites and applications</dd>
+                </dl>
+                <h2>Inline HTML elements</h2>
+                <p>HTML defines a long list of available inline tags, a complete list of which can be found on the <a
+                        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">Mozilla Developer Network</a>.
+                </p>
+                <ul>
+                    <li><strong>To bold text</strong>, use <code class="language-plaintext highlighter-rouge">&lt;strong&gt;</code>.
+                    </li>
+                    <li><em>To italicize text</em>, use <code
+                            class="language-plaintext highlighter-rouge">&lt;em&gt;</code>.
+                    </li>
+                    <li>Abbreviations, like <abbr title="HyperText Markup Langage">HTML</abbr> should use <code
+                            class="language-plaintext highlighter-rouge">&lt;abbr&gt;</code>, with an optional <code
+                            class="language-plaintext highlighter-rouge">title</code> attribute for the full phrase.
+                    </li>
+                    <li>Citations, like <cite>— Mark Otto</cite>, should use <code
+                            class="language-plaintext highlighter-rouge">&lt;cite&gt;</code>.
+                    </li>
+                    <li>
+                        <del>Deleted</del>
+                        text should use <code class="language-plaintext highlighter-rouge">&lt;del&gt;</code> and
+                        <ins>inserted</ins>
+                        text should use <code class="language-plaintext highlighter-rouge">&lt;ins&gt;</code>.
+                    </li>
+                    <li>Superscript <sup>text</sup> uses <code
+                            class="language-plaintext highlighter-rouge">&lt;sup&gt;</code> and subscript
+                        <sub>text</sub> uses <code class="language-plaintext highlighter-rouge">&lt;sub&gt;</code>.
+                    </li>
+                </ul>
+                <p>Most of these elements are styled by browsers with few modifications on our part.</p>
+                <h2>Heading</h2>
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <h3>Sub-heading</h3>
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <pre><code>Example code block</code></pre>
+                <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other
+                    highly repetitive body text used throughout.</p>
+            </article>
+
+            <article class="blog-post">
+                <h2 class="blog-post-title">Another blog post</h2>
+                <p class="blog-post-meta">December 23, 2020 by <a href="#">Jacob</a></p>
+
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <blockquote>
+                    <p>Longer quote goes here, maybe with some <strong>emphasized text</strong> in the middle of it.</p>
+                </blockquote>
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <h3>Example table</h3>
+                <p>And don't forget about tables in these posts:</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Upvotes</th>
+                        <th>Downvotes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Alice</td>
+                        <td>10</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td>Bob</td>
+                        <td>4</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Charlie</td>
+                        <td>7</td>
+                        <td>9</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td>Totals</td>
+                        <td>21</td>
+                        <td>23</td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other
+                    highly repetitive body text used throughout.</p>
+            </article>
+
+            <article class="blog-post">
+                <h2 class="blog-post-title">New feature</h2>
+                <p class="blog-post-meta">December 14, 2020 by <a href="#">Chris</a></p>
+
+                <p>This is some additional paragraph placeholder content. It has been written to fill the available
+                    space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
+                    to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+                <ul>
+                    <li>First list item</li>
+                    <li>Second list item with a longer description</li>
+                    <li>Third list item to close it out</li>
+                </ul>
+                <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other
+                    highly repetitive body text used throughout.</p>
+            </article>
+        </div>
+
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 2rem;">
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4>개발 일기</h4>
+
+                    <p class="mb-0">Customize this section to tell your visitors a little bit about your
+                        publication,
+                        writers, content, or something else entirely. Totally up to you.
+                        <a href="#" class="text-muted float-end">read more</a>
+                    </p>
+
+
+                </div>
+
+                <div class="p-4">
+                    <h4 class="">커뮤니티 게시판</h4>
+                    <ol class="list-unstyled mb-0">
+                        {% for category in categories %}
+                            <li class="mb-1">
+                                <a class="text-dark" href="{% url 'category_post' category.slug %}">
+                                    {{ category }}<span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                                    {{ category.post_set.count }}
+                                    </span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+                <div class="p-4">
+                    <h4 class="fst-italic">Elsewhere</h4>
+                    <ol class="list-unstyled">
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% include 'forum/footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
