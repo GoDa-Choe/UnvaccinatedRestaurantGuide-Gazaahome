@@ -3,12 +3,13 @@
  */
 
 .home_footer {
-  padding: 2.5rem 0;
-  color: #727272;
-  text-align: center;
-  background-color: #f9f9f9;
-  border-top: .05rem solid #e5e5e5;
+    padding: 2.5rem 0;
+    color: #727272;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-top: .05rem solid #e5e5e5;
 }
+
 .home_footer p:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }

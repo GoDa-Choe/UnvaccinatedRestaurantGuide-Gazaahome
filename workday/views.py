@@ -9,7 +9,6 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from workday.forms import CalculatorForm, LeaveForm, DayoffForm
-from workday.implement import make_days
 
 from workday.library import calculator_lib
 
@@ -32,8 +31,8 @@ class CalculatorCreate(LoginRequiredMixin, CreateView):
         if current_user.is_authenticated:
             form.instance.author = current_user
 
-            holidays = make_days.get_holidays()
-            weekends = make_days.get_weekends()
+            holidays = calculator_lib.make_days.get_holidays()
+            weekends = calculator_lib.make_days.get_weekends()
             response = super(CalculatorCreate, self).form_valid(form)
 
             for holiday in holidays:
