@@ -1,5 +1,5 @@
 import datetime
-from workday.implement import holidays
+from workday.library import holidays
 
 
 def make_days(begin, end):
