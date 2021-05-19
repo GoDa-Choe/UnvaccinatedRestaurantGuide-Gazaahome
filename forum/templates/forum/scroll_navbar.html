@@ -1,0 +1,42 @@
+<!-- Category Scroll Bar -->
+<div class="nav-scroller bg-body shadow-sm">
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+        {% if category %} {% comment %}Post List{% endcomment %}
+            {% for category_iter in categories %}
+                {% if category_iter == category %}
+                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}"
+                       style="color:#6f42c1;">
+                        {{ category_iter }}
+                        <span class="badge text-dark rounded-pill align-text-bottom"
+                              style="background-color: #b4a0f0">
+                            {{ category_iter.post_set.count }}
+                        </span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}">
+                        {{ category_iter }}
+                        <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category_iter.post_set.count }}</span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% else %}{% comment %}Post Detail{% endcomment %}
+            {% for category_iter in categories %}
+                {% if category_iter == post.category %}
+                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}"
+                       style="color:#6f42c1;">
+                        {{ category_iter }}
+                        <span class="badge text-dark rounded-pill align-text-bottom"
+                              style="background-color: #b4a0f0">
+                            {{ category_iter.post_set.count }}
+                        </span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}">
+                        {{ category_iter }}
+                        <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category_iter.post_set.count }}</span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </nav>
+</div>

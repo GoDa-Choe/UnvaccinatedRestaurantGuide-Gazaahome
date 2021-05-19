@@ -45,7 +45,7 @@ class Post(models.Model, HitCountMixin):
 
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):

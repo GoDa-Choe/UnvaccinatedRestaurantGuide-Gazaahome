@@ -19,31 +19,7 @@
     </div>
 
     <!-- Category Scroll Bar -->
-    <div class="nav-scroller bg-body shadow-sm">
-        <nav class="nav nav-underline" aria-label="Secondary navigation">
-            {% for category in categories %}
-                {% if category == post.category %}
-                    <a class="nav-link" href="{% url 'category_post' category.slug %}"
-                       style="color:#6f42c1;">
-                        {{ category }}
-                        <span class="badge text-dark rounded-pill align-text-bottom"
-                              style="background-color: #b4a0f0">
-                            {{ category.post_set.count }}
-                        </span>
-                    </a>
-                {% else %}
-                    <a class="nav-link" href="{% url 'category_post' category.slug %}">
-                        {{ category }}
-                        <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category.post_set.count }}</span>
-                    </a>
-                {% endif %}
-
-
-            {% endfor %}
-            <a class="nav-link" href="/forum/category/no_category">미분류({{ num_noncategory_posts }})
-            </a>
-        </nav>
-    </div>
+    {% include 'forum/scroll_navbar.html' %}
 
 
 

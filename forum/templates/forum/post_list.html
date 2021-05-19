@@ -22,22 +22,12 @@
     </div>
 
     <!-- Category Scroll Bar -->
-    <div class="nav-scroller bg-body shadow-sm">
-        <nav class="nav nav-underline" aria-label="Secondary navigation">
-            {% for category in categories %}
-                <a class="nav-link" href="{% url 'category_post' category.slug %}">
-                    {{ category }}
-                    <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category.post_set.count }}</span>
-                </a>
-            {% endfor %}
-            <a class="nav-link" href="/forum/category/no_category">미분류({{ num_noncategory_posts }})
-            </a>
-        </nav>
-    </div>
+    {% include 'forum/scroll_navbar.html' %}
 
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
 
+        <!-- Header -->
         <div class="d-flex justify-content-between border-bottom pb-2 mb-0">
             <h2 class="h5">
                 {% if category %}

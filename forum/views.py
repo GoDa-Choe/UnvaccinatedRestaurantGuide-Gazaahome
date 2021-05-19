@@ -167,7 +167,6 @@ def tag_post(request, slug):
         'post_list': post_list.order_by('-pk'),
         'tag': tag,
         'categories': Category.objects.all(),
-        'num_noncategory_posts': Post.objects.filter(category=None).count(),
     }
 
     return render(
@@ -188,7 +187,6 @@ def category_post(request, slug):
     context = {
         'post_list': post_list.order_by('-pk'),
         'categories': Category.objects.all(),
-        'num_noncategory_posts': Post.objects.filter(category=None).count(),
         'category': category
     }
 
@@ -208,7 +206,6 @@ class PostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = Category.objects.all()
-        context['num_noncategory_posts'] = Post.objects.filter(category=None).count()
 
         return context
 
@@ -221,7 +218,6 @@ class PostDetail(HitCountDetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
-        context['num_noncategory_posts'] = Post.objects.filter(category=None).count()
         context['comment_form'] = CommentForm
 
         likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
