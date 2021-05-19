@@ -18,17 +18,15 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'forum/bootstrap/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
 
+    <!-- Footer CSS style-->
+    <link href="{% static 'forum/css/footer.css' %}" rel="stylesheet" type="text/css" media="screen">
+
     <!-- Custom styles for this template-->
     {% block custom_style %}
         <link href="{% static 'home/css/home.css' %}" rel="stylesheet" type="text/css" media="screen">
     {% endblock %}
 </head>
 <body>
-
-
-<div class="container">
-
-</div>
 
 <main class="container">
     {% include 'forum/navbar.html' %}

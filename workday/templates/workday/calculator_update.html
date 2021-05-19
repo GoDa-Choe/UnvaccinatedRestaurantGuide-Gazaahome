@@ -14,7 +14,7 @@
 
 {% block main-area %}
     <form method="post" action="{% url 'workday:update' calculator.pk %}">{% csrf_token %}
-        <h2 class="display-5 text-center mb-3">실출근 달력</h2>
+        <h2 class="display-5 text-center mb-3">실출근 달력 수정</h2>
 
         <div class="d-flex justify-content-between">
             <div class="d-inline">
@@ -29,10 +29,10 @@
 
         </div>
 
-        <div class="row justify-content-evenly">
+        <div class="row row-cols-1 row-cols-md-3 g-3 mt-1">
             {% for month, month_block in blocked_service_days %}
-                <div class="col-auto">
-                    <div class="card text-center my-3" style="min-width: 350px;max-width: 380px;">
+                <div class="col my-2 d-flex justify-content-center">
+                    <div class="card text-center my-2" style="min-width: 350px;max-width: 380px;">
                         <div class="card-header">
                             <h5>{{ month.year }}-{{ month.month }}</h5>
                         </div>
