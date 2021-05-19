@@ -1,4 +1,4 @@
-{% extends 'forum/base_full_width.html' %}
+{% extends 'forum/base.html' %}
 {% load crispy_forms_filters %}
 
 {% load crispy_forms_tags %}
@@ -9,11 +9,25 @@
 
 {% block main-area %}
 
-    <h1>새로운 실출근 계산기</h1>
-    <hr>
-    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit" class="btn btn-primary float-end">Submit</button>
-    </form>
+    <div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 lh-1">Bootstrap</h1>
+            <small>Since 2011</small>
+        </div>
+    </div>
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h2>실출근 계산기 만들기</h2>
+
+        <hr>
+
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            {{ form | crispy }}
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" id="btnFetch" class="btn btn-primary">생성</button>
+            </div>
+        </form>
+    </div>
+
 
 {% endblock %}

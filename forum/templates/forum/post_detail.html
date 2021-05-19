@@ -59,7 +59,9 @@
         {% endif %}
 
         <!-- Post content-->
-        <p>{{ post.get_content_markdown|safe }}</p>
+        <p>{{ post.get_content_markdown|safe|linebreaks }}</p>
+
+        <hr>
 
         <!-- Tags-->
         <div class="d-flex">
@@ -77,24 +79,22 @@
             {% if user.is_authenticated %}
                 <form action="{% url 'like' post.pk %}" method="POST">{% csrf_token %}
                     {% if is_liked %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn text-white"
-                                style="background-color: #6f42c1">
+                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-outline-primary btn-sm">
                             좋아요 {{ num_likes }}
                         </button>
                     {% else %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn text-white"
-                                style="background-color: #6f42c1">
+                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-sm btn-outline-primary ">
                             좋아요 {{ num_likes }}
                         </button>
                     {% endif %}
                 </form>
             {% else %}
-                <button class="btn text-white" style="background-color: #6f42c1"> {{ num_likes }} 좋아요</button>
+                <button class="btn btn-sm btn-outline-primary ">좋아요 {{ num_likes }}</button>
             {% endif %}
 
             <!-- Hits -->
             <div class="d-inline">
-                <button class="btn mx-3 text-white" style="background-color: #6f42c1">
+                <button class="btn btn-sm mx-3 btn-outline-success">
                     조회수 {{ post.hit_count.hits }}</button>
             </div>
         </div>
@@ -107,7 +107,7 @@
 
         {% if post.comment_set.exists %}
 
-            {% for comment in post.comment_set.all reversed %}
+            {% for comment in post.comment_set.all%}
 
                 <div class="d-flex  pt-3">
                     <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
@@ -143,7 +143,7 @@
 
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h5>
+                                <h4 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
@@ -154,7 +154,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
                                 </button>
                                 <a role="button" class="btn btn-danger"
-                                   href=" {% url 'comment_delete'  comment.pk %}  ">삭제</a>
+                                   href="{% url 'comment_delete'  comment.pk %}">삭제</a>
                             </div>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
         {% endif %}
 
         <!-- Comments form-->
-        <div class="card my-4">
+        <div class="card my-4 text-center">
             <div class="card-body">
                 {% if user.is_authenticated %}
                     <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}new_comment/">

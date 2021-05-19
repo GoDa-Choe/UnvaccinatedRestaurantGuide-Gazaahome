@@ -26,12 +26,17 @@
     <!-- Custom styles for this template-->
     {% block custom_style %}{% endblock %}
 
+    <!-- Custom scripts for this template-->
+    {% block custom_script %}{% endblock %}
+
 </head>
 
 <body>
 
 <!-- Navigation Bar -->
-{% include 'forum/navbar.html' %}
+<div class="container">
+    {% include 'forum/navbar.html' %}
+</div>
 
 <div class="container my-3">
     <div class="row">
@@ -52,6 +57,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ"
         crossorigin="anonymous"></script>
+
 
 </body>
 

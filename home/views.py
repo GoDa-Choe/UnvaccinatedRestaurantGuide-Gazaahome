@@ -41,7 +41,7 @@ def home(request):
         calculator = Calculator.objects.filter(author=request.user).first()
         if calculator:
             context['calculator'] = calculator
-            new = calculator_lib.get_workday_from_calculator(calculator)
+            new = calculator_lib.get_workday_from_calculator_light(calculator)
             context.update(new)
             return render(request, 'home/home.html', context)
 

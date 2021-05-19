@@ -1,19 +1,33 @@
-{% extends 'forum/base_full_width.html' %}
+{% extends 'forum/base.html' %}
 {% load crispy_forms_filters %}
 
 {% load crispy_forms_tags %}
 
 {% block head-title %}
-    휴가 삭제
+    실출근 계산기 삭제
 {% endblock %}
 
 {% block main-area %}
 
-    <h1>실출근 계산기 삭제</h1>
+    <div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 lh-1">Bootstrap</h1>
+            <small>Since 2011</small>
+        </div>
+    </div>
 
-    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-        <p>정말로 <strong>"{{ calculator.name }}"</strong>을/를 삭제하시겠습니까?"</p>
-        <br>
-        <button type="submit" class="btn btn-primary float-end">삭제</button>
-    </form>
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h2>실출근 계산기 삭제</h2>
+        <hr>
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+            <p><strong>{{ calculator.name }}</strong>을/를</p>
+            <p>정말로 <strong>삭제</strong>하시겠습니까?"</p>
+
+           <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </div>
+        </form>
+    </div>
+
 {% endblock %}

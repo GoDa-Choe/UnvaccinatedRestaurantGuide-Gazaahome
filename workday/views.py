@@ -19,6 +19,14 @@ class CalculatorCreate(LoginRequiredMixin, CreateView):
     form_class = CalculatorForm
     success_url = reverse_lazy('workday:index')
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            calculator = Calculator.objects.filter(author=self.request.user).first()
+            if not calculator:
+                return super(CalculatorCreate, self).dispatch(request, *args, **kwargs)
+
+        raise PermissionDenied
+
     def form_valid(self, form):
         current_user = self.request.user
         if current_user.is_authenticated:

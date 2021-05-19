@@ -75,3 +75,38 @@ def insert_None_for_align(blocked_service_days):
             blocked_service_days[i].append(None)
 
     return months
+
+
+def get_workday_from_calculator_light(calculator):
+    begin_service = calculator.start_date
+    end_service = calculator.end_date
+
+    service_days = make_days.make_service_days(begin_service, end_service)  # 입대 ~ 전역전
+
+    serviced_days = make_days.make_serviced_days(begin_service)  # 입대~어제
+    remain_days = service_days - serviced_days  # 오늘 ~ 전역전
+
+    leaves = set()  # 휴가
+    leaves_list = calculator.leave_set.all()
+    for leave in leaves_list:
+        leaves.update(leave.get_leaves())
+
+    dayoffs = set()
+    dayoff_list = calculator.dayoff_set.all()
+    for dayoff in dayoff_list:
+        dayoffs.add(dayoff.date)
+
+    workdays = remain_days - dayoffs - leaves  # 실출근
+
+    workdays_list = list(workdays)
+
+    data = {
+        'num_workdays': len(workdays),
+        'end_workday': max(workdays_list),
+        'workday_percent': f'{(1 - len(workdays) / len(service_days)) * 100 :.2f}',
+
+        'percent': f'{len(serviced_days) / len(service_days) * 100 :.2f}',
+        'num_remain_days': len(remain_days),  #
+    }
+
+    return data

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from forum.models import Post, Category, Tag, Comment
-from forum.forms import CommentForm
+from forum.forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -88,7 +88,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'head_image', 'category']
+    form_class = PostForm
     template_name = 'forum/post_update_form.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -131,7 +131,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content', 'head_image', 'category']
+    form_class = PostForm
 
     def form_valid(self, form):
         current_user = self.request.user
