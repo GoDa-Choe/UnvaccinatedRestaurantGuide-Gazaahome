@@ -29,15 +29,15 @@
 
         </div>
 
-        <div class="row justify-content-between">
-            {% for month_block in blocked_service_days %}
+        <div class="row justify-content-evenly">
+            {% for month, month_block in blocked_service_days %}
                 <div class="col-auto">
                     <div class="card text-center my-3" style="min-width: 350px;max-width: 380px;">
                         <div class="card-header">
-                            <h5>{{ month_block.8.year }}-{{ month_block.8.month }}</h5>
+                            <h5>{{ month.year }}-{{ month.month }}</h5>
                         </div>
 
-                        <div class="card-body px-0">
+                        <div class="card-body px-0" style="min-height: 300px">
                             {% for weekday in weekdays %}
                                 <button type="button" class="btn text-dark my-1" style="width: 44px">
                                     <span class="bt-ft">{{ weekday }}</span>
@@ -48,7 +48,11 @@
                                 {% if date == None %}
                                     <button type="button" class="btn text-white my-1" disabled style="width: 44px">00
                                     </button>
-                                {% elif date == calculator.start_date or date == calculator.end_date %}
+                                {% elif date == calculator.start_date %}
+                                    <button type="button" class="btn btn-outline-success my-1" style="width: 44px">
+                                        <span class="bt-ft">{{ date|date:'d' }}</span>
+                                    </button>
+                                {% elif date == calculator.end_date %}
                                     <button type="button" class="btn btn-warning my-1" style="width: 44px">
                                         <span class="bt-ft">{{ date|date:'d' }}</span>
                                     </button>

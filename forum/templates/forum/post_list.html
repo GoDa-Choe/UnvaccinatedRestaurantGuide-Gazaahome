@@ -21,18 +21,6 @@
     <!-- Category Scroll Bar -->
     <div class="nav-scroller bg-body shadow-sm">
         <nav class="nav nav-underline" aria-label="Secondary navigation">
-            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            <a class="nav-link" href="#">
-                Friends
-                <span class="badge bg-light text-dark rounded-pill align-text-bottom">27</span>
-            </a>
-            <a class="nav-link" href="#">Explore</a>
-            <a class="nav-link" href="#">Suggestions</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
             {% for category in categories %}
                 <a class="nav-link" href="{% url 'category_post' category.slug %}">
                     {{ category }}
@@ -55,7 +43,7 @@
                     모든 게시글
                 {% endif %}
             </h2>
-            <small><a href="#">새로운 게시글</a> </small>
+            <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url 'create' %}">새로운 게시글</a>
         </div>
 
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, DeleteView
@@ -9,7 +9,7 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from workday.forms import CalculatorForm, LeaveForm, DayoffForm
-from workday.implement import create_block, make_days
+from workday.implement import make_days
 
 from workday.library import calculator_lib
 
@@ -79,8 +79,6 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-
-
 class LeaveCreate(LoginRequiredMixin, CreateView):
     model = Leave
     form_class = LeaveForm
@@ -118,6 +116,22 @@ class LeaveDelete(LoginRequiredMixin, DeleteView):
         return reverse_lazy('workday:detail', args=(self.kwargs['cal'],))
 
 
+class CalculatorDelete(LoginRequiredMixin, DeleteView):
+    model = Calculator
+    form_class = CalculatorForm
+    template_name = 'workday/calculator_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        if current_calculator.author == self.request.user:
+            return super(CalculatorDelete, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def get_success_url(self):
+        return reverse_lazy('workday:index')
+
+
 class CalculatorUpdate(LoginRequiredMixin, View):
     template_name = 'workday/calculator_update.html'
 
@@ -132,63 +146,10 @@ class CalculatorUpdate(LoginRequiredMixin, View):
         return reverse_lazy('workday:detail', args=(self.kwargs['pk'],))
 
     def get(self, request, *args, **kwargs):
-        ob = Calculator.objects.get(pk=self.kwargs['pk'])
-        begin_service = ob.start_date
-        end_service = ob.end_date
-
-        service_days = make_days.make_service_days(begin_service, end_service)
-
-        blocked_service_days = \
-            create_block.make_blocked_service_days(service_days, begin_service, end_service)
-
-        serviced_days = make_days.make_serviced_days(begin_service)
-        remaining_days = service_days - serviced_days
-
-        leaves = []
-        leave_list = ob.leave_set.all()
-        for leave in leave_list:
-            leaves.extend(leave.get_leaves())
-
-        dayoffs = []
-        dayoff_list = ob.dayoff_set.all()
-        for dayoff in dayoff_list:
-            dayoffs.append(dayoff.date)
-
-        holidays = make_days.get_holidays()
-        weekends = make_days.get_weekends()
-
-        workdays = remaining_days - set(dayoffs) - set(leaves)
-
-        first_weekday = []
-        last_weekday = []
-        for month in blocked_service_days:
-            first_weekday.append(month[0].weekday())
-            last_weekday.append(month[-1].weekday())
-
-        for i in range(len(blocked_service_days)):
-            first_count = first_weekday[i]
-            last_count = 6 - last_weekday[i]
-            for j in range(first_count):
-                blocked_service_days[i].insert(0, None)
-            for j in range(last_count):
-                blocked_service_days[i].append(None)
-
-        weekdays = ['월', '활', '수', '목', '금', '토', '일']
-
-        context = {}
-        context['calculator'] = ob
-        context['blocked_service_days'] = blocked_service_days
-        context['service_days'] = service_days
-        context['serviced_days'] = serviced_days
-        context['workdays'] = workdays
-        context['percent'] = f'{len(serviced_days) / len(service_days) * 100 :.2f}'
-        context['today'] = datetime.date.today()
-        context['remaining_days'] = remaining_days
-        context['leaves'] = leaves
-        context['weekdays'] = weekdays
-        context['dayoffs'] = dayoffs
-
-        return render(request, 'workday/calculator_update.html', context=context)
+        calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        context = calculator_lib.get_workday_from_calculator(calculator)
+        context['calculator'] = calculator
+        return render(request, 'workday/calculator_update.html', context)
 
     def post(self, request, *args, **kwargs):
         calculator = Calculator.objects.get(pk=self.kwargs['pk'])
@@ -206,3 +167,14 @@ class CalculatorUpdate(LoginRequiredMixin, View):
                 else:
                     return redirect(reverse_lazy('workday:detail', args=(self.kwargs['pk'],)))
         return redirect(reverse_lazy('workday:detail', args=(self.kwargs['pk'],)))
+
+
+def redirect_calculator(request):
+    if request.user.is_authenticated:
+        calculator = Calculator.objects.filter(author=request.user).first()
+        if calculator:
+            return redirect(reverse('workday:detail', args=(calculator.pk,)))
+        else:
+            return redirect('workday:create')
+    else:
+        raise PermissionDenied

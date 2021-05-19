@@ -9,12 +9,11 @@
 
 {% block main-area %}
 
-    <h1>휴가 삭제하기</h1>
-    <p>시작일 : {{ leave.start_date }} 종료일 : {{ leave.start_date }} 기간 : {{ leave.days.days }}</p>
-    <hr>
+    <h1>실출근 계산기 삭제</h1>
+
     <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-        {{ form | crispy }}
+        <p>정말로 <strong>"{{ calculator.name }}"</strong>을/를 삭제하시겠습니까?"</p>
+        <br>
         <button type="submit" class="btn btn-primary float-end">삭제</button>
     </form>
-
 {% endblock %}
