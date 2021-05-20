@@ -1,7 +1,7 @@
 {% extends 'forum/base.html' %}
 
 {% block head-title %}
-    달력수정
+    달력 수정
 {% endblock %}
 
 {% block custom_style %}
@@ -13,80 +13,97 @@
 {% endblock %}
 
 {% block main-area %}
-    <form method="post" action="{% url 'workday:update' calculator.pk %}">{% csrf_token %}
-        <h2 class="display-5 text-center mb-3">실출근 달력 수정</h2>
 
-        <div class="d-flex justify-content-between">
-            <div class="d-inline">
-                <button type="button" class="btn btn-sm btn-secondary mx-1">휴일</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary mx-1">출근</button>
-                <button type="button" class="btn btn-sm btn-primary mx-1">휴가</button>
-                <button type="button" class="btn btn-sm btn-warning mx-1">전역</button>
-            </div>
-            <div class="d-inline">
-                <button type="submit" class="btn btn-sm btn-outline-success">저장</button>
-            </div>
-
+    <div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 lh-1">Bootstrap</h1>
+            <small>Since 2011</small>
         </div>
+    </div>
 
-        <div class="row row-cols-1 row-cols-md-3 g-3 mt-1">
-            {% for month, month_block in blocked_service_days %}
-                <div class="col my-2 d-flex justify-content-center">
-                    <div class="card text-center my-2" style="min-width: 350px;max-width: 380px;">
-                        <div class="card-header">
-                            <h5>{{ month.year }}-{{ month.month }}</h5>
-                        </div>
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
 
-                        <div class="card-body px-0" style="min-height: 300px">
-                            {% for weekday in weekdays %}
-                                <button type="button" class="btn text-dark my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ weekday }}</span>
-                                </button>
-                            {% endfor %}
+        <form method="post" action="{% url 'workday:update' calculator.pk %}">{% csrf_token %}
+            <h2 class="display-5 text-center mb-3">실출근 달력 수정</h2>
 
-                            {% for date in month_block %}
-                                {% if date == None %}
-                                    <button type="button" class="btn text-white my-1" disabled style="width: 44px">00
+            <div class="d-flex justify-content-between">
+                <div class="d-inline">
+                    <button type="button" class="btn btn-sm btn-secondary mx-1">휴일</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary mx-1">출근</button>
+                    <button type="button" class="btn btn-sm btn-primary mx-1">휴가</button>
+                    <button type="button" class="btn btn-sm btn-warning mx-1">전역</button>
+                </div>
+                <div class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-success">저장</button>
+                </div>
+
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-3 mt-1">
+                {% for month, month_block in blocked_service_days %}
+                    <div class="col d-flex justify-content-center">
+                        <div class="card text-center my-3" style="min-width: 350px;max-width: 380px;">
+                            <div class="card-header">
+                                <h5>{{ month.year }}-{{ month.month }}</h5>
+                            </div>
+
+                            <div class="card-body px-0" style="min-height: 300px">
+                                {% for weekday in weekdays %}
+                                    <button type="button" class="btn text-dark" style="width: 44px">
+                                        <span class="bt-ft">{{ weekday }}</span>
                                     </button>
-                                {% elif date == calculator.start_date %}
-                                    <button type="button" class="btn btn-outline-success my-1" style="width: 44px">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </button>
-                                {% elif date == calculator.end_date %}
-                                    <button type="button" class="btn btn-warning my-1" style="width: 44px">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </button>
-                                {% elif date in leaves %}
-                                    <button type="button" class="btn btn-primary my-1" style="width: 44px">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </button>
-                                {% elif date in serviced_days %}
-                                    <button type="button" class="btn btn-secondary my-1" style="width: 44px">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </button>
-                                {% elif date in dayoffs %}
-                                    <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
-                                           autocomplete="off"
-                                           name="dayoffs" value="{{ date|date:'Y-m-d' }}" checked>
-                                    <label class="btn btn-outline-secondary my-1" style="width: 44px"
-                                           for="{{ date|date:'Y-m-d' }}">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </label>
-                                {% else %}
-                                    <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
-                                           autocomplete="off"
-                                           name="dayoffs" value="{{ date|date:'Y-m-d' }}">
-                                    <label class="btn btn-outline-secondary my-1" style="width: 44px"
-                                           for="{{ date|date:'Y-m-d' }}">
-                                        <span class="bt-ft">{{ date|date:'d' }}</span>
-                                    </label>
-                                {% endif %}
-                            {% endfor %}
+                                {% endfor %}
+
+                                {% for date in month_block %}
+                                    {% if date == None %}
+                                        <button type="button" class="btn text-white my-1" disabled style="width: 44px">
+                                            <span class="bt-ft">00</span>
+                                        </button>
+                                    {% elif date == calculator.start_date %}
+                                        <button type="button" class="btn btn-outline-success my-1" style="width: 44px">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </button>
+                                    {% elif date == calculator.end_date %}
+                                        <button type="button" class="btn btn-warning my-1" style="width: 44px">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </button>
+                                    {% elif date in leaves %}
+                                        <button type="button" class="btn btn-primary my-1" style="width: 44px">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </button>
+                                    {% elif date in serviced_days %}
+                                        <button type="button" class="btn btn-secondary my-1" style="width: 44px">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </button>
+                                    {% elif date in dayoffs %}
+                                        <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
+                                               autocomplete="off"
+                                               name="dayoffs" value="{{ date|date:'Y-m-d' }}" checked>
+                                        <label class="btn btn-outline-secondary my-1" style="width: 44px"
+                                               for="{{ date|date:'Y-m-d' }}">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </label>
+                                    {% else %}
+                                        <input type="checkbox" class="btn-check" id="{{ date|date:'Y-m-d' }}"
+                                               autocomplete="off"
+                                               name="dayoffs" value="{{ date|date:'Y-m-d' }}">
+                                        <label class="btn btn-outline-secondary my-1" style="width: 44px"
+                                               for="{{ date|date:'Y-m-d' }}">
+                                            <span class="bt-ft">{{ date|date:'d' }}</span>
+                                        </label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    </form>
+                {% endfor %}
+            </div>
+        </form>
+
+    </div>
+
+
+
+
 
 {% endblock %}

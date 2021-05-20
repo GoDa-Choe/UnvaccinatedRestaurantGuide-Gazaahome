@@ -33,10 +33,11 @@ class CalculatorForm(ModelForm):
 class LeaveForm(ModelForm):
     class Meta:
         model = Leave
-        fields = ('start_date', 'end_date')
+        fields = ('type', 'start_date', 'end_date')
         labels = {
-            'start_date': '휴가 시작일',
-            'end_date': '휴가 종료일',
+            'type': '종류',
+            'start_date': '출발일',
+            'end_date': '복귀일',
         }
 
 

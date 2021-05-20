@@ -26,6 +26,16 @@ class Leave(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    LEAVE_CHOICES = (
+        ('ye', '연가'),
+        ('po', '포상'),
+        ('wi', '위로'),
+        ('bo', '보상'),
+        ('ch', '청원'),
+        ('tp', '예정'),
+    )
+    type = models.CharField(max_length=2, choices=LEAVE_CHOICES)
+
     # ForeignKeys
     calculator = models.ForeignKey(Calculator, on_delete=models.CASCADE)
 

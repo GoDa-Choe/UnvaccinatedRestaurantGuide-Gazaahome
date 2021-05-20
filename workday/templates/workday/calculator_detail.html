@@ -142,7 +142,7 @@
         {% for leave in calculator.leave_set.all %}
             <tr class="text-center">
                 <th scope="row">{{ forloop.counter }}</th>
-                <td>개발중</td>
+                <td>{{ leave.get_type_display }}</td>
                 <td>{{ leave.start_date|date:'y-m-d' }}</td>
                 <td>{{ leave.end_date|date:'y-m-d' }}</td>
                 <td>{{ leave.days.days }}</td>

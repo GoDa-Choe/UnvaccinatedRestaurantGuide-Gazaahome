@@ -25,9 +25,9 @@
 
     <article>
         <!-- Title-->
-        <h1 class="mt-4">
+        <h2 class="h3 mt-4">
             {{ post.title }}
-        </h1>
+        </h2>
 
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-inline">
@@ -41,10 +41,10 @@
             <div class="d-inline">
                 <!-- Post eidt-->
                 {% if user.is_authenticated and user == post.author %}
-                    <a class="btn btn-outline-secondary" href="{% url 'update' post.pk %}" role="button">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'update' post.pk %}" role="button">
                         수정
                     </a>
-                    <a class="btn btn-outline-secondary mx-2" href="{% url 'delete' post.pk %}" role="button">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'delete' post.pk %}" role="button">
                         삭제
                     </a>
                 {% endif %}
@@ -79,11 +79,13 @@
             {% if user.is_authenticated %}
                 <form action="{% url 'like' post.pk %}" method="POST">{% csrf_token %}
                     {% if is_liked %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-outline-primary btn-sm">
+                        <button type="submit" name="post_id" value="{{ post.pk }}"
+                                class="btn btn-outline-primary btn-sm">
                             좋아요 {{ num_likes }}
                         </button>
                     {% else %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}" class="btn btn-sm btn-outline-primary ">
+                        <button type="submit" name="post_id" value="{{ post.pk }}"
+                                class="btn btn-sm btn-outline-primary ">
                             좋아요 {{ num_likes }}
                         </button>
                     {% endif %}
@@ -94,8 +96,7 @@
 
             <!-- Hits -->
             <div class="d-inline">
-                <button class="btn btn-sm mx-3 btn-outline-success">
-                    조회수 {{ post.hit_count.hits }}</button>
+                <button class="btn btn-sm mx-2 btn-outline-success">조회수 {{ post.hit_count.hits }}</button>
             </div>
         </div>
     </article>
@@ -107,21 +108,20 @@
 
         {% if post.comment_set.exists %}
 
-            {% for comment in post.comment_set.all%}
+            {% for comment in post.comment_set.all %}
 
                 <div class="d-flex  pt-3">
                     <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
 
                         <div class="float-end">
                             {% if user.is_authenticated and comment.author == user %}
-                                <a role="button" class="btn btn-sm btn-outline-secondary"
-                                   href="{% url 'comment_update' comment.pk %}">
-                                    수정
+                                <a href="{% url 'comment_update' comment.pk %}" class="text-dark text-decoration-none">
+                                    <small>수정</small>
                                 </a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#deleteCommentModal-{{ comment.pk }}">
-                                    삭제
-                                </button>
+                                <a class="text-dark text-decoration-none" href="#" data-bs-toggle="modal"
+                                   data-bs-target="#deleteCommentModal-{{ comment.pk }}">
+                                    <small>삭제</small>
+                                </a>
                             {% endif %}
                         </div>
 
@@ -143,7 +143,7 @@
 
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h4>
+                                <h5 class="modal-title" id="deleteModalLabel">댓글을 삭제하시겠습니까?</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
@@ -169,7 +169,7 @@
                     <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}new_comment/">
                         {% csrf_token %}
                         <div class="form-group">{{ comment_form|crispy }}</div>
-                        <button class="btn btn-primary float-end mt-1" type="submit">작성</button>
+                        <button class="btn btn-sm btn-primary float-end mt-1" type="submit">작성</button>
                     </form>
 
                 {% else %}

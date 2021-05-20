@@ -3,7 +3,7 @@ from forum import views
 
 urlpatterns = [
     path('tag/<str:slug>/', views.tag_post, name='tag_post'),
-    path('category/<str:slug>/', views.category_post, name='category_post'),
+    path('category/<str:slug>/', views.CategoryPostList.as_view(), name='category_post'),
 
     path('delete_post/<int:pk>/', views.PostDelete.as_view(), name='delete'),
     path('update_post/<int:pk>/', views.PostUpdate.as_view(), name='update'),

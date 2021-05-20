@@ -3,14 +3,13 @@
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home:home' %}">GazaHome</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="{% url 'home:home' %}">집에가자</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     {% if user.is_authenticated %}
                         <a class="nav-link" aria-current="page" href="{% url 'workday:index' %}">실출근 계산기</a>
@@ -20,25 +19,20 @@
                         </a>
                     {% endif %}
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">게시판</a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="">about</a>
                 </li>
-
-
                 {% if user.is_authenticated %}
-                    <li class="nav-item dropdown nav">
-                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button"
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             {{ user.username }}
                         </a>
-
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item text-dark" href="/accounts/logout/">로그아웃</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/accounts/logout/">로그아웃</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -46,7 +40,6 @@
                             <li><a class="dropdown-item" href="#">disabled</a></li>
                         </ul>
                     </li>
-
                 {% else %}
                     <a class="nav-link text-dark" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
                         로그인
@@ -73,17 +66,17 @@
                     <div class="col-md-6">
                         <a href="{% provider_login_url 'google' %}" role="button"
                            class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="fab fa-google"></i>&nbsp&nbsp Log in with Google
+                            <i class="fab fa-google"></i>&nbsp; 구글 계정으로 로그인
                         </a>
                         <a href="/accounts/login/" role="button"
                            class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="far fa-envelope"></i>&nbsp&nbsp Log in with E-mail&nbsp
+                            <i class="far fa-envelope"></i>&nbsp; 아이디로 로그인
                         </a>
                     </div>
                     <div class="col-md-6">
                         <a href="/accounts/signup/" role="button"
                            class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="far fa-envelope"></i>&nbsp&nbsp Sign Up with E-mail
+                            <i class="far fa-envelope"></i>&nbsp; 회원가입
                         </a>
                     </div>
                 </div>

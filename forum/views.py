@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from hitcount.views import HitCountDetailView
+from django.contrib.auth.models import User
 
 
 @require_POST
@@ -119,7 +120,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             tags_list = tags_str.split('#')
 
             for tag in tags_list:
-                tag = tag.strip()
+                tag = tag.strip(' #')
                 tag, is_tag_created = Tag.objects.get_or_create(name=tag)
                 if is_tag_created:
                     tag.slug = slugify(tag, allow_unicode=True)
@@ -177,15 +178,13 @@ def tag_post(request, slug):
 
 
 def category_post(request, slug):
-    if slug == 'no_category':
-        category = '미분류'
-        post_list = Post.objects.filter(category=None)
-    else:
-        category = Category.objects.get(slug=slug)
-        post_list = Post.objects.filter(category=category)
+    category = Category.objects.get(slug=slug)
+    post_list = Post.objects.filter(category=category).exclude(author='공지사항')
+    notice_list = Post.objects.filter(author='공지사항')
 
     context = {
         'post_list': post_list.order_by('-pk'),
+        'notice_list': notice_list.order_by('-pk'),
         'categories': Category.objects.all(),
         'category': category
     }
@@ -195,6 +194,30 @@ def category_post(request, slug):
         'forum/post_list.html',
         context,
     )
+
+
+class CategoryPostList(ListView):
+    model = Post
+    template_name = 'forum/post_list.html'
+    ordering = '-pk'
+    paginate_by = 10
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        category = Category.objects.get(slug=self.kwargs['slug'])
+        notice_manager = User.objects.get(username="공지사항")
+        return category.post_set.exclude(author=notice_manager)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryPostList, self).get_context_data()
+        category = Category.objects.get(slug=self.kwargs['slug'])
+        notice_manager = User.objects.get(username="공지사항")
+        notice_list = category.post_set.filter(author=notice_manager)
+
+        context['category'] = category
+        context['categories'] = Category.objects.all()
+        context['notice_list'] = notice_list
+        return context
 
 
 class PostList(ListView):
