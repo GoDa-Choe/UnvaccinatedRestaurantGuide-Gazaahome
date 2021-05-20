@@ -3,17 +3,17 @@
     <nav class="nav nav-underline" aria-label="Secondary navigation">
         {% if category %} {% comment %}Post List{% endcomment %}
 
-            {% if category == "인기 게시판" %}
-                <a class="nav-link" href="{% url 'popular_post' %}" style="color:#6f42c1;">인기 게시판</a>
+            {% if category == "인기" %}
+                <a class="nav-link" href="{% url 'popular_post' %}" style="color:#6f42c1;">인기</a>
             {% else %}
-                <a class="nav-link" href="{% url 'popular_post' %}">인기 게시판</a>
+                <a class="nav-link" href="{% url 'popular_post' %}">인기</a>
             {% endif %}
 
 
-            {% if category == "좋아요 게시판" %}
-                <a class="nav-link" href="{% url 'likes_post' %}" style="color:#6f42c1;">좋아요 게시판</a>
+            {% if category == "좋아요" %}
+                <a class="nav-link" href="{% url 'likes_post' %}" style="color:#6f42c1;">좋아요</a>
             {% else %}
-                <a class="nav-link" href="{% url 'likes_post' %}">좋아요 게시판</a>
+                <a class="nav-link" href="{% url 'likes_post' %}">좋아요</a>
             {% endif %}
 
 
@@ -40,11 +40,11 @@
             {% else %}{% comment %}Post Detail{% endcomment %}
 
             <a class="nav-link" href="{% url 'popular_post' %}">
-                인기 게시판
+                인기
             </a>
 
             <a class="nav-link" href="{% url 'likes_post' %}">
-                좋아요 게시판
+                좋아요
             </a>
 
 

@@ -189,7 +189,7 @@ class LikesPostList(ListView):
         context['post_list'] = sorted(context['post_list'], key=lambda post: post.num_likes(), reverse=True)
         context['post_list'] = context['post_list'][:20]
         context['categories'] = Category.objects.all()
-        context['category'] = "좋아요 게시판"
+        context['category'] = "좋아요"
 
         return context
 
@@ -205,7 +205,7 @@ class PopularPostList(ListView):
         context = super(PopularPostList, self).get_context_data()
         context['post_list'] = context['post_list'][:20]
         context['categories'] = Category.objects.all()
-        context['category'] = "인기 게시판"
+        context['category'] = "인기"
 
         return context
 
