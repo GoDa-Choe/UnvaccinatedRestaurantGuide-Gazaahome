@@ -177,23 +177,37 @@ def tag_post(request, slug):
     )
 
 
-def category_post(request, slug):
-    category = Category.objects.get(slug=slug)
-    post_list = Post.objects.filter(category=category).exclude(author='공지사항')
-    notice_list = Post.objects.filter(author='공지사항')
+class LikesPostList(ListView):
+    model = Post
+    template_name = 'forum/post_list.html'
+    paginate_by = 10
+    context_object_name = 'post_list'
+    ordering = "-hit_count_generic__hits"
 
-    context = {
-        'post_list': post_list.order_by('-pk'),
-        'notice_list': notice_list.order_by('-pk'),
-        'categories': Category.objects.all(),
-        'category': category
-    }
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(LikesPostList, self).get_context_data()
+        context['post_list'] = sorted(context['post_list'], key=lambda post: post.num_likes(), reverse=True)
+        context['post_list'] = context['post_list'][:20]
+        context['categories'] = Category.objects.all()
+        context['category'] = "좋아요 게시판"
 
-    return render(
-        request,
-        'forum/post_list.html',
-        context,
-    )
+        return context
+
+
+class PopularPostList(ListView):
+    model = Post
+    template_name = 'forum/post_list.html'
+    paginate_by = 10
+    context_object_name = 'post_list'
+    ordering = "-hit_count_generic__hits"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PopularPostList, self).get_context_data()
+        context['post_list'] = context['post_list'][:20]
+        context['categories'] = Category.objects.all()
+        context['category'] = "인기 게시판"
+
+        return context
 
 
 class CategoryPostList(ListView):

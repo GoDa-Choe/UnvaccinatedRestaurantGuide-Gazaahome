@@ -98,7 +98,11 @@
         <div class="col-md-6">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
-                    <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
+
+                    <a href="{% url 'popular_post' %}" class="text-decoration-none">
+                        <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
+                    </a>
+
                     <!-- Popular Post/most hits-->
                     <div class="list-group-flush">
                         {% for post in popular_posts %}
@@ -140,7 +144,9 @@
         <div class="col-md-6">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
-                    <strong class="d-inline-block mb-2 text-success">좋아요 많은 게시글</strong>
+                    <a href="{% url 'likes_post' %}" class="text-decoration-none">
+                        <strong class="d-inline-block mb-2 text-success">좋아요 게시글</strong>
+                    </a>
                     <!-- Most Likes-->
                     <div class="list-group-flush">
                         {% for post in most_likes_posts %}

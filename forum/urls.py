@@ -3,6 +3,9 @@ from forum import views
 
 urlpatterns = [
     path('tag/<str:slug>/', views.tag_post, name='tag_post'),
+
+    path('likes/', views.LikesPostList.as_view(), name='likes_post'),
+    path('popular/', views.PopularPostList.as_view(), name='popular_post'),
     path('category/<str:slug>/', views.CategoryPostList.as_view(), name='category_post'),
 
     path('delete_post/<int:pk>/', views.PostDelete.as_view(), name='delete'),

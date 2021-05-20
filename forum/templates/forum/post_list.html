@@ -52,35 +52,36 @@
 
         <div class="list-group-flush">
 
-
             <!-- Notice -->
-            {% for notice in notice_list %}
+            {% if notice_list %}
+                {% for notice in notice_list %}
+                    <a href="{% url 'detail' notice.pk %}" class="list-group-item list-group-item-action"
+                       style="border: 0">
+                        <div class="d-flex text-muted pt-3">
+                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
 
-                <a href="{% url 'detail' notice.pk %}" class="list-group-item list-group-item-action" style="border: 0">
-                    <div class="d-flex text-muted pt-3">
-                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                <h3 class="h6 text-dark fw-bold">{{ notice.title }}</h3>
 
-                            <h3 class="h6 text-dark fw-bold">{{ notice.title }}</h3>
-
-                            <div class="d-flex text-muted justify-content-between">
-                                <div class="d-inline">
-                                    <strong class="text-gray-dark">공지사항</strong>
-                                    <div class="d-inline"> {{ notice.created_at|date:'m-d H:i' }} </div>
-                                </div>
-
-                                <div class="d-inline mb-1">
-                                    <div class="d-inline"><i class="fas fa-heart"></i> {{ notice.num_likes }}&nbsp;
+                                <div class="d-flex text-muted justify-content-between">
+                                    <div class="d-inline">
+                                        <strong class="text-gray-dark">공지사항</strong>
+                                        <div class="d-inline"> {{ notice.created_at|date:'m-d H:i' }} </div>
                                     </div>
-                                    <div class="d-inline"><i class="far fa-comment"></i> {{ notice.num_comments }}&nbsp;
+
+                                    <div class="d-inline mb-1">
+                                        <div class="d-inline"><i class="fas fa-heart"></i> {{ notice.num_likes }}&nbsp;
+                                        </div>
+                                        <div class="d-inline"><i class="far fa-comment"></i> {{ notice.num_comments }}&nbsp;
+                                        </div>
+                                        <div class="d-inline"><i class="far fa-eye"></i> {{ notice.hit_count.hits }}
+                                        </div>
                                     </div>
-                                    <div class="d-inline"><i class="far fa-eye"></i> {{ notice.hit_count.hits }}</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            {% endfor %}
-
+                    </a>
+                {% endfor %}
+            {% endif %}
 
 
             <!-- Post -->
