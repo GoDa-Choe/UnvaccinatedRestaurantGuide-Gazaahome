@@ -12,22 +12,13 @@ class CalculatorForm(ModelForm):
             'end_date': '전역일',
         }
 
-    # def clean_start_date(self):
-    #     end_date = self.cleaned_data.get('end_date')
-    #     start_date = self.cleaned_data.get('start_date')
-    #     if start_date >= end_date:
-    #         raise ValidationError("전역일이 입대일보다 빠를 수 없습니다.")
-    #     return start_date
-
     def clean_end_date(self):
         end_date = self.cleaned_data.get('end_date')
         start_date = self.cleaned_data.get('start_date')
         if start_date >= end_date:
             raise ValidationError("전역일이 입대일보다 빠를 수 없습니다.")
-        elif (end_date - start_date).days >= 573:
-            raise ValidationError("군복무 기간이 18개월을 넘습니다.")
-
-        return end_date
+        else:
+            return end_date
 
 
 class LeaveForm(ModelForm):
@@ -39,6 +30,22 @@ class LeaveForm(ModelForm):
             'start_date': '출발일',
             'end_date': '복귀일',
         }
+
+    def __init__(self, calculator, *args, **kwargs):
+        self.calculator = calculator
+        super(LeaveForm, self).__init__(*args, **kwargs)
+
+    def clean_end_date(self):
+        end_date = self.cleaned_data.get('end_date')
+        start_date = self.cleaned_data.get('start_date')
+
+        service_start = self.calculator.start_date
+        service_end = self.calculator.end_date
+
+        if service_start <= start_date <= end_date <= service_end:
+            return end_date
+        else:
+            raise ValidationError("휴가기간이 잘못되었습니다.")
 
 
 class DayoffForm(ModelForm):

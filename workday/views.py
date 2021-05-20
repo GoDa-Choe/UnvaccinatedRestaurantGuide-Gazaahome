@@ -32,7 +32,8 @@ class CalculatorCreate(LoginRequiredMixin, CreateView):
             form.instance.author = current_user
 
             holidays = calculator_lib.make_days.get_holidays()
-            weekends = calculator_lib.make_days.get_weekends()
+            weekends = calculator_lib.make_days.get_weekends(form.cleaned_data['start_date'],
+                                                             form.cleaned_data['end_date'])
             response = super(CalculatorCreate, self).form_valid(form)
 
             for holiday in holidays:
@@ -96,6 +97,11 @@ class LeaveCreate(LoginRequiredMixin, CreateView):
             return super(LeaveCreate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
+
+    def get_form_kwargs(self):
+        kwargs = super(LeaveCreate, self).get_form_kwargs()
+        kwargs['calculator'] = Calculator.objects.get(pk=self.kwargs['pk'])
+        return kwargs
 
     def form_valid(self, form):
         current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])

@@ -10,7 +10,10 @@ def get_workday_from_calculator(calculator):
 
     service_days = make_days.make_service_days(begin_service, end_service)  # 입대 ~ 전역전
 
-    blocked_service_days = create_block.make_blocked_service_days(service_days, today, end_service)  # 입대 ~ 전역
+    if begin_service < today:
+        blocked_service_days = create_block.make_blocked_service_days(today, end_service)  # 입대 ~ 전역
+    else:
+        blocked_service_days = create_block.make_blocked_service_days(begin_service, end_service)  # 입대 ~ 전역
 
     serviced_days = make_days.make_serviced_days(begin_service)  # 입대~어제
     remain_days = service_days - serviced_days  # 오늘 ~ 전역전
