@@ -21,7 +21,7 @@ from home import views
 app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
-    path('about/', views.RobotView.as_view(), name='robot'),
+    path('robots.txt/', views.RobotView.as_view(), name='robot'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
