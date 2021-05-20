@@ -203,10 +203,6 @@
                                 <button type="button" class="btn text-white my-1" disabled style="width: 44px">
                                     <span class="bt-ft">00</span>
                                 </button>
-                            {% elif date == today %}
-                                <button type="button" class="btn btn-outline-success my-1" style="width: 44px">
-                                    <span class="bt-ft">{{ date|date:'d' }}</span>
-                                </button>
                             {% elif date == calculator.end_date %}
                                 <button type="button" class="btn btn-warning my-1" style="width: 44px">
                                     <span class="bt-ft">{{ date|date:'d' }}</span>
@@ -217,6 +213,10 @@
                                 </button>
                             {% elif date in serviced_days or date in dayoffs %}
                                 <button type="button" class="btn btn-secondary my-1" style="width: 44px">
+                                    <span class="bt-ft">{{ date|date:'d' }}</span>
+                                </button>
+                            {% elif date == today %}
+                                <button type="button" class="btn btn-outline-success my-1" style="width: 44px">
                                     <span class="bt-ft">{{ date|date:'d' }}</span>
                                 </button>
                             {% else %}
