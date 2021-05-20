@@ -2,6 +2,7 @@ from django.shortcuts import render
 from forum.models import Post, Category
 from workday.models import Calculator
 from workday.library import calculator_lib
+from django.views.generic import TemplateView
 
 
 def home(request):
@@ -28,3 +29,8 @@ def home(request):
         'home/home.html',
         context
     )
+
+
+class RobotView(TemplateView):
+    template_name = 'home/robots.txt'
+    content_type = 'text/plain'
