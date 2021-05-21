@@ -3,14 +3,16 @@ from django.contrib.auth.models import User
 
 from datetime import date, timedelta
 
+DATE_FORMAT = "날짜형식: <em>2021-01-01</em>"
+
 
 class Calculator(models.Model):
     name = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(help_text=DATE_FORMAT)
+    end_date = models.DateField(help_text=DATE_FORMAT)
 
     # ForeignKeys
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -23,8 +25,8 @@ class Leave(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(help_text=DATE_FORMAT)
+    end_date = models.DateField(help_text=DATE_FORMAT)
 
     LEAVE_CHOICES = (
         ('ye', '연가'),
