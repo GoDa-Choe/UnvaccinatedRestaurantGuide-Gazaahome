@@ -15,7 +15,7 @@
     {% include 'home/home_sub_banner.html' %}
 
     <!-- Search Bar -->
-    <form class="d-flex">
+    <form class="d-flex">{% csrf_token %}
         <input class="form-control me-2" type="search" placeholder="준비중" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
