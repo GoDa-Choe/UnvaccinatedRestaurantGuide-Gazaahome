@@ -234,8 +234,13 @@ class CategoryPostList(ListView):
 class PostList(ListView):
     model = Post
     template_name = 'forum/post_list.html'
-    ordering = '-pk'
+    context_object_name = 'post_list'
     paginate_by = 10
+
+    def get_queryset(self):
+        notice_manager = User.objects.get(username="공지사항")
+        post_list = Post.objects.exclude(author=notice_manager).order_by('-pk')
+        return post_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
