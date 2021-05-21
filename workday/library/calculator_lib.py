@@ -36,6 +36,11 @@ def get_workday_from_calculator(calculator):
 
     weekdays = ['월', '화', '수', '목', '금', '토', '일']
 
+    if workdays_list:
+        end_workday = max(workdays_list)
+    else:
+        end_workday = end_service
+
     data = {
         'blocked_service_days': zip(months, blocked_service_days),
 
@@ -43,7 +48,7 @@ def get_workday_from_calculator(calculator):
 
         'num_workdays': len(workdays),
         'today': today,
-        'end_workday': max(workdays_list),
+        'end_workday': end_workday,
         'workday_percent': f'{(1 - len(workdays) / len(service_days)) * 100 :.2f}',
 
         'percent': f'{len(serviced_days) / len(service_days) * 100 :.2f}',
@@ -103,9 +108,14 @@ def get_workday_from_calculator_light(calculator):
 
     workdays_list = list(workdays)
 
+    if workdays_list:
+        end_workday = max(workdays_list)
+    else:
+        end_workday = end_service
+
     data = {
         'num_workdays': len(workdays),
-        'end_workday': max(workdays_list),
+        'end_workday': end_workday,
         'workday_percent': f'{(1 - len(workdays) / len(service_days)) * 100 :.2f}',
 
         'percent': f'{len(serviced_days) / len(service_days) * 100 :.2f}',
