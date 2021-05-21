@@ -1,0 +1,31 @@
+<!-- Side-->
+<div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem;">
+
+        <div class="p-4 mb-3 bg-light rounded">
+            <h5>개발 일기</h5>
+
+            <p class="mb-0">
+                <strong>집에가자 Beta</strong><br>
+                version 1.0.0. 2021.05.20<a href="#" class="text-muted float-end">read more</a>
+            </p>
+        </div>
+
+
+        <div class="p-4">
+            <h4 class="">커뮤니티 게시판</h4>
+            <ol class="list-unstyled mb-0">
+                {% for category in categories %}
+                    <li class="mb-1">
+                        <a class="text-dark" href="{% url 'category_post' category.slug %}">
+                            {{ category }}<span
+                                class="badge bg-light text-dark rounded-pill align-text-bottom">
+                                    {{ category.post_set.count }}
+                                    </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>

@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="게시판">
-    <meta name="author" content="goda studio">
-    <meta name="version" content="GazaHome alpha">
+    <meta name="description" content="군복무 실출근 계산기">
+    <meta name="author" content="goda soft studio">
+    <meta name="version" content="gazaa bete v1.0.0.">
 
     <!-- Site Register-->
     <meta name="naver-site-verification" content="270c7bc5144781707284b3eec40c7dbea01ffc27"/>
@@ -121,10 +121,10 @@
                                             </div>
                                             <div class="d-inline">
                                                 <div class="d-inline"><i
-                                                        class="fas fa-heart"></i> {{ post.num_likes }}&nbsp;
+                                                        class="fas fa-heart"></i> {{ post.num_likes }}
                                                 </div>
                                                 <div class="d-inline"><i
-                                                        class="far fa-comment"></i> {{ post.num_comments }}&nbsp;
+                                                        class="far fa-comment"></i> {{ post.num_comments }}
                                                 </div>
                                                 <div class="d-inline"><i
                                                         class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
@@ -165,10 +165,10 @@
                                             </div>
                                             <div class="d-inline">
                                                 <div class="d-inline"><i
-                                                        class="fas fa-heart"></i> {{ post.num_likes }}&nbsp;
+                                                        class="fas fa-heart"></i> {{ post.num_likes }}
                                                 </div>
                                                 <div class="d-inline"><i
-                                                        class="far fa-comment"></i> {{ post.num_comments }}&nbsp;
+                                                        class="far fa-comment"></i> {{ post.num_comments }}
                                                 </div>
                                                 <div class="d-inline"><i
                                                         class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
@@ -192,37 +192,10 @@
             {% include 'home/home_area_1st.html' %}
 
         </div>
+
         <!-- Side-->
-        <div class="col-md-4">
-            <div class="position-sticky" style="top: 2rem;">
+        {% include 'home/home_side.html' %}
 
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h5>개발 일기</h5>
-
-                    <p class="mb-0">
-                        <strong>집에가자 Beta</strong><br>
-                        version 1.0.0. 2021.05.20<a href="#" class="text-muted float-end">read more</a>
-                    </p>
-                </div>
-
-
-                <div class="p-4">
-                    <h4 class="">커뮤니티 게시판</h4>
-                    <ol class="list-unstyled mb-0">
-                        {% for category in categories %}
-                            <li class="mb-1">
-                                <a class="text-dark" href="{% url 'category_post' category.slug %}">
-                                    {{ category }}<span
-                                        class="badge bg-light text-dark rounded-pill align-text-bottom">
-                                    {{ category.post_set.count }}
-                                    </span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-        </div>
     </div>
 
 </main>

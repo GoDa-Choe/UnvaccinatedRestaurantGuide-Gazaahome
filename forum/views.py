@@ -181,13 +181,11 @@ class LikesPostList(ListView):
     model = Post
     template_name = 'forum/post_list.html'
     paginate_by = 10
+    queryset = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)[:20]
     context_object_name = 'post_list'
-    ordering = "-hit_count_generic__hits"
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(LikesPostList, self).get_context_data()
-        context['post_list'] = sorted(context['post_list'], key=lambda post: post.num_likes(), reverse=True)
-        context['post_list'] = context['post_list'][:20]
         context['categories'] = Category.objects.all()
         context['category'] = "좋아요"
 
@@ -199,7 +197,7 @@ class PopularPostList(ListView):
     template_name = 'forum/post_list.html'
     paginate_by = 10
     context_object_name = 'post_list'
-    ordering = "-hit_count_generic__hits"
+    ordering = ("-hit_count_generic__hits", '-pk')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularPostList, self).get_context_data()
@@ -213,14 +211,13 @@ class PopularPostList(ListView):
 class CategoryPostList(ListView):
     model = Post
     template_name = 'forum/post_list.html'
-    ordering = '-pk'
     paginate_by = 10
     context_object_name = 'post_list'
 
     def get_queryset(self):
         category = Category.objects.get(slug=self.kwargs['slug'])
         notice_manager = User.objects.get(username="공지사항")
-        return category.post_set.exclude(author=notice_manager)
+        return category.post_set.exclude(author=notice_manager).order_by('-pk')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CategoryPostList, self).get_context_data()
