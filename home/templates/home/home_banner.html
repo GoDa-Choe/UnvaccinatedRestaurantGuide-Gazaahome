@@ -1,8 +1,22 @@
-<div class="p-3 p-md-5 text-white rounded bg-warning my-3">
+{% load static %}
+<div class="p-3 p-md-5 text-white rounded bg-warning mt-3">
     <div class="col-md-6">
         <h1 class="display-4">집에 가자! Beta</h1>
         <h2 class="h4">군복무 실출근 계산기</h2>
         <p>휴가/휴일을 제외한 실출근을 확인해보세요!</p>
-        <a href="#howtouse" class="text-white fw-bold">How to use?</a>
+
+        <a href="#howtouse" class="text-white fw-bold mx-1">How to use?</a>
+
+        <a href="https://open.kakao.com/o/gV6L2Ged" class="text-primary text-decoration-none mx-1 fw-bold">
+            <img src="{% static 'home/images/kakaolink_btn_small_ov.png' %}" alt="이미지 오류"
+                 style="width: 20px; height: 20px">
+            <small>집에가자 오픈카톡</small>
+        </a>
+
     </div>
+</div>
+<div class="px-3 px-md-5 py-2 text-white rounded mb-3 bg-success">
+    <h3 class="display-6"><small>New Update 친구 실출근은?</small></h3>
+    <p><small>검색 기능을 통해 친구 실출근을 알아보세요!</small></p>
+    <a href="#howtosearch" class="text-white fw-bold">어떻게 검색하나요?</a>
 </div>

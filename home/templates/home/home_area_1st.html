@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="p-3 bg-body rounded shadow-sm">
     <article>
         <h2 class="h5 blog-post-title">집에가자란?</h2>
@@ -31,6 +33,8 @@
             <li>실출근 계산기 만들기</li>
             <li>휴가 등록</li>
             <li>휴일 등록</li>
+            <li>친구 실출근을 검색하기</li>
+
         </ol>
 
         <hr>
@@ -56,6 +60,14 @@
         <h6><strong>4. 휴일 등록</strong></h6>
         <p>실출근 계산기는 출근을 쉽게 파악할 수 있도록 달력을 만들어 줍니다. 휴일 수정을 통해 휴일을 삭제하거나 추가해보세요</p>
         <pre class="text-primary"><code>휴일 수정 페이지에서는<br>휴일만 수정할 수 있습니다.</code></pre>
+
+
+        <h6 id="howtosearch"><strong>5. 친구 실출근을 검색하기</strong></h6>
+        <p>실출근 계산기 상단 검색바를 통해서 쉽게 친구의 실출근을 확인할 수 있습니다.</p>
+        <div class="col-md-6">
+            <img src="{% static 'home/images/search_calculator.jpg' %}" class="w-100" alt="사진 업로드 실패">
+
+        </div>
 
     </article>
 </div>

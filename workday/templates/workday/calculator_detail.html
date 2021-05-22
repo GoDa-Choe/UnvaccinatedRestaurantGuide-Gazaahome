@@ -183,9 +183,11 @@
         </div>
 
         <div class="d-inline">
-            <a href="{% url 'workday:update' calculator.pk %}" role="button" class="btn btn-sm btn-outline-success">
-                휴일 수정
-            </a>
+            {% if user.is_authenticated and user == calculator.author %}
+                <a href="{% url 'workday:update' calculator.pk %}" role="button" class="btn btn-sm btn-outline-success">
+                    휴일 수정
+                </a>
+            {% endif %}
         </div>
     </div>
 
