@@ -11,6 +11,8 @@ urlpatterns = [
     path('create_calculator/', views.CalculatorCreate.as_view(), name='create'),
     path('<int:pk>/delete_calculator', views.CalculatorDelete.as_view(), name='delete'),
     path('<int:pk>/update_calculator', views.CalculatorUpdate.as_view(), name='update'),
+
+    path('search/', views.CalculatorSearch.as_view(), name='search'),
     path('<int:pk>', views.CalculatorDetail.as_view(), name='detail'),
     path('', views.redirect_calculator, name='index'),
 ]

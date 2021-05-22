@@ -7,7 +7,7 @@ DATE_FORMAT = "날짜형식: <em>2021-01-01</em>"
 
 
 class Calculator(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

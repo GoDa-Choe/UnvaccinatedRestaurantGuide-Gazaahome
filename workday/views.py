@@ -2,15 +2,28 @@ from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, DeleteView
-from django.views.generic import View
+from django.views.generic import View, FormView
+from django.views.generic.edit import FormMixin
+
 from workday.models import Calculator, Leave, Dayoff
 import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from workday.forms import CalculatorForm, LeaveForm, DayoffForm
+from workday.forms import CalculatorForm, LeaveForm, DayoffForm, CalculatorSearchForm
 
 from workday.library import calculator_lib
+
+
+class CalculatorSearch(LoginRequiredMixin, FormView):
+    form_class = CalculatorSearchForm
+    template_name = 'workday/calculator_search.html'
+
+    def form_valid(self, form):
+        calculator_name = form.cleaned_data['calculator_name']
+        calculator = Calculator.objects.get(name=calculator_name)
+
+        return redirect(reverse_lazy('workday:detail', args=(calculator.pk,)))
 
 
 class CalculatorCreate(LoginRequiredMixin, CreateView):
@@ -68,8 +81,9 @@ class CalculatorList(LoginRequiredMixin, ListView):
         return context
 
 
-class CalculatorDetail(LoginRequiredMixin, DetailView):
+class CalculatorDetail(LoginRequiredMixin, FormMixin, DetailView):
     model = Calculator
+    form_class = CalculatorSearchForm
     template_name = 'workday/calculator_detail.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -78,9 +92,24 @@ class CalculatorDetail(LoginRequiredMixin, DetailView):
         else:
             raise PermissionDenied
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        calculator_name = form.cleaned_data['calculator_name']
+        calculator = Calculator.objects.get(name=calculator_name)
+
+        return redirect(reverse_lazy('workday:detail', args=(calculator.pk,)))
+
     def get_context_data(self, **kwargs):
         context = super(CalculatorDetail, self).get_context_data(**kwargs)
         calculator = self.get_object()
+
         new = calculator_lib.get_workday_from_calculator(calculator)
         context.update(new)
 
