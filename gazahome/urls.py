@@ -21,12 +21,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('home.urls')),
 
-    path('workday/', include('workday.urls')),
     path('forum/', include('forum.urls')),
+    path('workday/', include('workday.urls')),
+    path('barracks/', include('barracks.urls')),
 
     path('admin/', admin.site.urls),
-
     path('accounts/', include('allauth.urls')),
+
     path('markdownx/', include('markdownx.urls')),
 ]
 
