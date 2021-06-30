@@ -15,6 +15,7 @@ class Barracks(models.Model, HitCountMixin):
 
     # ForeignKeys
     members = models.ManyToManyField(Calculator, blank=True)
+    host = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     # hit_counts
     hit_count_generic = GenericRelation(
