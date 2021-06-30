@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'forum',
     'home',
     'workday',
+    'barracks',
 ]
 
 MIDDLEWARE = [
