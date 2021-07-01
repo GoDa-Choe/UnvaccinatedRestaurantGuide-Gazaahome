@@ -28,7 +28,8 @@
                 생활관 목록
             </h2>
             {% if user.is_authenticated %}
-                <a role="button" class="btn btn-outline-secondary btn-sm" href="#">생활관 만들기</a>
+                <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url "barracks:create_barracks" %}">
+                    생활관 만들기</a>
             {% else %}
                 <a class="btn btn-outline-secondary btn-sm" href="#" data-bs-toggle="modal"
                    data-bs-target="#loginModal">
@@ -43,7 +44,7 @@
             <!-- Barracks -->
             {% for barracks in barracks_list %}
 
-                <a href="#" class="list-group-item list-group-item-action" style="border: 0">
+                <a href="{% url 'barracks:barracks_detail' barracks.pk %}" class="list-group-item list-group-item-action" style="border: 0">
                     <div class="d-flex text-muted pt-3">
                         <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
 
