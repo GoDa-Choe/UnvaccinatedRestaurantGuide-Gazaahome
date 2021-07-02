@@ -14,6 +14,6 @@ urlpatterns = [
     path('<int:pk>/invite/', views.CalculatorSearch.as_view(), name="search_calculator"),
     path('<int:pk>/invite/<str:calculator_name>/', views.SearchedCalculatorList.as_view(),
          name="searched_calculator_list"),
-    # path('<int:pk>/transfer/', views.TransferToBarracks.as_view(), name="transfer_to_barracks"),
-    # path('<int:pk>/quit/', views.QuitBarracks.as_view(), name="quit_barracks"),
+    path('<int:pk>/transfer/', views.TransferToBarracks.as_view(), name="transfer_to_barracks"),
+    path('<int:pk>/quit/', views.QuitBarracks.as_view(), name="quit_barracks"),
 ]

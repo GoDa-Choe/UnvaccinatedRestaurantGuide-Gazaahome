@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, DeleteView
-from django.views.generic import FormView
+from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +14,8 @@ from barracks.models import Barracks, Invitation
 from workday.models import Calculator
 
 from barracks.forms import BarracksForm, CalculatorSearchForm
+
+MAXIMUM = 5  # the number of maximum members of a barracks
 
 
 # Create your views here.
@@ -45,12 +47,23 @@ class CreateBarracks(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         current_user = self.request.user
         form.instance.host = current_user
-        return super(CreateBarracks, self).form_valid(form)
+        response = super(CreateBarracks, self).form_valid(form)
+
+        current_calculator = Calculator.objects.filter(author=self.request.user).first()
+        self.object.members.add(current_calculator)
+
+        return response
 
 
 class BarracksDetail(DetailView):
     model = Barracks
     template_name = "barracks/barracks_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(BarracksDetail, self).get_context_data(**kwargs)
+        context['calculator_list'] = self.object.members.all()
+
+        return context
 
 
 class InviteToBarracks(CreateBarracks):
@@ -91,9 +104,35 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
         return redirect(reverse_lazy('barracks:searched_calculator_list', args=(self.kwargs['pk'], calculator_name)))
 
 
-class TransferToBarracks:
-    pass
+class TransferToBarracks(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        calculator = Calculator.objects.filter(author=request.user).first()
+        barracks_pk = self.kwargs['pk']
+
+        barracks = Barracks.objects.get(pk=barracks_pk)
+
+        if barracks.members.count() >= 5:
+            return PermissionDenied
+
+        barracks.members.add(calculator)
+        return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))
 
 
-class QuitBarracks:
-    pass
+class QuitBarracks(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+
+        barracks_pk = self.kwargs['pk']
+        barracks = Barracks.objects.get(pk=barracks_pk)
+
+        member_calculator = barracks.members.filter(author=request.user)
+        if not member_calculator.exists():
+            raise PermissionDenied
+
+        member_calculator = member_calculator.first()
+
+        if barracks.members.count() == 1:
+            barracks.delete()
+            return redirect(reverse_lazy('barracks:barracks_list'))
+
+        barracks.members.remove(member_calculator)
+        return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))

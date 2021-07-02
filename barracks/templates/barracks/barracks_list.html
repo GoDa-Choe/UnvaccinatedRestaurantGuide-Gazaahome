@@ -44,12 +44,12 @@
             <!-- Barracks -->
             {% for barracks in barracks_list %}
 
-                <a href="{% url 'barracks:barracks_detail' barracks.pk %}" class="list-group-item list-group-item-action" style="border: 0">
+                <div class="list-group-item list-group-item-action" style="border: 0">
                     <div class="d-flex text-muted pt-3">
                         <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
 
-                            <h3 class="h6 text-dark">{{ barracks.name }}</h3>
-
+                            <a href="{% url 'barracks:barracks_detail' barracks.pk %}" class="h6 text-dark">{{ barracks.name }}</a>
+                            <a href="{% url 'barracks:transfer_to_barracks' barracks.pk %}">참가</a>
                             <!-- members -->
                             {#                            <div class="d-inline">#}
                             {#                                {% if post.tags.exists %}#}
@@ -64,7 +64,7 @@
 
                         </div>
                     </div>
-                </a>
+                </div>
             {% endfor %}
 
         </div>

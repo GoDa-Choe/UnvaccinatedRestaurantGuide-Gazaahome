@@ -28,6 +28,8 @@
 
             <div class="d-flex justify-content-end">
 
+                <a class="btn btn-primary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
+                   role="button">생활관 퇴장</a>
                 <a class="btn btn-primary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
                    role="button">초대</a>
                 <!-- Search Bar -->
@@ -46,6 +48,16 @@
                     </p>
                 </div>
             </div>
+
+            {% for calculator in calculator_list %}
+
+                <div>
+                    {{ calculator.name }}
+                </div>
+
+            {% endfor %}
+
+
         </article>
     </div>
 
