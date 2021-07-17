@@ -15,6 +15,17 @@ from workday.models import Calculator
 
 from barracks.forms import BarracksForm, CalculatorSearchForm
 
+# Core Lib
+from workday.library import calculator_lib
+
+COLORS = [
+    "primary",
+    "warning",
+    "danger",
+    "success",
+    "info",
+]
+
 MAXIMUM = 5  # the number of maximum members of a barracks
 
 
@@ -61,7 +72,25 @@ class BarracksDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BarracksDetail, self).get_context_data(**kwargs)
-        context['calculator_list'] = self.object.members.all()
+
+        calculator_color_list = zip(self.object.members.all(), COLORS)
+
+        unsorted_calculator_list = {(calculator, color): calculator_lib.get_workday_from_calculator_barracks(calculator)
+                                    for calculator, color in calculator_color_list}
+
+        sorted_calculator_info_percent_order = {
+            calculator_color: info for calculator_color, info
+            in sorted(unsorted_calculator_list.items(), key=lambda x: x[-1]['percent'], reverse=True)}
+
+        sorted_calculator_info_workday_order = {
+            calculator_color: info for calculator_color, info
+            in sorted(unsorted_calculator_list.items(), key=lambda x: x[-1]['workday_percent'], reverse=True)}
+
+        context['calculator_list_percent_order'] = sorted_calculator_info_percent_order
+        context['calculator_list_workday_order'] = sorted_calculator_info_workday_order
+
+        temp = [[1, 2], [3, 4]]
+        context["temp"] = temp
 
         return context
 
@@ -107,12 +136,15 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
 class TransferToBarracks(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         calculator = Calculator.objects.filter(author=request.user).first()
+        if not calculator:
+            return redirect(reverse_lazy('workday:create'))
+
         barracks_pk = self.kwargs['pk']
 
         barracks = Barracks.objects.get(pk=barracks_pk)
 
         if barracks.members.count() >= 5:
-            return PermissionDenied
+            raise PermissionDenied
 
         barracks.members.add(calculator)
         return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))

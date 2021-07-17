@@ -26,15 +26,17 @@
 
         <article class="mb-5">
 
-            <div class="d-flex justify-content-end">
+            <div class="float-end justify-content-end">
 
+                <a class="btn btn-primary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
+                   role="button">입장</a>
                 <a class="btn btn-primary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
-                   role="button">생활관 퇴장</a>
+                   role="button">퇴장</a>
                 <a class="btn btn-primary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
                    role="button">초대</a>
                 <!-- Search Bar -->
-
             </div>
+
             <h1 class="d-flex mt-3 align-items-center">{{ barracks.name }}</h1>
 
 
@@ -49,14 +51,142 @@
                 </div>
             </div>
 
-            {% for calculator in calculator_list %}
+            <hr>
 
-                <div>
-                    {{ calculator.name }}
+            <div class="card-group mb-4">
+                {% for calculator_color, info in calculator_list_percent_order.items %}
+                    <div class="card border-{{ calculator_color.1 }} mx-3">
+                        <div class="card-header bg-{{ calculator_color.1 }} py-1
+                        d-flex justify-content-between align-items-center">
+                            <a href="{% url 'workday:detail' calculator_color.0.pk %}"
+                               class="card-link  d-inline text-decoration-none text-dark">
+                                {{ calculator_color.0.name }}
+                            </a>
+                            <p class="card-subtitle small text-white">
+                                <small>입대 : {{ calculator_color.0.start_date|date:'Y/m/d' }}</small></p>
+                        </div>
+
+                        <div class="card-body py-1">
+                            <div class="card-text d-flex justify-content-between align-items-center">
+                                <p class="d-inline small text-muted my-0">
+                                    <small>{{ calculator_color.0.end_date |date:'Y/m/d' }}</small>
+                                </p>
+                                <p class="d-inline small text-muted my-0">
+                                    <small>{{ info.end_workday |date:'Y/m/d' }}</small>
+                                </p>
+                            </div>
+                            <div class="card-text d-flex justify-content-between align-items-center">
+                                <div class="d-inline">
+                                    <p class="my-0">
+                                        전역 <span class="badge bg-secondary">D-{{ info.num_remain_days }}</span>
+                                    </p>
+                                </div>
+                                <div class="d-inline">
+                                    <p class="my-0">
+                                        막출 <span class="badge bg-secondary">D-{{ info.num_workdays }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="container my-3">
+
+                <h3 class="text-center my-0">군복무율 순위</h3>
+                <div class="d-flex justify-content-between align-items-start">
+                    <p class="d-inline my-0 small"><small>입대</small></p>
+                    <p class="d-inline my-0 small"><small>전역</small></p>
                 </div>
 
-            {% endfor %}
+                {% for calculator_color, info in calculator_list_percent_order.items %}
+                    <div class="d-flex justify-content-between align-items-end text-muted">
+                        <p class="d-inline text-start my-0 small">
+                            <small>{{ calculator_color.0.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                        <div class="d-inline">
 
+                            <p class="text-end my-0 small">
+                                <small>{{ calculator_color.0.end_date|date:'Y/m/d' }}</small></p>
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-{{ calculator_color.1 }}"
+                             role="progressbar"
+                             style="width: {{ info.percent }}%"
+                             aria-valuenow="{{ info.percent }}"
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ info.percent }}%
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="d-inline my-0 fw-bold small">{{ calculator_color.0.name }}</p>
+                        <p class="d-inline my-0 fw-bold small">D-{{ info.num_remain_days }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="container my-3">
+                <h3 class="text-center my-0">실출근율 순위</h3>
+                <div class="d-flex justify-content-between align-items-start">
+                    <p class="d-inline my-0 small"><small>입대</small></p>
+                    <p class="d-inline my-0 small"><small>막출</small></p>
+                </div>
+                {% for calculator_color, info in calculator_list_workday_order.items %}
+                    <div class="d-flex justify-content-between align-items-end text-muted">
+                        <p class="d-inline text-start my-0 small">
+                            <small>{{ calculator_color.0.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                        <div class="d-inline">
+                            <p class="text-end my-0 small">
+                                <small>{{ info.end_workday|date:'Y/m/d' }}</small>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-{{ calculator_color.1 }}"
+                             role="progressbar"
+                             style="width: {{ info.workday_percent }}%"
+                             aria-valuenow="{{ info.workday_percent }}"
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ info.workday_percent }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="d-inline my-0 fw-bold small">{{ calculator_color.0.name }}</p>
+                        <p class="d-inline my-0 fw-bold small">D-{{ info.num_workdays }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="progress mt-3">
+                <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 10%"
+                     aria-valuenow="10"
+                     aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mt-3">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%"
+                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mt-3">
+                <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%"
+                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mt-3">
+                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
+                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mt-3">
+                <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 100%"
+                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
 
         </article>
     </div>
