@@ -93,6 +93,8 @@ class BarracksDetail(HitCountDetailView):
 
         context['guest_book_form'] = GuestBookForm
 
+        context['current_calculator'] = Calculator.objects.filter(author=self.request.user).first()
+
         return context
 
 

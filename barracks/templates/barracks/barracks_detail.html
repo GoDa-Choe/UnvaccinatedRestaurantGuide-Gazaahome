@@ -15,26 +15,21 @@
 
     <div class="my-3 p-3 rounded shadow-sm">
 
-        <!-- Calculator Search-->
-        {#        <form class="row" method="post" enctype="multipart/form-data">{% csrf_token %}#}
-        {#            <div class="col px-1">{{ form |crispy }}</div>#}
-        {#            <div class="col-auto  px-1">#}
-        {#                <button class="btn btn-outline-success" type="submit">검색</button>#}
-        {#            </div>#}
-        {#        </form>#}
-
-
         <article class="mb-5">
 
             <div class="float-end justify-content-end">
 
-                <a class="btn btn-primary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
-                   role="button">입장</a>
-                <a class="btn btn-primary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
+                {% if current_calculator not in barracks.members.all %}
+                    <a class="btn btn-primary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
+                       role="button">입장</a>
+                {% endif %}
+
+                {% if current_calculator in barracks.members.all %}
+                    <a class="btn btn-primary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
                    role="button">퇴장</a>
-                <a class="btn btn-primary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
+                    <a class="btn btn-primary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
                    role="button">초대</a>
-                <!-- Search Bar -->
+                {% endif %}
             </div>
 
             <h1 class="d-flex mt-3 align-items-center">{{ barracks.name }}</h1>
