@@ -1,3 +1,6 @@
+import datetime
+from collections import defaultdict
+
 from workday.library import make_days
 from workday.library import create_block
 from datetime import date
@@ -41,6 +44,8 @@ def get_workday_from_calculator(calculator):
     else:
         end_workday = end_service
 
+    percent = round(len(serviced_days) / len(service_days) * 100, 2)
+
     data = {
         'blocked_service_days': zip(months, blocked_service_days),
 
@@ -51,7 +56,7 @@ def get_workday_from_calculator(calculator):
         'end_workday': end_workday,
         'workday_percent': f'{(1 - len(workdays) / len(service_days)) * 100 :.2f}',
 
-        'percent': f'{len(serviced_days) / len(service_days) * 100 :.2f}',
+        'percent': f'{percent :.2f}' if percent <= 100 else "100.00",
         'num_remain_days': len(remain_days),
 
         'weekdays': weekdays,
@@ -113,12 +118,14 @@ def get_workday_from_calculator_light(calculator):
     else:
         end_workday = end_service
 
+    percent = round(len(serviced_days) / len(service_days) * 100, 2)
+
     data = {
         'num_workdays': len(workdays),
         'end_workday': end_workday,
         'workday_percent': f'{(1 - len(workdays) / len(service_days)) * 100 :.2f}',
 
-        'percent': f'{len(serviced_days) / len(service_days) * 100 :.2f}',
+        'percent': f'{percent :.2f}' if percent <= 100 else "100.00",
         'num_remain_days': len(remain_days),  #
     }
 
@@ -153,13 +160,31 @@ def get_workday_from_calculator_barracks(calculator):
     else:
         end_workday = end_service
 
+    percent = round(len(serviced_days) / len(service_days) * 100, 2)
+
     data = {
         'num_workdays': len(workdays),
         'end_workday': end_workday,
         'workday_percent': round((1 - len(workdays) / len(service_days)) * 100, 2),
 
-        'percent': round(len(serviced_days) / len(service_days) * 100, 2),
+        'percent': percent if percent <= 100 else 100.0,
         'num_remain_days': len(remain_days),
     }
 
     return data
+
+
+def get_leave_from_calculator(calculator):
+    parsed_leaves = defaultdict(int)  # 휴가
+    for leave in calculator.leave_set.all():
+        parsed_leaves[leave.type] += leave.days().days
+
+    parsed_leaves["total"] = sum(parsed_leaves.values())
+
+    return parsed_leaves
+
+
+def get_leave_for_progress(sorted_calculator_leave_list, max_leaves):
+    for calculator_color, leaves in sorted_calculator_leave_list.items():
+        for leave_type, leave in leaves.items():
+            sorted_calculator_leave_list[calculator_color][leave_type] = (leave, leave / max_leaves * 100)

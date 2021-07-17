@@ -20,15 +20,15 @@
             <div class="float-end justify-content-end">
 
                 {% if current_calculator not in barracks.members.all %}
-                    <a class="btn btn-primary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
                        role="button">입장</a>
                 {% endif %}
 
                 {% if current_calculator in barracks.members.all %}
-                    <a class="btn btn-primary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
-                   role="button">퇴장</a>
-                    <a class="btn btn-primary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
-                   role="button">초대</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
+                       role="button">퇴장</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
+                       role="button">초대</a>
                 {% endif %}
             </div>
 
@@ -50,7 +50,7 @@
 
             <div class="card-group mb-5">
                 {% for calculator_color, info in calculator_list_percent_order.items %}
-                    <div class="card border-{{ calculator_color.1 }} mx-3">
+                    <div class="card border-{{ calculator_color.1 }} mx-3" style="max-width: 18rem;">
                         <div class="card-header bg-{{ calculator_color.1 }} py-1
                         d-flex justify-content-between align-items-center">
                             <a href="{% url 'workday:detail' calculator_color.0.pk %}"
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="d-inline my-0 fw-bold small">{{ calculator_color.0.name }}</p>
+                        <p class="d-inline my-0 fw-bold small">{{ forloop.counter }}위 {{ calculator_color.0.name }}</p>
                         <p class="d-inline my-0 fw-bold small">D-{{ info.num_remain_days }}</p>
                     </div>
                 {% endfor %}
@@ -150,18 +150,81 @@
                              style="width: {{ info.workday_percent }}%"
                              aria-valuenow="{{ info.workday_percent }}"
                              aria-valuemin="0" aria-valuemax="100">
-                            {{ info.workday_percent }}
+                            {{ info.workday_percent }}%
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="d-inline my-0 fw-bold small">{{ calculator_color.0.name }}</p>
+                        <p class="d-inline my-0 fw-bold small">{{ forloop.counter }}위 {{ calculator_color.0.name }}</p>
                         <p class="d-inline my-0 fw-bold small">D-{{ info.num_workdays }}</p>
                     </div>
                 {% endfor %}
             </div>
 
         </article>
+
+
+        <!-- Leave Ranking -->
+
+        <h3 class="text-center mb-4">휴가 순위</h3>
+
+        {% for calculator_color, leave in calculator_leave_list.items %}
+            <div class="progress">
+
+                {% if leave.ye.0 %}
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ leave.ye.1 }}%; background-color: #C2F1D1">
+                        연가 {{ leave.ye.0 }}
+                    </div>
+                {% endif %}
+
+                {% if leave.po.0 %}
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ leave.po.1 }}%; background-color: #8CC095">
+                        포상 {{ leave.po.0 }}
+                    </div>
+                {% endif %}
+
+                {% if leave.wi.0 %}
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ leave.wi.1 }}; background-color: #75A07C">
+                        위로 {{ leave.wi.0 }}
+                    </div>
+                {% endif %}
+
+                {% if leave.bo.0 %}
+
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ leave.bo.1 }}%; background-color: #4F6F54">
+                        보상 {{ leave.bo.0 }}
+                    </div>
+                {% endif %}
+
+                {% if leave.ch.0 %}
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ leave.ch.1 }}%; background-color: #2D8549">
+                        청원 {{ leave.ch.0 }}
+                    </div>
+                {% endif %}
+
+                {% if leave.tp.0 %}
+                    <div class="progress-bar text-dark progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width:{{ leave.tp.1 }} %; background-color: #185B2E">
+                        예정 {{ leave.tp.0 }}
+                    </div>
+                {% endif %}
+
+
+            </div>
+
+            <div class="d-flex justify-content-between align-items-start  mb-1">
+                <p class="d-inline my-0 fw-bold small text-{{ calculator_color.1 }}">
+                    {{ forloop.counter }}위 {{ calculator_color.0.name }}
+                </p>
+                <p class="d-inline my-0 fw-bold small">{{ leave.total.0 }}일</p>
+            </div>
+        {% endfor %}
+
 
         <!-- GuestBook-->
         <div class="my-3 p-3 container">
@@ -247,6 +310,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 
 

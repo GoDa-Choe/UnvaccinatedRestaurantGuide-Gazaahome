@@ -38,6 +38,19 @@ class BarracksList(ListView):
     ordering = '-created_at'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super(BarracksList, self).get_context_data(**kwargs)
+
+        current_calculator = None
+        if self.request.user.is_authenticated:
+            current_calculator = Calculator.objects.filter(author=self.request.user).first()
+            context['current_calculator'] = current_calculator
+
+        if current_calculator:
+            context['my_barracks_list'] = current_calculator.barracks_set.order_by('-created_at')
+
+        return context
+
 
 class DeleteBarracks(DeleteView):
     model = Barracks
@@ -75,7 +88,7 @@ class BarracksDetail(HitCountDetailView):
     def get_context_data(self, **kwargs):
         context = super(BarracksDetail, self).get_context_data(**kwargs)
 
-        calculator_color_list = zip(self.object.members.all(), COLORS)
+        calculator_color_list = list(zip(self.object.members.all(), COLORS))
 
         unsorted_calculator_list = {(calculator, color): calculator_lib.get_workday_from_calculator_barracks(calculator)
                                     for calculator, color in calculator_color_list}
@@ -88,12 +101,26 @@ class BarracksDetail(HitCountDetailView):
             calculator_color: info for calculator_color, info
             in sorted(unsorted_calculator_list.items(), key=lambda x: x[-1]['workday_percent'], reverse=True)}
 
+        unsorted_calculator_leave_list = {(calculator, color): calculator_lib.get_leave_from_calculator(calculator)
+                                          for calculator, color in calculator_color_list}
+
+        sorted_calculator_leave_list = {
+            calculator_color: leaves for calculator_color, leaves
+            in sorted(unsorted_calculator_leave_list.items(), key=lambda x: x[-1]['total'], reverse=True)}
+
+        first_key = next(iter(sorted_calculator_leave_list))
+        max_leaves = sorted_calculator_leave_list[first_key]["total"]
+
+        calculator_lib.get_leave_for_progress(sorted_calculator_leave_list, max_leaves)
+
         context['calculator_list_percent_order'] = sorted_calculator_info_percent_order
         context['calculator_list_workday_order'] = sorted_calculator_info_workday_order
 
         context['guest_book_form'] = GuestBookForm
 
         context['current_calculator'] = Calculator.objects.filter(author=self.request.user).first()
+
+        context['calculator_leave_list'] = sorted_calculator_leave_list
 
         return context
 

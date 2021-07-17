@@ -22,22 +22,71 @@
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
 
-        <!-- Header -->
-        <div class="d-flex justify-content-between border-bottom pb-2 mb-0">
-            <h2 class="h5">
-                생활관 목록
-            </h2>
-            {% if user.is_authenticated %}
-                <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url "barracks:create_barracks" %}">
-                    생활관 만들기</a>
-            {% else %}
-                <a class="btn btn-outline-secondary btn-sm" href="#" data-bs-toggle="modal"
-                   data-bs-target="#loginModal">
-                    생활관 만들기
-                </a>
-            {% endif %}
-        </div>
+        <!-- My Barracks List-->
+        {% if user.is_authenticated and current_calculator and my_barracks_list.exists %}
 
+            <div class="d-flex justify-content-between border-bottom pb-2 my-0">
+                <h2 class="h5">
+                    나의 생활관
+                </h2>
+                {% if user.is_authenticated %}
+                    <a role="button" class="btn btn-outline-secondary btn-sm"
+                       href="{% url "barracks:create_barracks" %}">
+                        생활관 만들기</a>
+                {% else %}
+                    <a class="btn btn-outline-secondary btn-sm" href="#" data-bs-toggle="modal"
+                       data-bs-target="#loginModal">
+                        생활관 만들기
+                    </a>
+                {% endif %}
+            </div>
+            <div class="list-group-flush">
+
+                {% for barracks in my_barracks_list %}
+
+                    <a href="{% url 'barracks:barracks_detail' barracks.pk %}"
+                       class="list-group-item list-group-item-action" style="border: 0">
+                        <div class="d-flex text-muted pt-3">
+                            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="d-inline h6 text-dark">{{ barracks.name }}</h3>
+
+                                    <div class="d-inline mb-1">
+                                        <!-- Barracks Likes
+                                    <div class="d-inline"><i class="fas fa-heart"></i> {{ post.num_likes }}</div>
+                                    -->
+                                        <div class="d-inline"><i class="far fa-comment"></i> {{ barracks.num_barracks }}
+                                        </div>
+                                        <div class="d-inline"><i class="far fa-eye"></i> {{ barracks.hit_count.hits }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-inline">
+                                    {% if barracks.members.exists %}
+                                        {% for calculator in barracks.members.iterator %}
+                                            {{ colors.iter }}
+                                            <span class="badge rounded-pill bg-{% cycle "primary" "warning" "danger" "success" "info" %}">
+                                            {{ calculator.name }}
+                                        </span>
+                                        {% endfor %}
+                                        {% resetcycle %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between border-bottom pb-2 mt-5">
+            <h2 class="h5">
+                모든 생활관
+            </h2>
+        </div>
 
         <!-- Barracks List-->
         <div class="list-group-flush">
@@ -69,6 +118,7 @@
                                             {{ calculator.name }}
                                         </span>
                                     {% endfor %}
+                                    {% resetcycle %}
                                 {% endif %}
                             </div>
                         </div>
