@@ -28,7 +28,7 @@ class Barracks(models.Model, HitCountMixin):
     def get_absolute_url(self):
         return f"/barracks/{self.pk}/"
 
-    def num_comments(self):
+    def num_barracks(self):
         return self.guestbook_set.count()
 
 
