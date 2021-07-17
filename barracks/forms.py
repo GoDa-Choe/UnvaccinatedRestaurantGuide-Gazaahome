@@ -1,7 +1,7 @@
 from django.forms import ModelForm, ValidationError, Form, TextInput
 from django.forms import CharField
 
-from barracks.models import Barracks, Invitation
+from barracks.models import Barracks, Invitation, GuestBook
 from workday.models import Calculator
 
 
@@ -11,6 +11,15 @@ class BarracksForm(ModelForm):
         fields = ('name',)
         labels = {
             'name': '생활관 이름',
+        }
+
+
+class GuestBookForm(ModelForm):
+    class Meta:
+        model = GuestBook
+        fields = ('content',)
+        labels = {
+            'content': ""
         }
 
 

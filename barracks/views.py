@@ -1,19 +1,20 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, get_object_or_404
 
+from hitcount.views import HitCountDetailView
 from django.views.generic import ListView, DetailView
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, UpdateView
 from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 from django.core.exceptions import PermissionDenied
 
-from barracks.models import Barracks, Invitation
+from barracks.models import Barracks, Invitation, GuestBook
 from workday.models import Calculator
 
-from barracks.forms import BarracksForm, CalculatorSearchForm
+from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm
 
 # Core Lib
 from workday.library import calculator_lib
@@ -66,9 +67,10 @@ class CreateBarracks(LoginRequiredMixin, CreateView):
         return response
 
 
-class BarracksDetail(DetailView):
+class BarracksDetail(HitCountDetailView):
     model = Barracks
     template_name = "barracks/barracks_detail.html"
+    count_hit = True
 
     def get_context_data(self, **kwargs):
         context = super(BarracksDetail, self).get_context_data(**kwargs)
@@ -89,8 +91,7 @@ class BarracksDetail(DetailView):
         context['calculator_list_percent_order'] = sorted_calculator_info_percent_order
         context['calculator_list_workday_order'] = sorted_calculator_info_workday_order
 
-        temp = [[1, 2], [3, 4]]
-        context["temp"] = temp
+        context['guest_book_form'] = GuestBookForm
 
         return context
 
@@ -168,3 +169,47 @@ class QuitBarracks(LoginRequiredMixin, View):
 
         barracks.members.remove(member_calculator)
         return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))
+
+
+class GuestBookUpdate(LoginRequiredMixin, UpdateView):
+    model = GuestBook
+    form_class = GuestBookForm
+    template_name = 'barracks/guest_book_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(GuestBookUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+
+def delete_guest_book(request, pk):
+    guest_book = get_object_or_404(GuestBook, pk=pk)
+    barracks = guest_book.barracks
+    if request.user.is_authenticated and request.user == guest_book.author:
+        guest_book.delete()
+        return redirect(barracks.get_absolute_url())
+    else:
+        raise PermissionDenied
+
+
+def new_guest_book(request, pk):
+    if request.user.is_authenticated:
+        barracks = get_object_or_404(Barracks, pk=pk)
+        calculator = Calculator.objects.filter(author=request.user).first()
+
+        if request.method == 'POST':
+            guest_book_form = GuestBookForm(request.POST)
+
+            if guest_book_form.is_valid():
+                guest_book = guest_book_form.save(commit=False)
+                guest_book.author = request.user
+                guest_book.calculator = calculator
+                guest_book.barracks = barracks
+                guest_book.save()
+
+                return redirect(guest_book.get_absolute_url())
+        else:
+            return redirect(barracks.get_absolute_url())
+    else:
+        raise PermissionDenied
