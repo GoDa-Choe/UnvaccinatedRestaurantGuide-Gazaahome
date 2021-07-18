@@ -14,12 +14,50 @@
 
 
     <div class="my-3 p-3 rounded shadow-sm">
+        <!-- Search Bar -->
         <form class="row" method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="col">{{ form |crispy }}</div>
             <div class="col-auto  px-0">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
         </form>
+
+
+        <!-- Header -->
+        <h2 class="h3 my-4">
+            {{ barracks.name }} 생활관 초대장 목록
+        </h2>
+
+        <div class="card-group mb-5">
+            {% for invitation in invitation_list %}
+                <div class="card mx-3" style="max-width: 18rem;">
+                    <div class="card-header">
+                        <span class="badge rounded-pill bg-success">To</span>
+                        <strong>{{ invitation.invitee.name }}</strong>
+
+                        <div class="d-inline small text-primary float-end">수락 대기 중</div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="card-text">
+                            <span class="badge rounded-pill bg-warning">From</span>
+                            <strong>{{ invitation.inviter_calculator.name }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="card-text text-muted">
+                                {{ invitation.created_at|date:'Y/m/d' }}
+                            </div>
+                            <a href="{% url "barracks:delete_invitation" barracks.pk invitation.pk %}"
+                               class="card-link text-danger">
+                                삭제
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
     </div>
 
 {% endblock %}

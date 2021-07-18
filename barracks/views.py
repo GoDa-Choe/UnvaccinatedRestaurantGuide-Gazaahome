@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 
 from hitcount.views import HitCountDetailView
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.views.generic import CreateView, DeleteView, UpdateView
 from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
@@ -125,8 +125,28 @@ class BarracksDetail(HitCountDetailView):
         return context
 
 
-class InviteToBarracks(CreateBarracks):
-    pass
+class DeleteInvitation(View):
+    def get(self, request, *args, **kwargs):
+        invitation = Invitation.objects.get(pk=self.kwargs['invitation_pk'])
+        invitation.delete()
+
+        return redirect(reverse_lazy('barracks:search_calculator', args=(self.kwargs['pk'],)))
+
+
+class SendInvitation(View):
+    def get(self, request, *args, **kwargs):
+        inviter = request.user
+        inviter_calculator = Calculator.objects.filter(author=inviter).first()
+        barracks = Barracks.objects.get(pk=self.kwargs['pk'])
+        invitee_calculator = Calculator.objects.filter(name=self.kwargs['calculator_name']).first()
+
+        if barracks.members.count() >= 5:
+            raise PermissionDenied
+
+        barracks.invitation_set.create(inviter=inviter,
+                                       inviter_calculator=inviter_calculator,
+                                       invitee=invitee_calculator)
+        return redirect(reverse_lazy('barracks:search_calculator', args=(self.kwargs['pk'],)))
 
 
 class CalculatorSearch(LoginRequiredMixin, FormView):
@@ -136,6 +156,14 @@ class CalculatorSearch(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         calculator_name = form.cleaned_data['calculator_name']
         return redirect(reverse_lazy('barracks:searched_calculator_list', args=(self.kwargs['pk'], calculator_name)))
+
+    def get_context_data(self, **kwargs):
+        context = super(CalculatorSearch, self).get_context_data()
+        barracks = Barracks.objects.get(pk=self.kwargs['pk'])
+
+        context["barracks"] = barracks
+        context["invitation_list"] = barracks.invitation_set.all()
+        return context
 
 
 class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
@@ -162,6 +190,11 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
         calculator_name = form.cleaned_data['calculator_name']
         return redirect(reverse_lazy('barracks:searched_calculator_list', args=(self.kwargs['pk'], calculator_name)))
 
+    def get_context_data(self, **kwargs):
+        context = super(SearchedCalculatorList, self).get_context_data()
+        context["barracks"] = Barracks.objects.get(pk=self.kwargs['pk'])
+        return context
+
 
 class TransferToBarracks(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -177,6 +210,10 @@ class TransferToBarracks(LoginRequiredMixin, View):
             raise PermissionDenied
 
         barracks.members.add(calculator)
+
+        if repulicate := barracks.invitation_set.filter(invitee=calculator):
+            repulicate.delete()
+
         return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))
 
 
@@ -242,3 +279,51 @@ def new_guest_book(request, pk):
             return redirect(barracks.get_absolute_url())
     else:
         raise PermissionDenied
+
+
+class InvitationList(LoginRequiredMixin, ListView):
+    model = Invitation
+    template_name = 'barracks/invitation_list.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super(InvitationList, self).get(request, *args, **kwargs)
+        calculator = Calculator.objects.filter(author=request.user).first()
+        if not calculator:
+            return redirect(reverse_lazy('workday:create'))
+
+        return response
+
+    def get_queryset(self):
+        user = self.request.user
+        calculator = Calculator.objects.filter(author=user).first()
+
+        invitation_list = None
+        if calculator:
+            invitation_list = calculator.invitation_set.all()
+
+        return invitation_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InvitationList, self).get_context_data()
+
+        return context
+
+
+class AcceptInvitation(View):
+    def get(self, request, *args, **kwargs):
+        calculator = Calculator.objects.filter(author=request.user).first()
+        if not calculator:
+            return redirect(reverse_lazy('workday:create'))
+
+        barracks_pk = self.kwargs['pk']
+
+        barracks = Barracks.objects.get(pk=barracks_pk)
+
+        if barracks.members.count() >= 5:
+            raise PermissionDenied
+        barracks.members.add(calculator)
+
+        invitation = Invitation.objects.get(pk=self.kwargs['invitation_pk'])
+        invitation.delete()
+
+        return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))

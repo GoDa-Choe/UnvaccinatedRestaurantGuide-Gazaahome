@@ -41,7 +41,7 @@ class GuestBook(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.author}::{self.calculator.name}::{self.content}"
+        return f"{self.author}::{self.calculator.name if self.calculator else None}::{self.content}"
 
     def get_absolute_url(self):
         return f"{self.barracks.get_absolute_url()}#guest_book-{self.pk}"
@@ -52,8 +52,10 @@ class Invitation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # ForeignKeys
-    inviter = models.ForeignKey(Barracks, on_delete=models.CASCADE)
+    barracks = models.ForeignKey(Barracks, on_delete=models.CASCADE)
+    inviter = models.ForeignKey(User, on_delete=models.CASCADE)
+    inviter_calculator = models.ForeignKey(Calculator, on_delete=models.CASCADE, related_name="my_invitations")
     invitee = models.ForeignKey(Calculator, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.pk} :: {self.inviter}->{self.invitee}"
+        return f"{self.pk}-{self.barracks.name} :: {self.inviter_calculator.name}->{self.invitee.name}"

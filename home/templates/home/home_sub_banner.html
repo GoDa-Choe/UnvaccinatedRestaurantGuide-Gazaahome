@@ -1,6 +1,26 @@
-<div class="d-flex align-items-center p-3 my-3 rounded shadow-sm text-white" style="background-color: #6f42c1">
+<div class="d-flex justify-content-between align-items-center p-3 my-3 rounded shadow-sm text-white"
+     style="background-color: #6f42c1">
+
     <div class="lh-1">
         <h1 class="h6 mb-0 lh-1">Beta Test</h1>
         <small>since 2021. 5. 21</small>
     </div>
+
+    {% with user_calculator=user.calculator_set.first user_invitations=user.calculator_set.first.invitation_set %}
+        {% if user.is_authenticated and user_calculator and user_invitations.exists %}
+
+            <a href="{% url "barracks:invitation_list" %}" class="btn position-relative btn-sm rounded"
+               style="background-color: #CCCCFF; color: #6f42c1">
+                초대장
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill fw-bold"
+                      style="background-color: #6495ED ">
+                     {{ user_invitations.count }}+
+                    <span class="visually-hidden">unread messages</span>
+                    </span>
+            </a>
+
+        {% endif %}
+    {% endwith %}
+
+
 </div>
