@@ -179,3 +179,6 @@ LOGIN_REDIRECT_URL = "/"
 
 # SSL
 SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT', False))
+
+# Google Site Register Code
+GOOGLE_SITE_REGISTER_CODE = os.environ.get('GOOGLE_SITE_REGISTER_CODE', "")

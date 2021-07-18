@@ -3,6 +3,7 @@ from forum.models import Post, Category
 from workday.models import Calculator
 from workday.library import calculator_lib
 from django.views.generic import TemplateView
+from gazahome.settings import GOOGLE_SITE_REGISTER_CODE
 
 
 def home(request):
@@ -13,7 +14,8 @@ def home(request):
     context = {
         'popular_posts': popular_posts,
         'most_likes_posts': most_likes_posts,
-        'categories': Category.objects.all()
+        'categories': Category.objects.all(),
+        'google_site_register_code': GOOGLE_SITE_REGISTER_CODE,
     }
 
     if request.user.is_authenticated:
