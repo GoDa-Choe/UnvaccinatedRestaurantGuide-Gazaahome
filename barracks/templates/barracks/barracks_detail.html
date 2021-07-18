@@ -20,14 +20,16 @@
             <div class="float-end justify-content-end">
 
                 {% if current_calculator not in barracks.members.all %}
-                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url "barracks:transfer_to_barracks" barracks.pk %}"
                        role="button">입장</a>
                 {% endif %}
 
                 {% if current_calculator in barracks.members.all %}
                     <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
                        role="button">퇴장</a>
-                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:search_calculator" barracks.pk %}"
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url "barracks:search_calculator" barracks.pk %}"
                        role="button">초대</a>
                 {% endif %}
             </div>
@@ -252,7 +254,7 @@
                                 {% if guestbook.calculator %}
                                     <strong class="text-gray-dark">{{ guestbook.calculator.name }}</strong>
                                 {% endif %}
-                                <div class="d-inline text-muted">{{ guestbook.modified_at|date:'Y-m-d H:i:s' }}</div>
+                                <div class="d-inline text-muted small">{{ guestbook.modified_at|date:'Y/m/d H:i' }}</div>
                             </div>
 
 

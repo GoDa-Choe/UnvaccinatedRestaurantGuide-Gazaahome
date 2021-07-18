@@ -1,0 +1,47 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block head-title %}
+    생활관 만원 안내
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <!-- Header -->
+        <h2 class="h5">생활관 만원 안내</h2>
+
+        <br>
+
+        <p class="d-inline">
+            <strong>{{ barracks.name }}</strong>
+        </p>
+        <p class="d-inline">
+            인원이 <strong>5명을 초과하여</strong>
+            {% if type == "transfer" %}
+                <u>지금은 입장할 수 없습니다.</u>
+            {% else %}
+                <u>지금은 초대할 수 없습니다.</u>
+            {% endif %}
+        </p>
+
+        <br>
+        <br>
+
+        <p>집에가자 Beta에서는 생활관에 모두 5명까지 입장할 수 있습니다.</p>
+
+        <p class="small"><small class="text-muted">빠른 시일 내 보다 많은 사용자 분께서 생활관을 꾸릴 수 있도록 노력하겠습니다.</small></p>
+
+        <a href="{% url "barracks:barracks_detail" barracks.pk %}" class="text-decoration-none small">
+            <i class="fas fa-undo-alt"></i> {{ barracks.name }}</a>
+    </div>
+{% endblock %}

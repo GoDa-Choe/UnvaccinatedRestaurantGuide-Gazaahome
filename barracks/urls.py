@@ -29,4 +29,6 @@ urlpatterns = [
     path('<int:pk>/transfer/', views.TransferToBarracks.as_view(), name="transfer_to_barracks"),
     path('<int:pk>/quit/', views.QuitBarracks.as_view(), name="quit_barracks"),
 
+    path('<int:pk>/overflow/<str:type>/', views.OverFlow.as_view(), name="barracks_overflow"),
+
 ]

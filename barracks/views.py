@@ -3,7 +3,7 @@ from django.shortcuts import redirect, get_object_or_404
 from hitcount.views import HitCountDetailView
 from django.views.generic import ListView
 from django.views.generic import CreateView, DeleteView, UpdateView
-from django.views.generic import View, FormView
+from django.views.generic import View, TemplateView, FormView
 from django.views.generic.edit import FormMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -143,7 +143,7 @@ class SendInvitation(View):
         invitee_calculator = Calculator.objects.filter(name=self.kwargs['calculator_name']).first()
 
         if barracks.members.count() >= 5:
-            raise PermissionDenied
+            return redirect(reverse_lazy('barracks:barracks_overflow', args=(barracks.pk, "invite")))
 
         barracks.invitation_set.create(inviter=inviter,
                                        inviter_calculator=inviter_calculator,
@@ -209,7 +209,7 @@ class TransferToBarracks(LoginRequiredMixin, View):
         barracks = Barracks.objects.get(pk=barracks_pk)
 
         if barracks.members.count() >= 5:
-            raise PermissionDenied
+            return redirect(reverse_lazy('barracks:barracks_overflow', args=(barracks_pk, "transfer")))
 
         barracks.members.add(calculator)
 
@@ -322,10 +322,20 @@ class AcceptInvitation(View):
         barracks = Barracks.objects.get(pk=barracks_pk)
 
         if barracks.members.count() >= 5:
-            raise PermissionDenied
+            return redirect(reverse_lazy('barracks:barracks_overflow', args=(barracks_pk, "transfer")))
         barracks.members.add(calculator)
 
         invitation = Invitation.objects.get(pk=self.kwargs['invitation_pk'])
         invitation.delete()
 
         return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))
+
+
+class OverFlow(TemplateView):
+    template_name = 'barracks/barracks_overflow.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(OverFlow, self).get_context_data()
+        context["barracks"] = Barracks.objects.get(pk=self.kwargs['pk'])
+        context["type"] = self.kwargs["type"]
+        return context
