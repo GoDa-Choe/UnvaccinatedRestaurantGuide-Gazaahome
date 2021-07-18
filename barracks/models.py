@@ -23,7 +23,7 @@ class Barracks(models.Model, HitCountMixin):
         related_query_name='hit_count_generic_relation')
 
     def __str__(self):
-        return f"{self.pk} :: {self.name}"
+        return f"[생활관]::{self.pk}::{self.name}"
 
     def get_absolute_url(self):
         return f"/barracks/{self.pk}/"

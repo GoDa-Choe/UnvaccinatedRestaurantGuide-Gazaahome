@@ -49,7 +49,7 @@ class Post(models.Model, HitCountMixin):
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
-        return f"[{self.pk}] {self.title} :: {self.author}"
+        return f"[게시글]::{self.pk}::{self.author}::{self.title[:20]}"
 
     def get_absolute_url(self):
         return f"/forum/{self.pk}/"

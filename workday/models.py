@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from datetime import date, timedelta
+from datetime import timedelta
+
+from django.contrib.contenttypes.fields import GenericRelation
+from hitcount.models import HitCountMixin
+from hitcount.settings import MODEL_HITCOUNT
 
 DATE_FORMAT = "날짜형식: <em>2021-01-01</em>"
 
 
-class Calculator(models.Model):
+class Calculator(models.Model, HitCountMixin):
     name = models.CharField(max_length=30, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -17,8 +21,13 @@ class Calculator(models.Model):
     # ForeignKeys
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    # hit_counts
+    hit_count_generic = GenericRelation(
+        MODEL_HITCOUNT, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
+
     def __str__(self):
-        return f"{self.name} :: {self.author}"
+        return f"[계산기]::{self.name}::{self.author}"
 
 
 class Leave(models.Model):

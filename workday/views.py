@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
+
+from hitcount.views import HitCountDetailView
+from django.views.generic import ListView
 from django.views.generic import CreateView, DeleteView
 from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
@@ -106,10 +108,11 @@ class CalculatorList(LoginRequiredMixin, ListView):
         return context
 
 
-class CalculatorDetail(LoginRequiredMixin, FormMixin, DetailView):
+class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
     model = Calculator
     form_class = CalculatorSearchForm
     template_name = 'workday/calculator_detail.html'
+    count_hit = True
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
