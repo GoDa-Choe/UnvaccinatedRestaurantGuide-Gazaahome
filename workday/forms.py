@@ -12,7 +12,7 @@ class CalculatorSearchForm(Form):
 
     def clean_calculator_name(self):
         calculator_name = self.cleaned_data.get('calculator_name')
-        calculator = Calculator.objects.filter(name=calculator_name).first()
+        calculator = Calculator.objects.filter(name__icontains=calculator_name).first()
         if calculator:
             return calculator_name
         else:

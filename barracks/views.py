@@ -118,7 +118,9 @@ class BarracksDetail(HitCountDetailView):
 
         context['guest_book_form'] = GuestBookForm
 
-        context['current_calculator'] = Calculator.objects.filter(author=self.request.user).first()
+        context['current_calculator'] = None
+        if self.request.user.is_authenticated:
+            context['current_calculator'] = Calculator.objects.filter(author=self.request.user).first()
 
         context['calculator_leave_list'] = sorted_calculator_leave_list
 

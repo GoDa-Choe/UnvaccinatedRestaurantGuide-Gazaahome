@@ -13,6 +13,8 @@ urlpatterns = [
     path('<int:pk>/update_calculator', views.CalculatorUpdate.as_view(), name='update'),
 
     path('search/', views.CalculatorSearch.as_view(), name='search'),
+    path('search/<str:calculator_name>/', views.SearchedCalculatorList.as_view(), name='searched_list'),
+
     path('<int:pk>', views.CalculatorDetail.as_view(), name='detail'),
     path('', views.redirect_calculator, name='index'),
 ]

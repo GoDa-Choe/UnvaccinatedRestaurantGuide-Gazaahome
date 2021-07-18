@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block head-title %}
-    생활관
+    실출근 계산기 검색
 {% endblock %}
 
 {% block custom_style %}
@@ -34,8 +34,7 @@
         <!-- Calculator List-->
         <div class="list-group-flush">
             {% for calculator in searched_calculator_list %}
-                <a href="#" class="list-group-item list-group-item-action" style="border: 0"
-                   data-bs-toggle="modal" data-bs-target="#sendInvitationModal-{{ calculator.pk }}">
+                <a href="{% url "workday:detail" calculator.pk%}" class="list-group-item list-group-item-action" style="border: 0">
                     <div class="d-flex text-muted pt-2">
                         <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
 
@@ -70,32 +69,6 @@
                     </div>
                 </a>
 
-
-                <!-- Modal -->
-                <div class="modal fade" id="sendInvitationModal-{{ calculator.pk }}" tabindex="-1"
-                     aria-labelledby="sendInvitationLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="sendInvitationLabel">생활관 초대장</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>{{ calculator.name }}</strong>을(를) <strong>{{ barracks.name }}</strong> 생활관으로
-                                    초대하시겠습니까?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
-                                    취소
-                                </button>
-                                <a role="button" class="btn btn-sm btn-outline-secondary"
-                                   href="{% url "barracks:send_invitation" barracks.pk calculator.name %}">초대</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endfor %}
 
         </div>

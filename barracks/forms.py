@@ -24,7 +24,7 @@ class GuestBookForm(ModelForm):
 
 
 SEARCH_ATTRS = {
-    "placeholder": "친구 계산기 검색으로 초대",
+    "placeholder": "친구 계산기 별명으로 초대",
 }
 
 

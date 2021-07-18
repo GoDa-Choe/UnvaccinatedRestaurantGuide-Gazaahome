@@ -26,6 +26,31 @@ class CalculatorSearch(LoginRequiredMixin, FormView):
         return redirect(reverse_lazy('workday:detail', args=(calculator.pk,)))
 
 
+class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
+    model = Calculator
+    form_class = CalculatorSearchForm
+    template_name = 'workday/searched_calculator_list.html'
+    context_object_name = 'searched_calculator_list'
+    ordering = '-created_at'
+    paginate_by = 10
+
+    def get_queryset(self):
+        searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name'])
+        return searched_calculator_list
+
+    def post(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        calculator_name = form.cleaned_data['calculator_name']
+        return redirect(reverse_lazy('workday:searched_list', args=(calculator_name,)))
+
+
 class CalculatorCreate(LoginRequiredMixin, CreateView):
     model = Calculator
     form_class = CalculatorForm
@@ -102,9 +127,8 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, DetailView):
 
     def form_valid(self, form):
         calculator_name = form.cleaned_data['calculator_name']
-        calculator = Calculator.objects.get(name=calculator_name)
 
-        return redirect(reverse_lazy('workday:detail', args=(calculator.pk,)))
+        return redirect(reverse_lazy('workday:searched_list', args=(calculator_name,)))
 
     def get_context_data(self, **kwargs):
         context = super(CalculatorDetail, self).get_context_data(**kwargs)
