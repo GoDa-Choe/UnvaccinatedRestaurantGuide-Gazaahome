@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block head-title %}
-    {{ post.title }}
+    {{ post.title|truncatechars:15 }}
 {% endblock %}
 
 {% block main-area %}
