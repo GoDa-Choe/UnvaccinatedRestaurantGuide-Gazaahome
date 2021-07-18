@@ -29,7 +29,7 @@ class Category(models.Model):
 
 
 class Post(models.Model, HitCountMixin):
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=40)
     content = MarkdownxField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
