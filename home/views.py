@@ -36,3 +36,7 @@ def home(request):
 class RobotView(TemplateView):
     template_name = 'home/robots.txt'
     content_type = 'text/plain'
+
+
+class ContributorView(TemplateView):
+    template_name = 'home/contributor.html'

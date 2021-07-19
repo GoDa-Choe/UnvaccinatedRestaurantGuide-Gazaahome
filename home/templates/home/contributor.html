@@ -1,0 +1,45 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block head-title %}
+    생활관
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <div class="container">
+            <h5 class="mb-4">Contributors :</h5>
+
+            <div class="m-2">
+                <p class="text-muted m-0"><i class="far fa-edit"></i> 게시글 최초 작성자</p>
+                <p class="small m-3 mt-1">Who?</p>
+               <p class="text-muted m-0"><i class="fas fa-campground"></i> 생활관 최초 생성</p>
+                <p class="small m-3 mt-1">Who?</p>
+                <p class="text-muted m-0"><i class="fas fa-users"></i> 생활관 만원 최초 달성</p>
+                <p class="small m-3 mt-1">Who?</p>
+            </div>
+
+            <p class="small m-2 mt-4">
+                <small class="text-muted">
+                    안녕하세요, 고다입니다.<br>
+                    커뮤니티 활성화에 도움을 주신 분들께 조금이라도 선물을 드릴 수 있도록<br>
+                    이렇게 Comtirbution 페이지를 오픈했습니다.<br>
+                    오늘도 집에가자를 이용해주셔서 정말 감사합니다.<br>
+                </small>
+            </p>
+
+        </div>
+    </div>
+
+
+{% endblock %}

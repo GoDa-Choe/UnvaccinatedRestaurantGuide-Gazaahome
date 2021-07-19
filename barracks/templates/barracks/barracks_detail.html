@@ -49,12 +49,15 @@
 
             <div class="card-group mb-5">
                 {% for calculator_color, info in calculator_list_percent_order.items %}
-                    <div class="card border-{{ calculator_color.1 }} mx-3" style="max-width: 18rem;">
+
+                    <div class="card rounded border-{{ calculator_color.1 }} mx-3" style="max-width: 18rem;">
                         <div class="card-header bg-{{ calculator_color.1 }} py-1
                         d-flex justify-content-between align-items-center">
                             <a href="{% url 'workday:detail' calculator_color.0.pk %}"
                                class="card-link  d-inline text-decoration-none text-dark">
                                 {{ calculator_color.0.name }}
+                                <div class="d-inline text-muted small align-baseliner">
+                                    <small>{{ calculator_color.0.author }}</small></div>
                             </a>
                             <p class="card-subtitle small text-white">
                                 <small>입대 : {{ calculator_color.0.start_date|date:'Y/m/d' }}</small></p>

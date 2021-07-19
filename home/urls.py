@@ -21,6 +21,7 @@ from home import views
 app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
+    path('contributor/', views.ContributorView.as_view(), name='contributor'),
     path('robots.txt/', views.RobotView.as_view(), name='robot'),
 ]
 
