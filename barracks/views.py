@@ -19,6 +19,7 @@ from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm
 # Core Lib
 from workday.library import calculator_lib
 
+#color for barracks
 COLORS = [
     "success",
     "warning",
