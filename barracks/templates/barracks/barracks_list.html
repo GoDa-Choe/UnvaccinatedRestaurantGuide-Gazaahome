@@ -88,6 +88,17 @@
             <h2 class="h5">
                 모든 생활관
             </h2>
+
+            {% if user.is_authenticated  and current_calculator and not my_barracks_list.exists %}
+                <a role="button" class="btn btn-outline-secondary btn-sm"
+                   href="{% url "barracks:create_barracks" %}">
+                    생활관 만들기</a>
+            {% elif not user.is_authenticated  and current_calculator and not my_barracks_list.exists%}
+                <a class="btn btn-outline-secondary btn-sm" href="#" data-bs-toggle="modal"
+                   data-bs-target="#loginModal">
+                    생활관 만들기
+                </a>
+            {% endif %}
         </div>
 
         <!-- Barracks List-->
