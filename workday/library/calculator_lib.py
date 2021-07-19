@@ -187,4 +187,5 @@ def get_leave_from_calculator(calculator):
 def get_leave_for_progress(sorted_calculator_leave_list, max_leaves):
     for calculator_color, leaves in sorted_calculator_leave_list.items():
         for leave_type, leave in leaves.items():
-            sorted_calculator_leave_list[calculator_color][leave_type] = (leave, leave / max_leaves * 100)
+            percent = leave / max_leaves * 100 if max_leaves else 0
+            sorted_calculator_leave_list[calculator_color][leave_type] = (leave, percent)
