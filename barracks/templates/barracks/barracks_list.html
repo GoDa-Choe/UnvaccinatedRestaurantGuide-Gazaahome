@@ -66,7 +66,7 @@
                                     {% if barracks.members.exists %}
                                         {% for calculator in barracks.members.iterator %}
                                             {{ colors.iter }}
-                                            <span class="badge rounded-pill bg-{% cycle "primary" "warning" "danger" "success" "info" %}">
+                                            <span class="badge rounded-pill bg-{% cycle "success" "warning" "primary" "info" "danger" %}">
                                             {{ calculator.name }}
                                         </span>
                                         {% endfor %}
@@ -116,7 +116,7 @@
                                 {% if barracks.members.exists %}
                                     {% for calculator in barracks.members.iterator %}
                                         {{ colors.iter }}
-                                        <span class="badge rounded-pill bg-{% cycle "primary" "warning" "danger" "success" "info" %}">
+                                        <span class="badge rounded-pill bg-{% cycle "success" "warning" "primary" "info" "danger" %}">
                                             {{ calculator.name }}
                                         </span>
                                     {% endfor %}

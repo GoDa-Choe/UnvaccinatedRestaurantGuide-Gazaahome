@@ -20,11 +20,11 @@ from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm
 from workday.library import calculator_lib
 
 COLORS = [
-    "primary",
-    "warning",
-    "danger",
     "success",
+    "warning",
+    "primary",
     "info",
+    "danger",
 ]
 
 MAXIMUM = 5  # the number of maximum members of a barracks
@@ -130,8 +130,13 @@ class BarracksDetail(HitCountDetailView):
 class DeleteInvitation(View):
     def get(self, request, *args, **kwargs):
         invitation = Invitation.objects.get(pk=self.kwargs['invitation_pk'])
-        invitation.delete()
+        current_calculator = Calculator.objects.filter(author=request.user).first()
 
+        if invitation.invitee == current_calculator:
+            invitation.delete()
+            return redirect(reverse_lazy('barracks:invitation_list'))
+
+        invitation.delete()
         return redirect(reverse_lazy('barracks:search_calculator', args=(self.kwargs['pk'],)))
 
 
@@ -140,6 +145,11 @@ class SendInvitation(View):
         inviter = request.user
         inviter_calculator = Calculator.objects.filter(author=inviter).first()
         barracks = Barracks.objects.get(pk=self.kwargs['pk'])
+
+        member_calculator = barracks.members.filter(author=inviter)
+        if not member_calculator.exists():
+            raise PermissionDenied
+
         invitee_calculator = Calculator.objects.filter(name=self.kwargs['calculator_name']).first()
 
         if barracks.members.count() >= 5:
@@ -154,6 +164,18 @@ class SendInvitation(View):
 class CalculatorSearch(LoginRequiredMixin, FormView):
     form_class = CalculatorSearchForm
     template_name = 'barracks/calculator_search.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super(CalculatorSearch, self).get(request)
+
+        barracks_pk = self.kwargs['pk']
+        barracks = Barracks.objects.get(pk=barracks_pk)
+
+        member_calculator = barracks.members.filter(author=request.user)
+        if not member_calculator.exists():
+            raise PermissionDenied
+
+        return response
 
     def form_valid(self, form):
         calculator_name = form.cleaned_data['calculator_name']
@@ -175,6 +197,18 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
     context_object_name = 'searched_calculator_list'
     ordering = '-created_at'
     paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        response = super(SearchedCalculatorList, self).get(request)
+
+        barracks_pk = self.kwargs['pk']
+        barracks = Barracks.objects.get(pk=barracks_pk)
+
+        member_calculator = barracks.members.filter(author=request.user)
+        if not member_calculator.exists():
+            raise PermissionDenied
+
+        return response
 
     def get_queryset(self):
         searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name'])
