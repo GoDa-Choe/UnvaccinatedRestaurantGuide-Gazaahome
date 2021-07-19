@@ -25,7 +25,7 @@ COLORS = [
     "warning",
     "primary",
     "info",
-    "danger",
+    "secondary",
 ]
 
 MAXIMUM = 5  # the number of maximum members of a barracks
