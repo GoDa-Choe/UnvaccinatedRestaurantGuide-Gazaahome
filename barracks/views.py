@@ -19,13 +19,13 @@ from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm
 # Core Lib
 from workday.library import calculator_lib
 
-#color for barracks
+# color for barracks
 COLORS = [
     "success",
     "warning",
     "primary",
     "info",
-    "secondary",
+    "danger",
 ]
 
 MAXIMUM = 5  # the number of maximum members of a barracks
