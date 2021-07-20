@@ -4,6 +4,7 @@ from workday.models import Calculator
 from workday.library import calculator_lib
 from django.views.generic import TemplateView
 from gazahome.settings import GOOGLE_SITE_REGISTER_CODE
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -40,3 +41,14 @@ class RobotView(TemplateView):
 
 class ContributorView(TemplateView):
     template_name = 'home/contributor.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ContributorView, self).get_context_data()
+
+        num_user = User.objects.count()
+        num_calculator = Calculator.objects.count()
+
+        context["num_user"] = num_user
+        context["num_calculator"] = num_calculator
+
+        return context
