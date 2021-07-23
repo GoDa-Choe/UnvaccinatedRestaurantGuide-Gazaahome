@@ -197,6 +197,15 @@ class CalculatorDelete(LoginRequiredMixin, DeleteView):
         else:
             raise PermissionDenied
 
+    def delete(self, request, *args, **kwargs):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        barracks_list = current_calculator.barracks_set.all()
+        for barracks in barracks_list:
+            if barracks.members.count() == 1:
+                barracks.delete()
+
+        return super(CalculatorDelete, self).delete(request, *args, **kwargs)
+
     def get_success_url(self):
         return reverse_lazy('workday:index')
 
