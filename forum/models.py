@@ -20,6 +20,7 @@ class Tag(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=20, unique=True)
     slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+    priority = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
@@ -41,7 +42,7 @@ class Post(models.Model, HitCountMixin):
         related_query_name='hit_count_generic_relation')
 
     # likes
-    likes = models.ManyToManyField(User, related_name="likers")
+    likes = models.ManyToManyField(User, blank=True, related_name="likers")
 
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

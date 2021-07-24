@@ -20,33 +20,53 @@
 
 
 
-    <article>
-        <!-- Title-->
-        <h2 class="h3 mt-4">
-            {{ post.title }}
-        </h2>
+    <article class="my-3 p-3 rounded shadow-sm">
 
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-inline">
-                <p class="d-inline mx-2">
-                    {{ post.author|upper }}
-                </p>
-                <p class="d-inline text-muted mx-2">
-                    {{ post.created_at|date:'Y-m-d H:i' }}
-                </p>
-            </div>
-            <div class="d-inline">
+
+        <!-- Title-->
+        <div>
+            <div class="d-flex justify-content-end mb-1">
                 <!-- Post eidt-->
                 {% if user.is_authenticated and user == post.author %}
-                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'update' post.pk %}" role="button">
-                        수정
+                    <a class="btn btn-sm btn-outline-secondary"
+                       href="{% url 'update' post.pk %}" role="button">
+                        <small>수정</small>
                     </a>
-                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'delete' post.pk %}" role="button">
-                        삭제
+                    <a class="mx-1 btn btn-sm btn-outline-secondary"
+                       href="{% url 'delete' post.pk %}" role="button">
+                        <small>삭제</small>
                     </a>
                 {% endif %}
             </div>
+
+            <h2 class="h3">
+                {{ post.title }}
+            </h2>
         </div>
+
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-inline">
+                <p class="d-inline mx-1">
+                    {% if post.category.name == "익명" %}
+                        익명
+                    {% else %}
+                        {{ post.author|upper }}
+                    {% endif %}
+                </p>
+                <p class="d-inline text-muted mx-1 small">
+                    {{ post.created_at|date:'Y-m-d H:i' }}
+                </p>
+
+            </div>
+            <div class="d-inline text-muted small">
+                <div class="d-inline mx-1"><i class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+
+                <div class="d-inline mx-1"><i class="far fa-comment"></i> {{ post.num_comments }}</div>
+            </div>
+
+        </div>
+
 
         <hr>
 
@@ -56,12 +76,12 @@
         {% endif %}
 
         <!-- Post content-->
-        <p>{{ post.get_content_markdown|safe|linebreaks}}</p>
+        <p>{{ post.get_content_markdown|safe|linebreaks }}</p>
 
         <hr>
 
         <!-- Tags-->
-        <div class="d-flex">
+        <div class="d-flex justify-content-start">
             {% if post.tags.exists %}
                 <i class="fas fa-tags"></i>
                 {% for tag in post.tags.iterator %}
@@ -71,30 +91,24 @@
             {% endif %}
         </div>
 
+
         <div class="d-flex justify-content-center my-3">
             <!-- Likes -->
             {% if user.is_authenticated %}
                 <form action="{% url 'like' post.pk %}" method="POST">{% csrf_token %}
-                    {% if is_liked %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}"
-                                class="btn btn-outline-primary btn-sm">
-                            좋아요 {{ num_likes }}
-                        </button>
-                    {% else %}
-                        <button type="submit" name="post_id" value="{{ post.pk }}"
-                                class="btn btn-sm btn-outline-primary ">
-                            좋아요 {{ num_likes }}
-                        </button>
-                    {% endif %}
+                    <button type="submit" name="post_id" value="{{ post.pk }}"
+                            class="btn btn-sm btn-outline-success position-relative border-1" style="background-color: #aacfaa">
+                        특급
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                            {{ num_likes }}
+                        </span>
+
+                    </button>
                 </form>
             {% else %}
-                <button class="btn btn-sm btn-outline-primary ">좋아요 {{ num_likes }}</button>
+                <button class="btn btn-sm btn-outline-success"> 특급 {{ num_likes }}</button>
             {% endif %}
 
-            <!-- Hits -->
-            <div class="d-inline">
-                <button class="btn btn-sm mx-2 btn-outline-success">조회수 {{ post.hit_count.hits }}</button>
-            </div>
         </div>
     </article>
 
@@ -112,7 +126,8 @@
 
                         <div class="float-end">
                             {% if user.is_authenticated and comment.author == user %}
-                                <a href="{% url 'comment_update' comment.pk %}" class="text-dark text-decoration-none">
+                                <a href="{% url 'comment_update' comment.pk %}"
+                                   class="text-dark text-decoration-none mx-1">
                                     <small>수정</small>
                                 </a>
                                 <a class="text-dark text-decoration-none" href="#" data-bs-toggle="modal"
@@ -123,7 +138,12 @@
                         </div>
 
                         <div class="d-inline">
-                            <strong class="text-gray-dark">{{ comment.author.username }}</strong>
+                            {% if post.category.name == "익명" %}
+                                <strong class="text-gray-dark">익명</strong>
+                            {% else %}
+                                <strong class="text-gray-dark">{{ comment.author.username }}</strong>
+                            {% endif %}
+
                             <div class="d-inline text-muted">{{ comment.modified_at|date:'Y-m-d H:i:s' }}</div>
                         </div>
 

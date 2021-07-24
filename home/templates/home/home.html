@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="군복무 실출근 계산기 집에가자에서 복무율, 실출근율, 전역일을 모두 한번에 알아보세요">
     <meta name="author" content="goda soft studio">
-    <meta name="version" content="gazaa beta v1.2.1">
+    <meta name="version" content="gazaa beta v1.2.2">
 
     <!-- Robots -->
     <meta name="robots" content="index,follow">
@@ -127,7 +127,13 @@
                                         </p>
                                         <div class="d-flex text-muted justify-content-between">
                                             <div class="d-inline">
-                                                <strong class="text-gray-dark">{{ post.author }}</strong>
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
                                                 <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
                                             </div>
                                             <div class="d-inline">
@@ -155,7 +161,7 @@
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
                     <a href="{% url 'likes_post' %}" class="text-decoration-none">
-                        <strong class="d-inline-block mb-2 text-success">좋아요 게시글</strong>
+                        <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
                     </a>
                     <!-- Most Likes-->
                     <div class="list-group-flush">
@@ -171,7 +177,13 @@
                                         </p>
                                         <div class="d-flex text-muted justify-content-between">
                                             <div class="d-inline">
-                                                <strong class="text-gray-dark">{{ post.author }}</strong>
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
                                                 <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
                                             </div>
                                             <div class="d-inline">

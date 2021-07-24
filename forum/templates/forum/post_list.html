@@ -66,8 +66,10 @@
 
                                     <div class="d-inline mb-1">
                                         <div class="d-inline"><i class="fas fa-heart"></i> {{ notice.num_likes }}</div>
-                                        <div class="d-inline"><i class="far fa-comment"></i> {{ notice.num_comments }}</div>
-                                        <div class="d-inline"><i class="far fa-eye"></i> {{ notice.hit_count.hits }}</div>
+                                        <div class="d-inline"><i class="far fa-comment"></i> {{ notice.num_comments }}
+                                        </div>
+                                        <div class="d-inline"><i class="far fa-eye"></i> {{ notice.hit_count.hits }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +93,13 @@
                             </p>
                             <div class="d-flex text-muted justify-content-between">
                                 <div class="d-inline">
-                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+
+                                    {% if post.category.name == "익명" %}
+                                        <strong class="text-gray-dark">익명</strong>
+                                    {% else %}
+                                        <strong class="text-gray-dark">{{ post.author }}</strong>
+                                    {% endif %}
+
                                     <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
                                 </div>
 

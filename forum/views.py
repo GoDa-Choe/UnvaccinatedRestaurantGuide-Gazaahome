@@ -167,7 +167,7 @@ def tag_post(request, slug):
     context = {
         'post_list': post_list.order_by('-pk'),
         'tag': tag,
-        'categories': Category.objects.all(),
+        'categories': Category.objects.all().order_by("priority"),
     }
 
     return render(
@@ -182,12 +182,13 @@ class LikesPostList(ListView):
     template_name = 'forum/post_list.html'
     paginate_by = 10
     queryset = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)[:20]
+
     context_object_name = 'post_list'
 
     def get_context_data(self, **kwargs):
         context = super(LikesPostList, self).get_context_data()
-        context['categories'] = Category.objects.all()
-        context['category'] = "좋아요"
+        context['categories'] = Category.objects.all().order_by("priority")
+        context['category'] = "특급"
 
         return context
 
@@ -197,12 +198,12 @@ class PopularPostList(ListView):
     template_name = 'forum/post_list.html'
     paginate_by = 10
     context_object_name = 'post_list'
-    ordering = ("-hit_count_generic__hits", '-pk')
+    queryset = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularPostList, self).get_context_data()
-        context['post_list'] = context['post_list'][:20]
-        context['categories'] = Category.objects.all()
+        context['post_list'] = context['post_list'][:15]
+        context['categories'] = Category.objects.all().order_by("priority")
         context['category'] = "인기"
 
         return context
@@ -226,7 +227,7 @@ class CategoryPostList(ListView):
         notice_list = category.post_set.filter(author=notice_manager)
 
         context['category'] = category
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.all().order_by("priority")
         context['notice_list'] = notice_list
         return context
 
@@ -244,7 +245,7 @@ class PostList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.all().order_by("priority")
 
         return context
 
@@ -256,7 +257,7 @@ class PostDetail(HitCountDetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data()
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.all().order_by("priority")
         context['comment_form'] = CommentForm
 
         likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
