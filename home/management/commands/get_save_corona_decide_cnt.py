@@ -3,7 +3,7 @@ import requests
 import xml.etree.ElementTree as ElementTree
 
 from django.core.management.base import BaseCommand, CommandError
-from gazahome.models import Corona
+from home.models import Corona
 
 
 class Command(BaseCommand):

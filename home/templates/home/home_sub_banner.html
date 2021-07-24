@@ -1,4 +1,7 @@
-<div class="d-flex justify-content-between align-items-center p-3 my-3 rounded shadow-sm text-white"
+{% load humanize %}
+
+
+<div class="d-flex justify-content-between align-items-start p-3 mb-3 rounded shadow-sm text-white"
      style="background-color: #6f42c1">
 
     <div class="lh-1">
@@ -19,7 +22,16 @@
                     </span>
             </a>
 
+        {% else %}
+            <div class="float-end small">
+                <i class="fas fa-viruses"></i><small class="small">
+                {{ decided_count|intcomma }}(&#9652;{{ today_decided_count|intcomma }})</small>
+            </div>
         {% endif %}
+
+
+
+
     {% endwith %}
 
 

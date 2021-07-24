@@ -1,3 +1,8 @@
 from django.contrib import admin
+from home.models import Corona
 
-# Register your models here.
+
+@admin.register(Corona)
+class CoronaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'state_date', 'decided_count', 'created_at', ]
+    list_display_links = ['id', 'state_date', ]
