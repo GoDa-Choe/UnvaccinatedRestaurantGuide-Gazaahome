@@ -2,7 +2,7 @@ from datetime import date
 import requests
 import xml.etree.ElementTree as ElementTree
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from home.models import Corona
 
 
@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def _get_decide_count(root):
-        decide_count = root.find("body").find("items").find("item").find("decideCnt").textt
+        decide_count = root.find("body").find("items").find("item").find("decideCnt").text
         return int(decide_count)
 
     def _get_response_root(self, today):
@@ -36,7 +36,7 @@ class Command(BaseCommand):
         root = ElementTree.fromstring(response.text)
         return root
 
-    def handle(self):
+    def handle(self, *args, **options):
         try:
             today = date.today()
             root = self._get_response_root(today)
@@ -46,9 +46,9 @@ class Command(BaseCommand):
 
                 Corona.objects.create(state_date=today, decided_count=decided_count)
                 self.stdout.write(
-                    self.style.SUCCESS(f"new corona decide count was finded at {today} :: {decided_count}."))
+                    self.style.SUCCESS(f"new corona decide count was finded at {today}({decided_count})."))
         except AttributeError:
-            self.stdout.write(self.style.ERROR('AttributeError was raised.'))
+            self.stdout.write(self.style.ERROR(f'AttributeError was raised.{date.today()}'))
             return
 
         self.stdout.write(self.style.SUCCESS('Successfully saved.'))

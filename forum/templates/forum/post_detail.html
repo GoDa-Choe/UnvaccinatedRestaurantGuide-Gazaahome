@@ -39,32 +39,30 @@
                 {% endif %}
             </div>
 
-            <h2 class="h3">
+            <h2 class="h4">
                 {{ post.title }}
             </h2>
         </div>
 
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center small">
             <div class="d-inline">
                 <p class="d-inline mx-1">
                     {% if post.category.name == "익명" %}
                         익명
                     {% else %}
-                        {{ post.author|upper }}
+                        {{ post.author }}
                     {% endif %}
                 </p>
                 <p class="d-inline text-muted mx-1 small">
                     {{ post.created_at|date:'Y-m-d H:i' }}
                 </p>
-
             </div>
             <div class="d-inline text-muted small">
-                <div class="d-inline mx-1"><i class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
-
-                <div class="d-inline mx-1"><i class="far fa-comment"></i> {{ post.num_comments }}</div>
+                <div class="d-inline"><i class="fas fa-heart"></i> {{ post.num_likes }}</div>
+                <div class="d-inline"><i class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                <div class="d-inline"><i class="far fa-comment"></i> {{ post.num_comments }}</div>
             </div>
-
         </div>
 
 
@@ -97,7 +95,8 @@
             {% if user.is_authenticated %}
                 <form action="{% url 'like' post.pk %}" method="POST">{% csrf_token %}
                     <button type="submit" name="post_id" value="{{ post.pk }}"
-                            class="btn btn-sm btn-outline-success position-relative border-1" style="background-color: #aacfaa">
+                            class="btn btn-sm btn-outline-success position-relative border-1"
+                            style="background-color: #aacfaa">
                         특급
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
                             {{ num_likes }}
@@ -106,7 +105,13 @@
                     </button>
                 </form>
             {% else %}
-                <button class="btn btn-sm btn-outline-success"> 특급 {{ num_likes }}</button>
+                <button class="btn btn-sm btn-outline-success position-relative border-1"
+                        style="background-color: #aacfaa">
+                    특급
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                        {{ num_likes }}
+                    </span>
+                </button>
             {% endif %}
 
         </div>
