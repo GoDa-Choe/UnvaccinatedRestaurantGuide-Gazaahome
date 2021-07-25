@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="군복무 실출근 계산기 집에가자에서 복무율, 실출근율, 전역일을 모두 한번에 알아보세요">
     <meta name="author" content="goda soft studio">
-    <meta name="version" content="gazaa beta v1.2.2">
+    <meta name="version" content="gazaa beta v1.2.3">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://gazaahome.com/">
 
     <!-- Robots -->
     <meta name="robots" content="index,follow">
@@ -17,7 +20,6 @@
     <meta property="og:description" content="군복무 실출근 계산기 집에가자에서 복무율, 실출근율, 전역일을 모두 한번에 알아보세요">
     <meta property="og:image" content="https://www.gazaahome.com/{% static 'home/images/logo.png' %}">
     <meta property="og:url" content="https://www.gazaahome.com/">
-
 
     <!-- Site Register -->
     <meta name="google-site-verification" content="{{ google_site_register_code }}"/>
@@ -125,7 +127,7 @@
                                         <p class="pb-0 mb-1 lh-sm">
                                             {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
                                         </p>
-                                        <div class="d-flex text-muted justify-content-between">
+                                        <div class="d-flex text-muted justify-content-between small">
                                             <div class="d-inline">
 
                                                 {% if post.category.name == "익명" %}
@@ -175,7 +177,7 @@
                                         <p class="pb-0 mb-1 lh-sm">
                                             {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
                                         </p>
-                                        <div class="d-flex text-muted justify-content-between">
+                                        <div class="d-flex text-muted justify-content-between small">
                                             <div class="d-inline">
 
                                                 {% if post.category.name == "익명" %}
