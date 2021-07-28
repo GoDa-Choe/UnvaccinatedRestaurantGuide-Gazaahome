@@ -1,0 +1,153 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block head-title %}
+    랭킹
+{% endblock %}
+
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <div class="my-3 p-3 rounded shadow-sm">
+        {% for calculator, info in calculator_info.items %}
+            <div class="d-block">
+                {{ calculator.name }} 전역-{{ info.num_remain_days }} 막출-{{ info.num_workdays }}
+            </div>
+        {% endfor %}
+    </div>
+
+
+    {{ num_remain_days }}
+    {{ num_workdays }}
+
+    <div>
+        {{ remaindays_ranking }}
+    </div>
+
+    <div>
+        {{ workdays_ranking }}
+    </div>
+
+
+    <div style="height: 20rem">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <div>
+        <canvas id="myChart1"></canvas>
+    </div>
+
+    <hr>
+
+    <div>
+        {{ remaindays_days }}
+        {{ remaindays_days_counter }}
+    </div>
+
+{% endblock %}
+
+{% block chart %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+            integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ remaindays_days|safe }},
+                datasets: [{
+                    label: '# of Votes',
+                    data: {{ remaindays_days_counter }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var label = context.parsed.y + 1;
+                                var percent = label / Number({{ remaindays_days_length }}) * 100;
+                                percent.toFixed(2);
+                                label = String(label) + "위" + "(" + String(percent) + "%)";
+
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '분포(%)'
+                        },
+                    }
+                },
+                y: {
+                    ticks: {
+                        autoSkip: true,
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+        var myChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: {{ workdays_days }},
+                datasets: [{
+                    label: '# of Votes',
+                    data: {{ workdays_days_counter }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                return "hello";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+
+{% endblock %}

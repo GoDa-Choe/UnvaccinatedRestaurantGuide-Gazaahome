@@ -189,3 +189,37 @@ def get_leave_for_progress(sorted_calculator_leave_list, max_leaves):
         for leave_type, leave in leaves.items():
             percent = leave / max_leaves * 100 if max_leaves else 0
             sorted_calculator_leave_list[calculator_color][leave_type] = (leave, percent)
+
+
+def get_workday_from_calculator_ranking(calculator):
+    begin_service = calculator.start_date
+    end_service = calculator.end_date
+
+    service_days = make_days.make_service_days(begin_service, end_service)  # 입대 ~ 전역전
+
+    serviced_days = make_days.make_serviced_days(begin_service)  # 입대~어제
+    remain_days = service_days - serviced_days  # 오늘 ~ 전역전
+
+    # 휴가
+    leaves = {leave_date for leave in calculator.leave_set.all() for leave_date in leave.get_leaves()}
+
+    # 휴일
+    dayoffs = {dayoff.date for dayoff in calculator.dayoff_set.all()}
+
+    # 실출근
+    workdays = remain_days - dayoffs - leaves
+
+    end_workday = max(workdays) if workdays else end_service
+
+    percent = round(len(serviced_days) / len(service_days) * 100, 2)
+
+    data = {
+        'num_workdays': len(workdays),
+        'end_workday': end_workday,
+        'workday_percent': round((1 - len(workdays) / len(service_days)) * 100, 2),
+
+        'percent': percent if percent <= 100 else 100.0,
+        'num_remain_days': len(remain_days),
+    }
+
+    return data
