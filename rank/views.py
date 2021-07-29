@@ -28,8 +28,22 @@ import ranking
 class RankingView(LoginRequiredMixin, TemplateView):
     template_name = "rank/ranking_index.html"
 
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            calculator = Calculator.objects.filter(author=request.user).first()
+            if not calculator:
+                return redirect(reverse_lazy('workday:create'))
+
+        return super(RankingView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(RankingView, self).get_context_data()
+
+        current_calculator = Calculator.objects.get(author=self.request.user)
+        current_info = calculator_lib.get_workday_from_calculator_ranking(current_calculator)
+        context["current_calculator"] = current_calculator
+        context["current_info"] = current_info
 
         calculator_info = {calculator: calculator_lib.get_workday_from_calculator_ranking(calculator)
                            for calculator in Calculator.objects.all()}
@@ -44,29 +58,49 @@ class RankingView(LoginRequiredMixin, TemplateView):
         context["num_remain_days"] = num_remain_days
         context["num_workdays"] = num_workdays
 
-        remaindays_ranking = list(ranking.Ranking(num_remain_days, start=1, reverse=True))
-        workdays_ranking = list(ranking.Ranking(num_workdays, start=1, reverse=True))
+        remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
+        workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
 
-        context["remaindays_ranking"] = remaindays_ranking
-        context["workdays_ranking"] = workdays_ranking
+        try:
+            current_remaindays_ranking = remaindays_ranking.rank(current_info["num_remain_days"])
+        except ValueError:
+            current_remaindays_ranking = 0
+        context["current_remaindays_ranking"] = current_remaindays_ranking
 
-        remaindays_ranks = [item[0] for item in remaindays_ranking]
-        remaindays_days = [item[1] for item in remaindays_ranking]
+        try:
+            current_workdays_ranking = workdays_ranking.rank(current_info["num_workdays"])
+        except ValueError:
+            current_workdays_ranking = 0
+        context["current_workdays_ranking"] = current_workdays_ranking
 
-        remaindays_ranks = [item[0] for item in remaindays_ranking]
-        workdays_days = [item[1] for item in workdays_ranking]
+        remaindays_ranking_length = len(num_remain_days)
+        context["remaindays_ranking_length"] = remaindays_ranking_length
+        workdays_ranking_length = len(num_workdays)
+        context["workdays_ranking_length"] = workdays_ranking_length
 
-        remaindays_days_counter = Counter(remaindays_days)
-        context["remaindays_days"] = [f"D-{day}" for day in remaindays_days_counter.keys()]
-        context["remaindays_days_length"] = len(list(remaindays_days_counter))
-        context["remaindays_days_counter"] = [round(counter / len(list(remaindays_days_counter)) * 100, 2)
-                                              for counter in remaindays_days_counter.values()]
+        current_remaindays_ranking_percentage = round(current_remaindays_ranking / remaindays_ranking_length * 100, 1)
+        context["current_remaindays_ranking_percentage"] = current_remaindays_ranking_percentage
 
-        workdays_days_counter = Counter(workdays_days)
-        context["workdays_days"] = list(workdays_days_counter.keys())
-        context["workdays_days_counter"] = list(workdays_days_counter.values())
-        context["test_label"] = list(range(1, 300))
-        context["test_data"] = list(range(1, 300))
-        context["colors"] = ['rgba(54, 162, 235, 0.2)' for i in range(1, 300)]
-        context["colors"][150] = 'rgba(240,6,38,0.98)'
+        current_workdays_ranking_percentage = round(current_workdays_ranking / workdays_ranking_length * 100, 1)
+        context["current_workdays_ranking_percentage"] = current_workdays_ranking_percentage
+
+        context["remaindays_ranking"] = {value: rank for rank, value in remaindays_ranking}
+        context["workdays_ranking"] = {value: rank for rank, value in workdays_ranking}
+
+        remaindays_days_counter = Counter(num_remain_days)
+        context["remaindays_days"] = [day for day in remaindays_days_counter.keys()]
+        context["remaindays_counter"] = [round(counter / remaindays_ranking_length * 100, 1)
+                                         for counter in remaindays_days_counter.values()]
+
+        workdays_days_counter = Counter(num_workdays)
+        context["workdays_days"] = [day for day in workdays_days_counter.keys()]
+        context["workdays_counter"] = [round(counter / workdays_ranking_length * 100, 1)
+                                       for counter in workdays_days_counter.values()]
+
+        context["remaindays_colors"] = ['rgba(54, 162, 235, 1)' if day == current_info["num_remain_days"]
+                                        else 'rgba(54, 162, 235, 0.2)' for day in remaindays_days_counter.keys()]
+
+        context["workdays_colors"] = ['rgba(11,152,10,1)' if day == current_info["num_workdays"]
+                                      else 'rgba(11,152,10,0.2)' for day in workdays_days_counter.keys()]
+
         return context

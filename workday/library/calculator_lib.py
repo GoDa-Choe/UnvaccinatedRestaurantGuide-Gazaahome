@@ -211,12 +211,12 @@ def get_workday_from_calculator_ranking(calculator):
 
     end_workday = max(workdays) if workdays else end_service
 
-    percent = round(len(serviced_days) / len(service_days) * 100, 2)
+    percent = round(len(serviced_days) / len(service_days) * 100, 1)
 
     data = {
         'num_workdays': len(workdays),
         'end_workday': end_workday,
-        'workday_percent': round((1 - len(workdays) / len(service_days)) * 100, 2),
+        'workday_percent': round((1 - len(workdays) / len(service_days)) * 100, 1),
 
         'percent': percent if percent <= 100 else 100.0,
         'num_remain_days': len(remain_days),
