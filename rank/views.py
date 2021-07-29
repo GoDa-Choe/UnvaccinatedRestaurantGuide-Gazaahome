@@ -48,8 +48,6 @@ class RankingView(LoginRequiredMixin, TemplateView):
         calculator_info = {calculator: calculator_lib.get_workday_from_calculator_ranking(calculator)
                            for calculator in Calculator.objects.all()}
 
-        context["calculator_info"] = calculator_info
-
         num_remain_days = [info["num_remain_days"] for info in calculator_info.values() if info["num_remain_days"] != 0]
         num_remain_days.sort()
         num_workdays = [info["num_workdays"] for info in calculator_info.values() if info["num_workdays"] != 0]
