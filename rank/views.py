@@ -48,54 +48,55 @@ class RankingView(LoginRequiredMixin, TemplateView):
         # O(N*Days)
         calculator_info = {calculator: calculator_lib.get_workday_from_calculator_ranking(calculator)
                            for calculator in Calculator.objects.all()}
+        context["calculator_info"] = calculator_info
 
-        # O(N) + O(NlogN)
-        num_remain_days = [info["num_remain_days"] for info in calculator_info.values() if info["num_remain_days"] != 0]
-        num_remain_days.sort()
-        # O(N) + O(NlogN)
-        num_workdays = [info["num_workdays"] for info in calculator_info.values() if info["num_workdays"] != 0]
-        num_workdays.sort()
-
-        # O(N) + O(N)
-        remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
-        workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
-
-        try:
-            current_remaindays_ranking = remaindays_ranking.rank(current_info["num_remain_days"])
-        except ValueError:
-            current_remaindays_ranking = 0
-        context["current_remaindays_ranking"] = current_remaindays_ranking
-
-        try:
-            current_workdays_ranking = workdays_ranking.rank(current_info["num_workdays"])
-        except ValueError:
-            current_workdays_ranking = 0
-        context["current_workdays_ranking"] = current_workdays_ranking
-
-        remaindays_ranking_length = len(num_remain_days)
-        context["remaindays_ranking_length"] = remaindays_ranking_length
-        workdays_ranking_length = len(num_workdays)
-        context["workdays_ranking_length"] = workdays_ranking_length
-
-        current_remaindays_ranking_percentage = round(current_remaindays_ranking / remaindays_ranking_length * 100, 1)
-        context["current_remaindays_ranking_percentage"] = current_remaindays_ranking_percentage
-
-        current_workdays_ranking_percentage = round(current_workdays_ranking / workdays_ranking_length * 100, 1)
-        context["current_workdays_ranking_percentage"] = current_workdays_ranking_percentage
-
-        # O(N) + O(N)
-        context["remaindays_ranking"] = {value: rank for rank, value in remaindays_ranking}
-        context["workdays_ranking"] = {value: rank for rank, value in workdays_ranking}
-
-        remaindays_days_counter = Counter(num_remain_days)
-        context["remaindays_days"] = [day for day in remaindays_days_counter.keys()]
-        context["remaindays_counter"] = [round(counter / remaindays_ranking_length * 100, 1)
-                                         for counter in remaindays_days_counter.values()]
-
-        workdays_days_counter = Counter(num_workdays)
-        context["workdays_days"] = [day for day in workdays_days_counter.keys()]
-        context["workdays_counter"] = [round(counter / workdays_ranking_length * 100, 1)
-                                       for counter in workdays_days_counter.values()]
+        # # O(N) + O(NlogN)
+        # num_remain_days = [info["num_remain_days"] for info in calculator_info.values() if info["num_remain_days"] != 0]
+        # num_remain_days.sort()
+        # # O(N) + O(NlogN)
+        # num_workdays = [info["num_workdays"] for info in calculator_info.values() if info["num_workdays"] != 0]
+        # num_workdays.sort()
+        #
+        # # O(N) + O(N)
+        # remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
+        # workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
+        #
+        # try:
+        #     current_remaindays_ranking = remaindays_ranking.rank(current_info["num_remain_days"])
+        # except ValueError:
+        #     current_remaindays_ranking = 0
+        # context["current_remaindays_ranking"] = current_remaindays_ranking
+        #
+        # try:
+        #     current_workdays_ranking = workdays_ranking.rank(current_info["num_workdays"])
+        # except ValueError:
+        #     current_workdays_ranking = 0
+        # context["current_workdays_ranking"] = current_workdays_ranking
+        #
+        # remaindays_ranking_length = len(num_remain_days)
+        # context["remaindays_ranking_length"] = remaindays_ranking_length
+        # workdays_ranking_length = len(num_workdays)
+        # context["workdays_ranking_length"] = workdays_ranking_length
+        #
+        # current_remaindays_ranking_percentage = round(current_remaindays_ranking / remaindays_ranking_length * 100, 1)
+        # context["current_remaindays_ranking_percentage"] = current_remaindays_ranking_percentage
+        #
+        # current_workdays_ranking_percentage = round(current_workdays_ranking / workdays_ranking_length * 100, 1)
+        # context["current_workdays_ranking_percentage"] = current_workdays_ranking_percentage
+        #
+        # # O(N) + O(N)
+        # context["remaindays_ranking"] = {value: rank for rank, value in remaindays_ranking}
+        # context["workdays_ranking"] = {value: rank for rank, value in workdays_ranking}
+        #
+        # remaindays_days_counter = Counter(num_remain_days)
+        # context["remaindays_days"] = [day for day in remaindays_days_counter.keys()]
+        # context["remaindays_counter"] = [round(counter / remaindays_ranking_length * 100, 1)
+        #                                  for counter in remaindays_days_counter.values()]
+        #
+        # workdays_days_counter = Counter(num_workdays)
+        # context["workdays_days"] = [day for day in workdays_days_counter.keys()]
+        # context["workdays_counter"] = [round(counter / workdays_ranking_length * 100, 1)
+        #                                for counter in workdays_days_counter.values()]
 
         # context["remaindays_colors"] = ['rgb(240, 9, 9, 1)' if day == current_info["num_remain_days"]
         #                                 else 'rgb(21, 67, 235, 1)' for day in remaindays_days_counter.keys()]
