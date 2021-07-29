@@ -11,6 +11,15 @@ def make_days(begin, end):
     return days
 
 
+def make_days_light(begin, end):
+    days = set(range(begin, end, datetime.timedelta(days=1)))
+    current = begin
+    while current < end:
+        days.add(current)
+        current += datetime.timedelta(days=1)
+    return days
+
+
 def make_service_days(begin_service, end_service):
     service_days = make_days(begin_service, end_service)
     return service_days

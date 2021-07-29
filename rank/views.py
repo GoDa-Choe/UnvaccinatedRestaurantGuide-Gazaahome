@@ -45,17 +45,18 @@ class RankingView(LoginRequiredMixin, TemplateView):
         context["current_calculator"] = current_calculator
         context["current_info"] = current_info
 
+        # O(N*Days)
         calculator_info = {calculator: calculator_lib.get_workday_from_calculator_ranking(calculator)
                            for calculator in Calculator.objects.all()}
 
+        # O(N) + O(NlogN)
         num_remain_days = [info["num_remain_days"] for info in calculator_info.values() if info["num_remain_days"] != 0]
         num_remain_days.sort()
+        # O(N) + O(NlogN)
         num_workdays = [info["num_workdays"] for info in calculator_info.values() if info["num_workdays"] != 0]
         num_workdays.sort()
 
-        context["num_remain_days"] = num_remain_days
-        context["num_workdays"] = num_workdays
-
+        # O(N) + O(N)
         remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
         workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
 
@@ -82,6 +83,7 @@ class RankingView(LoginRequiredMixin, TemplateView):
         current_workdays_ranking_percentage = round(current_workdays_ranking / workdays_ranking_length * 100, 1)
         context["current_workdays_ranking_percentage"] = current_workdays_ranking_percentage
 
+        # O(N) + O(N)
         context["remaindays_ranking"] = {value: rank for rank, value in remaindays_ranking}
         context["workdays_ranking"] = {value: rank for rank, value in workdays_ranking}
 

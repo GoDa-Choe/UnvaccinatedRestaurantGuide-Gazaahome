@@ -143,12 +143,6 @@
                             }
                         },
                         type: 'linear',
-                        ticks: {
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return value;
-                            }
-                        }
                     }
                 }
             }
@@ -198,12 +192,7 @@
                                 size: 14
                             }
                         },
-                        type: 'linear',
-                        ticks: {
-                            callback: function (value, index, values) {
-                                return value;
-                            }
-                        }
+                        {#type: 'linear',#}
                     }
                 }
             }
