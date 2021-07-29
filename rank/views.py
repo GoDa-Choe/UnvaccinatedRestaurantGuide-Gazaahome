@@ -97,10 +97,10 @@ class RankingView(LoginRequiredMixin, TemplateView):
         context["workdays_counter"] = [round(counter / workdays_ranking_length * 100, 1)
                                        for counter in workdays_days_counter.values()]
 
-        context["remaindays_colors"] = ['rgb(240, 9, 9, 1)' if day == current_info["num_remain_days"]
-                                        else 'rgb(21, 67, 235, 1)' for day in remaindays_days_counter.keys()]
-
-        context["workdays_colors"] = ['rgb(240, 9, 9, 1)' if day == current_info["num_workdays"]
-                                      else 'rgba(11, 152, 10, 1)' for day in workdays_days_counter.keys()]
+        # context["remaindays_colors"] = ['rgb(240, 9, 9, 1)' if day == current_info["num_remain_days"]
+        #                                 else 'rgb(21, 67, 235, 1)' for day in remaindays_days_counter.keys()]
+        #
+        # context["workdays_colors"] = ['rgb(240, 9, 9, 1)' if day == current_info["num_workdays"]
+        #                               else 'rgba(11, 152, 10, 1)' for day in workdays_days_counter.keys()]
 
         return context

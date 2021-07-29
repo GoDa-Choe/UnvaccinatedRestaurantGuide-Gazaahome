@@ -107,7 +107,7 @@
                 datasets: [{
                     label: '복무 랭킹',
                     data: {{ remaindays_counter }},
-                    backgroundColor: {{ remaindays_colors|safe }}
+                    backgroundColor: 'rgb(21, 67, 235, 1)'
                 }]
             },
             options: {
@@ -157,7 +157,7 @@
                 datasets: [{
                     label: '실출근 랭킹',
                     data: {{ workdays_counter }},
-                    backgroundColor: {{ workdays_colors|safe }}
+                    backgroundColor: 'rgba(11,152,10)'
                 }]
             },
             options: {
@@ -171,8 +171,7 @@
                                 var days_ranking = {{ workdays_ranking }};
                                 var label = days_ranking[context.parsed.x];
                                 var percent = label / {{ workdays_ranking_length }} * 100;
-                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";
-                                return text;
+                                return label + "위" + "(" + percent.toFixed(1) + "%)";
                             },
                             title: function (tooltipItems, data) {
                                 return 'D-' + tooltipItems[0].label;
@@ -192,7 +191,7 @@
                                 size: 14
                             }
                         },
-                        {#type: 'linear',#}
+                        type: 'linear',
                     }
                 }
             }
