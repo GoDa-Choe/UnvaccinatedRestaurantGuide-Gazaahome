@@ -65,5 +65,8 @@ class RankingView(LoginRequiredMixin, TemplateView):
         workdays_days_counter = Counter(workdays_days)
         context["workdays_days"] = list(workdays_days_counter.keys())
         context["workdays_days_counter"] = list(workdays_days_counter.values())
-
+        context["test_label"] = list(range(1, 300))
+        context["test_data"] = list(range(1, 300))
+        context["colors"] = ['rgba(54, 162, 235, 0.2)' for i in range(1, 300)]
+        context["colors"][150] = 'rgba(240,6,38,0.98)'
         return context
