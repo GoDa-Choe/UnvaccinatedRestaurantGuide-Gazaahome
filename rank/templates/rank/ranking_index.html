@@ -77,18 +77,18 @@
             </div>
         </div>
 
-        <div class="my-5">
-            <p class="d-inline text-muted small">분포(%)</p>
-            <p class="float-end m-0 text-primary fw-bold">복무 랭킹</p>
-            <canvas id="myChart"></canvas>
-        </div>
-
-        <div class="my-5">
-            <p class="d-inline text-muted small">분포(%)</p>
-            <p class="float-end m-0 text-success fw-bold">실출근 랭킹</p>
-            <canvas id="myChart1"></canvas>
-        </div>
-    </div>
+{#        <div class="my-5">#}
+{#            <p class="d-inline text-muted small">분포(%)</p>#}
+{#            <p class="float-end m-0 text-primary fw-bold">복무 랭킹</p>#}
+{#            <canvas id="myChart"></canvas>#}
+{#        </div>#}
+{##}
+{#        <div class="my-5">#}
+{#            <p class="d-inline text-muted small">분포(%)</p>#}
+{#            <p class="float-end m-0 text-success fw-bold">실출근 랭킹</p>#}
+{#            <canvas id="myChart1"></canvas>#}
+{#        </div>#}
+{#    </div>#}
 
 
 {% endblock %}
@@ -98,111 +98,111 @@
             integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {{ remaindays_days|safe }},
-                datasets: [{
-                    label: '복무 랭킹',
-                    data: {{ remaindays_counter }},
-                    backgroundColor: {{ remaindays_colors|safe }}
-                }]
-            },
-            options: {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                var days_ranking = {{ remaindays_ranking }};
-                                var label = days_ranking[context.parsed.x];
-                                var percent = label / {{ remaindays_ranking_length }} * 100;
-                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";
-                                return text;
-                            },
-                            title: function (tooltipItems, data) {
-                                return 'D-' + tooltipItems[0].label;
-                            }
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: '남은 복무(d-day)',
-                            font: {
-                                size: 14
-                            }
-                        },
-                        type: 'linear',
-                        ticks: {
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return value;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-
-        var ctx1 = document.getElementById('myChart1').getContext('2d');
-        var myChart = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: {{ workdays_days|safe }},
-                datasets: [{
-                    label: '실출근 랭킹',
-                    data: {{ workdays_counter }},
-                    backgroundColor: {{ workdays_colors|safe }}
-                }]
-            },
-            options: {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                var days_ranking = {{ workdays_ranking }};
-                                var label = days_ranking[context.parsed.x];
-                                var percent = label / {{ workdays_ranking_length }} * 100;
-                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";
-                                return text;
-                            },
-                            title: function (tooltipItems, data) {
-                                return 'D-' + tooltipItems[0].label;
-                            }
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: '남은 실출근(d-day)',
-                            font: {
-                                size: 14
-                            }
-                        },
-                        type: 'linear',
-                        ticks: {
-                            callback: function (value, index, values) {
-                                return value;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        var xyx = 'rgba(11,152,10,0.4)'
-    </script>
+{#    <script>#}
+{#        var ctx = document.getElementById('myChart').getContext('2d');#}
+{#        var myChart = new Chart(ctx, {#}
+{#            type: 'bar',#}
+{#            data: {#}
+{#                labels: {{ remaindays_days|safe }},#}
+{#                datasets: [{#}
+{#                    label: '복무 랭킹',#}
+{#                    data: {{ remaindays_counter }},#}
+{#                    backgroundColor: {{ remaindays_colors|safe }}#}
+{#                }]#}
+{#            },#}
+{#            options: {#}
+{#                plugins: {#}
+{#                    tooltip: {#}
+{#                        callbacks: {#}
+{#                            label: function (context) {#}
+{#                                var days_ranking = {{ remaindays_ranking }};#}
+{#                                var label = days_ranking[context.parsed.x];#}
+{#                                var percent = label / {{ remaindays_ranking_length }} * 100;#}
+{#                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";#}
+{#                                return text;#}
+{#                            },#}
+{#                            title: function (tooltipItems, data) {#}
+{#                                return 'D-' + tooltipItems[0].label;#}
+{#                            }#}
+{#                        }#}
+{#                    },#}
+{#                    legend: {#}
+{#                        display: false,#}
+{#                    }#}
+{#                },#}
+{#                scales: {#}
+{#                    x: {#}
+{#                        title: {#}
+{#                            display: true,#}
+{#                            text: '남은 복무(d-day)',#}
+{#                            font: {#}
+{#                                size: 14#}
+{#                            }#}
+{#                        },#}
+{#                        type: 'linear',#}
+{#                        ticks: {#}
+{#                            // Include a dollar sign in the ticks#}
+{#                            callback: function (value, index, values) {#}
+{#                                return value;#}
+{#                            }#}
+{#                        }#}
+{#                    }#}
+{#                }#}
+{#            }#}
+{#        });#}
+{##}
+{##}
+{#        var ctx1 = document.getElementById('myChart1').getContext('2d');#}
+{#        var myChart = new Chart(ctx1, {#}
+{#            type: 'bar',#}
+{#            data: {#}
+{#                labels: {{ workdays_days|safe }},#}
+{#                datasets: [{#}
+{#                    label: '실출근 랭킹',#}
+{#                    data: {{ workdays_counter }},#}
+{#                    backgroundColor: {{ workdays_colors|safe }}#}
+{#                }]#}
+{#            },#}
+{#            options: {#}
+{#                plugins: {#}
+{#                    tooltip: {#}
+{#                        callbacks: {#}
+{#                            label: function (context) {#}
+{#                                var days_ranking = {{ workdays_ranking }};#}
+{#                                var label = days_ranking[context.parsed.x];#}
+{#                                var percent = label / {{ workdays_ranking_length }} * 100;#}
+{#                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";#}
+{#                                return text;#}
+{#                            },#}
+{#                            title: function (tooltipItems, data) {#}
+{#                                return 'D-' + tooltipItems[0].label;#}
+{#                            }#}
+{#                        }#}
+{#                    },#}
+{#                    legend: {#}
+{#                        display: false,#}
+{#                    }#}
+{#                },#}
+{#                scales: {#}
+{#                    x: {#}
+{#                        title: {#}
+{#                            display: true,#}
+{#                            text: '남은 실출근(d-day)',#}
+{#                            font: {#}
+{#                                size: 14#}
+{#                            }#}
+{#                        },#}
+{#                        type: 'linear',#}
+{#                        ticks: {#}
+{#                            callback: function (value, index, values) {#}
+{#                                return value;#}
+{#                            }#}
+{#                        }#}
+{#                    }#}
+{#                }#}
+{#            }#}
+{#        });#}
+{#        var xyx = 'rgba(11,152,10,0.4)'#}
+{#    </script>#}
 
 {% endblock %}
