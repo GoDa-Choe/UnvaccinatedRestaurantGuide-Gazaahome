@@ -7,19 +7,44 @@
         </div>
 
         <div class="col">
-            <p class="my-1">휴가/휴일을 제외한 실출근을 확인해보세요!</p>
-            <a href="#howtouse" class="text-success fw-bold mx-1">How to use?</a>
-            <a href="https://open.kakao.com/o/gV6L2Ged" class="text-primary text-decoration-none mx-1 fw-bold">
-                <img src="{% static 'home/images/kakaolink_btn_small_ov.png' %}" alt="이미지 오류"
-                     style="width: 20px; height: 20px">
-                <small>오픈카톡 문의</small>
-            </a>
-            <div class="p-2 mt-1 text-white rounded bg-warning">
-                <h3 class=""><small>New Update 생활관</small></h3>
-                <p class="my-0 fw-bold text-secondary"><small>친구들과 복무율, 실출근, 휴가 비교를 한번에</small></p>
-                <a href="{% url "barracks:barracks_detail" 3 %}" class="text-white text-decoration-none small">
-                    <i class="fas fa-external-link-alt"></i> 생활관 구경하기</a>
+            <div class="row row-cols-1 row-cols-lg-2">
+                <p class="my-1">휴가/휴일을 제외한 실출근을 확인해보세요!</p>
+                <a href="#howtouse" class="text-success fw-bold mx-1">How to use?</a>
+                <a href="https://open.kakao.com/o/gV6L2Ged" class="text-primary text-decoration-none mx-1 fw-bold">
+                    <img src="{% static 'home/images/kakaolink_btn_small_ov.png' %}" alt="이미지 오류"
+                         style="width: 20px; height: 20px">
+                    <small>오픈카톡 문의</small>
+                </a>
+                <div class="col">
+
+                    <div class="p-2 mt-1 text-white rounded bg-success small">
+                        <h3 class="h5 mb-0"><small>New Update 랭킹</small></h3>
+                        <p class="my-0 fw-bold text-black-50"><small>실출근 계산기로 나의 D-day 랭킹을 알아보자</small></p>
+                        {% if user.is_authenticated %}
+                            <a href="{% url "rank:index" %}" class="text-white text-decoration-none small">
+                                <i class="fas fa-chart-line"></i> 랭킹 알아보기</a>
+                        {% else %}
+                            <a class="text-white text-decoration-none small" href="#" data-bs-toggle="modal"
+                               data-bs-target="#loginModal">
+                                <i class="fas fa-chart-line"></i> 랭킹 알아보기
+                            </a>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+                <div class="col">
+
+                    <div class="p-2 mt-1 text-white rounded bg-warning small">
+                        <h3 class="h5 mb-0"><small>생활관</small></h3>
+                        <p class="my-0 fw-bold text-secondary"><small>친구들과 복무율, 실출근, 휴가 비교를 한번에</small></p>
+                        <a href="{% url "barracks:barracks_detail" 3 %}" class="text-white text-decoration-none small">
+                            <i class="fas fa-campground"></i> 생활관 구경하기</a>
+                    </div>
+
+                </div>
             </div>
+
 
         </div>
     </div>
