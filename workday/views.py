@@ -8,6 +8,7 @@ from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
 
 from workday.models import Calculator, Leave, Dayoff
+from rank.models import RankingChart
 import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -139,6 +140,19 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
 
         new = calculator_lib.get_workday_from_calculator(calculator)
         context.update(new)
+
+        RankingChart.objects.update_or_create(
+            calculator=calculator,
+            defaults={
+                "start_date": calculator.start_date,
+                "end_date": calculator.end_date,
+                "end_workday": new['end_workday'],
+                "num_remaindays": new['num_remain_days'],
+                "num_workdays": new['num_workdays'],
+                "percent": float(new['percent']),
+                "workday_percent": float(new['workday_percent'])
+            }
+        )
 
         return context
 
