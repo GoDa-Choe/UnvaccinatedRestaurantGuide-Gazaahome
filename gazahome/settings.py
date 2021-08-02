@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'markdownx',
     'hitcount',
+    'admin_honeypot',
 
     # cloudinary
     'cloudinary_storage',
@@ -187,3 +188,5 @@ SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT', False))
 # Site Register Code
 GOOGLE_SITE_REGISTER_CODE = os.environ.get('GOOGLE_SITE_REGISTER_CODE', "")
 NAVER_SITE_REGISTER_CODE = os.environ.get('NAVER_SITE_REGISTER_CODE', "")
+
+ADMINS = [("goda", "goda.soft.studio@gmail.com"), ]

@@ -26,7 +26,9 @@ urlpatterns = [
     path('barracks/', include('barracks.urls')),
     path('ranking/', include('rank.urls')),
 
-    path('admin/', admin.site.urls),
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('bestgoda/', admin.site.urls),
+
     path('accounts/', include('allauth.urls')),
 
     path('markdownx/', include('markdownx.urls')),
