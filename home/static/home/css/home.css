@@ -1,26 +1,32 @@
 /* stylelint-disable selector-list-comma-newline-after */
 
 .display-4 {
-  font-size: 2.5rem;
+    font-size: 2.5rem;
 }
+
 @media (min-width: 768px) {
-  .display-4 {
-    font-size: 3rem;
-  }
+    .display-4 {
+        font-size: 3rem;
+    }
 }
 
 .card-img-right {
-  height: 100%;
-  border-radius: 0 3px 3px 0;
+    height: 100%;
+    border-radius: 0 3px 3px 0;
 }
 
 .flex-auto {
-  flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
-.h-250 { height: 250px; }
+.h-250 {
+    height: 250px;
+}
+
 @media (min-width: 768px) {
-  .h-md-250 { height: 250px; }
+    .h-md-250 {
+        height: 250px;
+    }
 }
 
 
@@ -28,10 +34,13 @@
  * Blog posts
  */
 .blog-post-title {
-  margin-bottom: .25rem;
-  font-size: 2.5rem;
+    margin-bottom: .25rem;
+    font-size: 2.5rem;
 }
+
 .blog-post-meta {
-  margin-bottom: 1.25rem;
-  color: #727272;
+    margin-bottom: 1.25rem;
+    color: #727272;
 }
+
+

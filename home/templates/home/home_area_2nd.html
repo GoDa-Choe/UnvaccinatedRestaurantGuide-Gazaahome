@@ -1,52 +1,74 @@
-<article class="blog-post">
-    <h2 class="blog-post-title">Another blog post</h2>
-    <p class="blog-post-meta">December 23, 2020 by <a href="#">Jacob</a></p>
+{% load static %}
 
-    <p>This is some additional paragraph placeholder content. It has been written to fill the available
-        space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
-        to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
-    <blockquote>
-        <p>Longer quote goes here, maybe with some <strong>emphasized text</strong> in the middle of it.</p>
-    </blockquote>
-    <p>This is some additional paragraph placeholder content. It has been written to fill the available
-        space and show how a longer snippet of text affects the surrounding content. We'll repeat it often
-        to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
-    <h3>Example table</h3>
-    <p>And don't forget about tables in these posts:</p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Upvotes</th>
-            <th>Downvotes</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Alice</td>
-            <td>10</td>
-            <td>11</td>
-        </tr>
-        <tr>
-            <td>Bob</td>
-            <td>4</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>Charlie</td>
-            <td>7</td>
-            <td>9</td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <tr>
-            <td>Totals</td>
-            <td>21</td>
-            <td>23</td>
-        </tr>
-        </tfoot>
-    </table>
+<div class="p-3 bg-body rounded shadow-sm">
+    <article>
+        <h2 class="h5 blog-post-title">집에가자란?</h2>
 
-    <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other
-        highly repetitive body text used throughout.</p>
-</article>
+        <p class="text-muted">2021-05-21 by <strong>goda</strong></p>
+
+        <p class="small">
+            집에가자는 군복무 실출근 계산기를 서비스하는 커뮤니티입니다. 계산기를 통해 현재까지의 실출근율과 남은 출근일수를 알아볼 수 있습니다.
+        </p>
+
+        <figure>
+            <blockquote class="blockquote">
+                <p class="small"><small><strong>실출근</strong></small></p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                <small>남은 복무기간 중 휴가와 휴일을 제외한 출근 일수</small>
+            </figcaption>
+        </figure>
+
+        <hr>
+
+        <div class="d-flex align-items-center p-2 my-2 text-white rounded" style="background-color: #6f42c1">
+            <div class="lh-1">
+                <h4 id="howtouse"> How to use?</h4>
+            </div>
+        </div>
+
+
+        <h4><strong>계산기로 실출근 알아보기</strong></h4>
+        <div class="row row-cols-1 row-cols-lg-2 my-2">
+            <div class="col my-1">
+                <img class="img-fluid" src="{% static 'home/images/main.png' %}" alt="이미지 오류">
+            </div>
+
+            <div class="col my-1">
+                <p>계산기는 실출근 계산기 메뉴를 통해 만들 수 있습니다.</p>
+                <p>별명과 입대일, 전역일을 입력하고 생성 버튼을 누르면 '집에가자' 서버가 계산기를 준비합니다. 약간의 시간이
+                    소요될 수 있습니다.</p>
+                <pre class="text-primary"><code>휴일 기본값 : 공휴일, 주말</code></pre>
+                <p class="text-decoration-underline">기본값으로 공휴일과, 주말을 실출근에 제외합니다. 이는 휴일 수정 버튼을 통해 다시 수정할 수 있습니다.</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-auto">
+                <p>랭킹 테스트</p>
+
+            </div>
+            <div class="col">
+                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
+                     height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
+                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#eee"/>
+                    <text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <img class="w-100" src="{% static 'home/images/barracks.png' %}" alt="이미지 오류">
+            </div>
+            <div class="col-auto">
+                <p>생활관 테스트</p>
+            </div>
+        </div>
+
+
+    </article>
+</div>
