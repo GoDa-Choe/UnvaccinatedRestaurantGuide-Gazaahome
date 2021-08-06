@@ -41,12 +41,12 @@
     <link href="{% static 'forum/css/footer.css' %}" rel="stylesheet" type="text/css" media="screen">
 
     <!-- Custom styles for this template-->
+    <link href="{% static 'home/css/home.css' %}" rel="stylesheet" type="text/css" media="screen">
+    <link href="{% static 'home/css/features.css' %}" rel="stylesheet" type="text/css" media="screen">
+
     {% block custom_style %}
-        <link href="{% static 'home/css/home.css' %}" rel="stylesheet" type="text/css" media="screen">
     {% endblock %}
 
-    {% block post_card %}
-    {% endblock %}
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-203346109-1"></script>
@@ -61,6 +61,7 @@
 
         gtag('config', 'UA-203346109-1');
     </script>
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BQVYN8RMC"></script>
     <script>
@@ -74,6 +75,7 @@
 
         gtag('config', 'G-7BQVYN8RMC');
     </script>
+
     <!-- Global site tag (gtag.js) - Google Ads: 329024456 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-329024456"></script>
     <script>
@@ -150,6 +152,56 @@
 
 
     <div class="row mb-2">
+
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a href="{% url 'likes_post' %}" class="text-decoration-none">
+                        <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
+                    </a>
+                    <!-- Most Likes-->
+                    <div class="list-group-flush">
+                        {% for post in most_likes_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between small">
+                                            <div class="d-inline">
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart"></i> {{ post.num_likes }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment"></i> {{ post.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-6">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
@@ -200,64 +252,15 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="col-md-6">
-            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
-                <div class="col p-4 d-flex flex-column position-static">
-                    <a href="{% url 'likes_post' %}" class="text-decoration-none">
-                        <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
-                    </a>
-                    <!-- Most Likes-->
-                    <div class="list-group-flush">
-                        {% for post in most_likes_posts %}
-                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
-                               style="border: 0">
-                                <div class="d-flex text-muted">
-                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-
-                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
-                                        <p class="pb-0 mb-1 lh-sm">
-                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
-                                        </p>
-                                        <div class="d-flex text-muted justify-content-between small">
-                                            <div class="d-inline">
-
-                                                {% if post.category.name == "익명" %}
-                                                    <strong class="text-gray-dark">익명</strong>
-                                                {% else %}
-                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
-                                                {% endif %}
-
-                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
-                                            </div>
-                                            <div class="d-inline">
-                                                <div class="d-inline"><i
-                                                        class="fas fa-heart"></i> {{ post.num_likes }}
-                                                </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-comment"></i> {{ post.num_comments }}
-                                                </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
+    
     </div>
 
 
     <div class="row g-5">
         <!-- Main-->
-        <div class="col-md-8">
+        <div class="col-md-9">
 
-            {% include 'home/home_area_1st.html' %}
+            {% include 'home/features.html' %}
 
         </div>
 

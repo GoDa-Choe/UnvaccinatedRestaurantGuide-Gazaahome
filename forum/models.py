@@ -1,3 +1,5 @@
+import datetime
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -63,6 +65,25 @@ class Post(models.Model, HitCountMixin):
 
     def num_comments(self):
         return self.comment_set.count()
+
+    def subtract(self):
+        now = timezone.now()
+        delta = now - self.created_at
+
+        days = delta.days
+        if days > 20:
+            return self.created_at.strftime("%Y/%m/%d")
+        elif days > 0:
+            return f"{days}일 전"
+
+        else:
+            seconds = delta.seconds
+            if seconds < 60:
+                return f"{seconds}초 전"
+            elif seconds < 3600:
+                return f"{round(seconds / 60)}분 전"
+            else:
+                return f"{round(seconds / 3600)}시간 전"
 
 
 class Comment(models.Model):

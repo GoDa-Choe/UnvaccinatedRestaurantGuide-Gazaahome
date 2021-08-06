@@ -1,3 +1,6 @@
+import datetime
+from django.utils import timezone
+
 from django.shortcuts import render
 from forum.models import Post, Category
 from workday.models import Calculator
@@ -15,9 +18,10 @@ def home(request):
     context = {
         'popular_posts': popular_posts,
         'most_likes_posts': most_likes_posts,
-        'categories': Category.objects.all(),
+        'categories': Category.objects.order_by('priority'),
         'google_site_register_code': GOOGLE_SITE_REGISTER_CODE,
         'naver_site_register_code': NAVER_SITE_REGISTER_CODE,
+        'now': str(timezone.now())
     }
 
     if request.user.is_authenticated:

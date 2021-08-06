@@ -1,70 +1,61 @@
 <!-- Side-->
-<div class="col-md-4">
+<!--suppress CheckEmptyScriptTag -->
+<div class="col-md-3">
     <div class="position-sticky" style="top: 2rem;">
 
-        <div class="p-4 bg-light rounded">
-            <h5>개발 일기</h5>
-            <div class="m-1">
-                <p class="mx-1 mb-0 small">v1.2.4 <small>2021.07.30</small></p>
-                <p class="mx-1 small text-muted"><small>랭킹 기능 도입</small></p>
+        <div class="container px-2 py-2" id="icon-grid">
+            <h4 class="h2 pb-2 border-bottom text-shadow-1">커뮤니티</h4>
 
-                <p class="mx-1 mb-0 small">v1.2.3 <small>2021.07.25</small></p>
-                <p class="mx-1 small text-muted mb-0"><small>페이스북 로그인 지원</small></p>
-                <p class="mx-1 small text-muted"><small>UI/UX 개선</small></p>
+            <div class="row row-cols-1 g-4 pt-5 pt-2">
 
-                <p class="mx-1 mb-0 small">v1.2.2 <small>2021.07.25</small></p>
-                <p class="mx-1 small text-muted mb-0"><small>익명 게시판, 코로나 알림 기능 도입</small></p>
-                <p class="mx-1 small text-muted"><small>좋아요 명칭 변경</small></p>
+                {% for category in categories %}
 
-                <p class="mx-1 mb-0 small">v1.2.1 <small>2021.07.24</small></p>
-                <p class="mx-1 small text-muted mb-0"><small>생활관 휴가 그래프 오류 수정</small></p>
-                <p class="mx-1 small text-muted"><small>계산기&생활관 모델 릴레이션 개선</small></p>
+                    <div class="col d-flex align-items-start">
+                        <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
+                            <use xlink:href="#category_tag"/>
+                        </svg>
 
-                <p class="mx-1 mb-0 small">v1.2.0 <small>2021.07.20</small></p>
-                <p class="mx-1 small text-muted"><small>생활관 기능 업데이트</small></p>
+                        <div>
+                            <a class="h5 fw-bold mb-0 text-dark text-decoration-none"
+                               href="{% url 'category_post' category.slug %}">
+                                {{ category.name }} 게시판
+                                <span class="badge text-white rounded-pill align-text-bottom"
+                                      style="background-color: lightgray">
+                                    {{ category.post_set.count }}
+                                </span>
+                            </a>
+                            {% with recently_post=category.post_set.first %}
+                                <p class="mb-0">
+                                    {{ recently_post.title }}...
+                                    <span class="small text-muted">
+                                    {{ recently_post.subtract }}
+                                </span>
+                                </p>
+                            {% endwith %}
+                        </div>
+                    </div>
 
-                <p class="mx-1 mb-0 small">v1.1.1 <small>2021.05.24</small></p>
-                <p class="mx-1 small text-muted"><small>SSL 보안 업데이트</small></p>
+                {% endfor %}
 
-                <p class="mx-1 mb-0 small"> v1.1.0 <small>2021.05.22</small></p>
-                <p class="mx-1 small text-muted"><small>실출근 계산기 검색 기능 추가</small></p>
-
-                <p class="mx-1 mb-0 small">v1.0.1 <small>2021.05.21</small></p>
-                <p class="mx-1 small text-muted"><small>전역시 계산기 열람 불가 오류 수정</small></p>
-
-                <p class="mx-1 mb-0 small"> v1.0.0 <small>2021.05.21</small></p>
-                <p class="mx-1 small text-muted"><small>베타 테스트 시작</small></p>
             </div>
+        </div>
 
-            <p class="small">
+
+        <div class="p-4">
+            <div class="bg-light rounded p-4">
+                <p class="small">
                 <small class="text-muted">
-                    안녕하세요, 고다입니다. 베타 테스트를 통해 모두가 함께 '집에가자'를 만들어 가고자 합니다.
+                    안녕하세요, 고다입니다. <br>베타 테스트를 통해 모두가 함께 '집에가자'를 만들어 가고자 합니다.
                     버그나 개선점 등을 자유롭게
                     <a href="{% url 'category_post' '아이디어' %}" class="text-decoration-none text-primary">아이디어 게시판</a>에
                     올려주시면 감사하겠습니다.<br>
                 </small>
             </p>
-            <p class="text-success fw-bold">
+            <p class="text-success fw-bold small">
                 국군 장병 여러분!<br>
                 오늘 하루도 고생하셨습니다.
             </p>
-        </div>
-
-
-        <div class="p-4">
-            <h4 class="">커뮤니티 게시판</h4>
-            <ol class="list-unstyled mb-0">
-                {% for category in categories %}
-                    <li class="mb-1">
-                        <a class="text-dark" href="{% url 'category_post' category.slug %}">
-                            {{ category }}<span
-                                class="badge bg-light text-dark rounded-pill align-text-bottom">
-                                    {{ category.post_set.count }}
-                                    </span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ol>
+            </div>
         </div>
     </div>
 </div>
