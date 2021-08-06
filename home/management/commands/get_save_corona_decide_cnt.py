@@ -20,7 +20,7 @@ class Command(BaseCommand):
     @staticmethod
     def _found(root):
         total_count = root.find("body").find("totalCount").text
-        return bool(total_count)
+        return int(total_count) > 0
 
     @staticmethod
     def _get_decide_count(root):
@@ -40,16 +40,30 @@ class Command(BaseCommand):
         try:
             today = date.today()
             root = self._get_response_root(today)
+            if self._found(root):
 
-            if self._found(root) and not Corona.objects.filter(state_date=today):
+                self.stdout.write(self.style.SUCCESS('New corona decided count was finded.'))
                 decided_count = self._get_decide_count(root)
+                obj, is_created = Corona.objects.update_or_create(
+                    state_date=today,
+                    defaults={
+                        'decided_count': decided_count,
+                    }
+                )
 
-                Corona.objects.create(state_date=today, decided_count=decided_count)
-                self.stdout.write(
-                    self.style.SUCCESS(f"new corona decide count was finded at {today}({decided_count})."))
+                if is_created:
+                    self.stdout.write(
+                        self.style.SUCCESS(f"corona model object was created at {today}({decided_count})."))
+                else:
+                    self.stdout.write(
+                        self.style.SUCCESS(f"corona model object was updated at {today}({decided_count})."))
+                self.stdout.write(self.style.SUCCESS('Successfully saved.'))
+                return
+
+            else:
+                self.stdout.write(self.style.SUCCESS('New corona decided count not was found.'))
+                return
+
         except AttributeError:
             self.stdout.write(self.style.ERROR(f'AttributeError was raised.{date.today()}'))
             return
-
-        self.stdout.write(self.style.SUCCESS('Successfully saved.'))
-        return
