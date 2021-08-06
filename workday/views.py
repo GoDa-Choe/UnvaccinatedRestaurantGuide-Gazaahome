@@ -139,9 +139,8 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
         calculator = self.get_object()
 
         new = calculator_lib.get_workday_from_calculator(calculator)
-        context.update(new)
 
-        RankingChart.objects.update_or_create(
+        obj, is_created = RankingChart.objects.update_or_create(
             calculator=calculator,
             defaults={
                 "start_date": calculator.start_date,
@@ -154,6 +153,7 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
             }
         )
 
+        context.update(new)
         return context
 
 
@@ -221,7 +221,7 @@ class CalculatorDelete(LoginRequiredMixin, DeleteView):
         return super(CalculatorDelete, self).delete(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy('workday:index')
+        return reverse_lazy('workday:create')
 
 
 class CalculatorUpdate(LoginRequiredMixin, View):
