@@ -26,7 +26,7 @@
                             </a>
                             {% with recently_post=category.post_set.last %}
                                 <p class="mb-0">
-                                    {{ recently_post.title|truncatechars:20 }}
+                                    {{ recently_post.title|truncatechars:22 }}
                                     <span class="small text-muted"><small>{{ recently_post.subtract }}</small></span>
                                 </p>
                             {% endwith %}

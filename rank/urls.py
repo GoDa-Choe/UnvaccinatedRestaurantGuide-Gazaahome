@@ -20,8 +20,7 @@ from rank import views
 
 app_name = 'rank'
 urlpatterns = [
-    path('', views.RankingView.as_view(), name='index'),
-    path('test/', views.RankingLineView.as_view(), name='line'),
+    path('', views.RankingLineView.as_view(), name='index'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
