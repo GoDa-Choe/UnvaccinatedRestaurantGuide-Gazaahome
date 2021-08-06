@@ -27,9 +27,7 @@
                             {% with recently_post=category.post_set.last %}
                                 <p class="mb-0">
                                     {{ recently_post.title|truncatechars:15 }}
-                                    <span class="small text-muted">
-                                    {{ recently_post.subtract }}
-                                </span>
+                                    <span class="small text-muted"><small>{{ recently_post.subtract }}</small></span>
                                 </p>
                             {% endwith %}
                         </div>
@@ -44,17 +42,18 @@
         <div class="p-4">
             <div class="bg-light rounded p-4">
                 <p class="small">
-                <small class="text-muted">
-                    안녕하세요, 고다입니다. <br>베타 테스트를 통해 모두가 함께 '집에가자'를 만들어 가고자 합니다.
-                    버그나 개선점 등을 자유롭게
-                    <a href="{% url 'category_post' '아이디어' %}" class="text-decoration-none text-primary">아이디어 게시판</a>에
-                    올려주시면 감사하겠습니다.<br>
-                </small>
-            </p>
-            <p class="text-success fw-bold small">
-                국군 장병 여러분!<br>
-                오늘 하루도 고생하셨습니다.
-            </p>
+                    <small class="text-muted">
+                        안녕하세요, 고다입니다. <br>베타 테스트를 통해 모두가 함께 '집에가자'를 만들어 가고자 합니다.
+                        버그나 개선점 등을 자유롭게
+                        <a href="{% url 'category_post' '아이디어' %}" class="text-decoration-none text-primary">아이디어
+                            게시판</a>에
+                        올려주시면 감사하겠습니다.<br>
+                    </small>
+                </p>
+                <p class="text-success fw-bold small">
+                    국군 장병 여러분!<br>
+                    오늘 하루도 고생하셨습니다.
+                </p>
             </div>
         </div>
     </div>
