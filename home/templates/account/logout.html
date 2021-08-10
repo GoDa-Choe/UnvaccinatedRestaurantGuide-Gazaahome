@@ -1,0 +1,51 @@
+{% extends "account/sign_base.html" %}
+
+{% load static %}
+
+{% block title %}로그아웃{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main class="form-signin">
+
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+
+            <img class="mb-4" src="{% static 'home/images/logo.png' %}" alt="" width="200" height="90">
+            <p class="h5"><strong>{{ user }}</strong>님</p>
+            <p> 정말로 로그아웃 하시겠습니까?</p>
+
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+
+            <button class="primaryAction w-100 btn btn-lg btn-primary mt-2" type="submit">로그아웃</button>
+        </form>
+
+
+    </main>
+
+
+
+
+{% endblock %}

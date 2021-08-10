@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'markdownx',
     'hitcount',
     'admin_honeypot',
+    'widget_tweaks',
 
     # cloudinary
     'cloudinary_storage',
@@ -81,7 +82,7 @@ ROOT_URLCONF = 'gazahome.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'home/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
