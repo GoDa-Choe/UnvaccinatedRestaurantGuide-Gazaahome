@@ -39,6 +39,11 @@ class BarracksList(ListView):
     ordering = '-created_at'
     paginate_by = 10
 
+    def get_queryset(self):
+        barracks_list = Barracks.objects.exclude(is_close=True)
+
+        return barracks_list
+
     def get_context_data(self, **kwargs):
         context = super(BarracksList, self).get_context_data(**kwargs)
 
@@ -85,6 +90,20 @@ class BarracksDetail(HitCountDetailView):
     model = Barracks
     template_name = "barracks/barracks_detail.html"
     count_hit = True
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            current_barracks = Barracks.objects.get(id=self.kwargs['pk'])
+        except self.model.DoesNotExist:
+            raise PermissionDenied
+
+        if not current_barracks.is_close:
+            return super(BarracksDetail, self).dispatch(request, *args, **kwargs)
+        else:
+            if current_barracks.members.filter(author=self.request.user).first():
+                return super(BarracksDetail, self).dispatch(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         context = super(BarracksDetail, self).get_context_data(**kwargs)
@@ -272,7 +291,7 @@ class QuitBarracks(LoginRequiredMixin, View):
             return redirect(reverse_lazy('barracks:barracks_list'))
 
         barracks.members.remove(member_calculator)
-        return redirect(reverse_lazy('barracks:barracks_detail', args=(barracks_pk,)))
+        return redirect(reverse_lazy('barracks:barracks_list'))
 
 
 class GuestBookUpdate(LoginRequiredMixin, UpdateView):

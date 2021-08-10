@@ -8,9 +8,10 @@ from workday.models import Calculator
 class BarracksForm(ModelForm):
     class Meta:
         model = Barracks
-        fields = ('name',)
+        fields = ('name', 'is_close')
         labels = {
             'name': '생활관 이름',
+            'is_close': '비공개',
         }
 
 

@@ -13,6 +13,8 @@ class Barracks(models.Model, HitCountMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    is_close = models.BooleanField(default=False)
+
     # ForeignKeys
     members = models.ManyToManyField(Calculator, blank=True)
     host = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
