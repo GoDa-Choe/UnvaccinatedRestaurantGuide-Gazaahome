@@ -79,12 +79,12 @@
         <hr>
 
         <!-- Tags-->
-        <div class="d-flex justify-content-start">
+        <div class="d-inline">
             {% if post.tags.exists %}
-                <i class="fas fa-tags"></i>
+                <i class="fas fa-tags text-muted"></i>
                 {% for tag in post.tags.iterator %}
                     <span class="badge rounded-pill"
-                          style="background-color: #9F81F7">{{ tag }}</span>
+                          style="background-color: darkseagreen">{{ tag }}</span>
                 {% endfor %}
             {% endif %}
         </div>

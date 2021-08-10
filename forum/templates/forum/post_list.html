@@ -114,9 +114,7 @@
                                 {% if post.tags.exists %}
                                     <i class="fas fa-tags"></i>
                                     {% for tag in post.tags.iterator %}
-                                        <span class="badge rounded-pill" style="background-color: #9F81F7">
-                                            {{ tag }}
-                                            </span>
+                                        <span class="badge rounded-pill" style="background-color: darkseagreen">{{ tag }}</span>
                                     {% endfor %}
                                 {% endif %}
                             </div>

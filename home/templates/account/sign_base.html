@@ -6,8 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="집에가자 전역일 계산기로 복무율과 실출근을 모두 한번에 알아보세요.">
-    <meta name="author" content="goda soft studio">
-    <meta name="version" content="gazaa beta v1.2.1">
+    <meta name="author" content="Goda Soft Studio">
+    <meta name="version" content="v1.2.2">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -33,13 +33,57 @@
     <!-- Custom styles for this template-->
     {% block custom_style %}{% endblock %}
 
+    <!-- Site Register -->
+    <meta name="google-site-verification" content="{{ google_site_register_code }}"/>
+    <meta name="naver-site-verification" content="{{ naver_site_register_code }}"/>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-203346109-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-203346109-1');
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BQVYN8RMC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-7BQVYN8RMC');
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Ads: 329024456 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-329024456"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'AW-329024456');
+    </script>
 
 </head>
 <body class="d-flex flex-column h-100 text-center">
 
 
 {% block content %}{% endblock %}
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"

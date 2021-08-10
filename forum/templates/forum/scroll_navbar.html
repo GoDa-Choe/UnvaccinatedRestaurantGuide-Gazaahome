@@ -6,14 +6,14 @@
         {% if category %}
 
             {% if category == "인기" %}
-                <a class="nav-link" href="{% url 'popular_post' %}" style="color:#6f42c1;">인기</a>
+                <a class="nav-link text-success" href="{% url 'popular_post' %}">인기</a>
             {% else %}
                 <a class="nav-link" href="{% url 'popular_post' %}">인기</a>
             {% endif %}
 
 
             {% if category == "특급" %}
-                <a class="nav-link" href="{% url 'likes_post' %}" style="color:#6f42c1;">특급</a>
+                <a class="nav-link text-success" href="{% url 'likes_post' %}">특급</a>
             {% else %}
                 <a class="nav-link" href="{% url 'likes_post' %}">특급</a>
             {% endif %}
@@ -21,11 +21,10 @@
 
             {% for category_iter in categories %}
                 {% if category_iter == category %}
-                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}"
-                       style="color:#6f42c1;">
+                    <a class="nav-link text-success" href="{% url 'category_post' category_iter.slug %}">
                         {{ category_iter }}
-                        <span class="badge text-dark rounded-pill align-text-bottom"
-                              style="background-color: #b4a0f0">
+                        <span class="badge text-white rounded-pill align-text-bottom"
+                              style="background-color: darkseagreen">
                             {{ category_iter.post_set.count }}
                         </span>
                     </a>
@@ -52,11 +51,10 @@
 
             {% for category_iter in categories %}
                 {% if category_iter == post.category %}
-                    <a class="nav-link" href="{% url 'category_post' category_iter.slug %}"
-                       style="color:#6f42c1;">
+                    <a class="nav-link text-success" href="{% url 'category_post' category_iter.slug %}">
                         {{ category_iter }}
-                        <span class="badge text-dark rounded-pill align-text-bottom"
-                              style="background-color: #b4a0f0">
+                        <span class="badge text-white rounded-pill align-text-bottom"
+                              style="background-color: darkseagreen">
                             {{ category_iter.post_set.count }}
                         </span>
                     </a>
