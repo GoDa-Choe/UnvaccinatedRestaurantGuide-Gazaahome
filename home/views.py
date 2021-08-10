@@ -57,3 +57,7 @@ class ContributorView(TemplateView):
         context["num_calculator"] = num_calculator
 
         return context
+
+
+class PrivacyView(TemplateView):
+    template_name = 'home/policy/privacy.html'

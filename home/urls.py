@@ -22,6 +22,11 @@ app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
     path('contributor/', views.ContributorView.as_view(), name='contributor'),
+
+    path('policy/privacy/', views.PrivacyView.as_view(), name='privacy'),
+    path('policy/license/', views.ContributorView.as_view(), name='contributor'),
+
+
     path('robots.txt/', views.RobotView.as_view(), name='robot'),
 ]
 
