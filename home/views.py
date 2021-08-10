@@ -61,3 +61,11 @@ class ContributorView(TemplateView):
 
 class PrivacyView(TemplateView):
     template_name = 'home/policy/privacy.html'
+
+
+class PolicyView(TemplateView):
+    template_name = 'home/policy/policy.html'
+
+
+class LicenseView(TemplateView):
+    template_name = 'home/policy/license.html'

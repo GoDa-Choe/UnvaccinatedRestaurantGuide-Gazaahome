@@ -16,9 +16,10 @@
                     {% if user.is_authenticated %}
                         <a class="nav-link" aria-current="page" href="{% url 'workday:index' %}">실출근 계산기</a>
                     {% else %}
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            실출근 계산기
-                        </a>
+                        {# <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">#}
+                        {# 실출근 계산기#}
+                        {# </a>#}
+                        <a class="nav-link" aria-current="page" href="{% url 'account_login' %}">실출근 계산기</a>
                     {% endif %}
                 </li>
                 <li class="nav-item">
@@ -36,7 +37,16 @@
                             </div>
                         </a>
                     {% else %}
+                        {% comment %}
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <div class="d-inline py-1 position-relative">
+                                랭킹<span
+                                    class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
+                                    style="background-color: #9F81F7"><small>new</small></span>
+                            </div>
+                        </a>
+                        {% endcomment %}
+                        <a class="nav-link" aria-current="page" href="{% url 'account_login' %}">
                             <div class="d-inline py-1 position-relative">
                                 랭킹<span
                                     class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
@@ -60,7 +70,7 @@
 
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/accounts/logout/">로그아웃</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_logout' %}">로그아웃</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -77,7 +87,12 @@
                         </ul>
                     </li>
                 {% else %}
-                    <a class="nav-link text-dark" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    {% comment %}
+                      <a class="nav-link text-dark" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        로그인
+                    </a>
+                    {% endcomment %}
+                    <a class="nav-link text-dark" href="{% url 'account_login' %}">
                         로그인
                     </a>
                 {% endif %}
@@ -124,8 +139,10 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer d-flex justify-content-between">
+                <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
+                <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
+                <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
             </div>
         </div>
     </div>

@@ -23,8 +23,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('contributor/', views.ContributorView.as_view(), name='contributor'),
 
+    path('policy/', views.PolicyView.as_view(), name='policy'),
     path('policy/privacy/', views.PrivacyView.as_view(), name='privacy'),
-    path('policy/license/', views.ContributorView.as_view(), name='contributor'),
+    path('policy/license/', views.LicenseView.as_view(), name='license'),
 
 
     path('robots.txt/', views.RobotView.as_view(), name='robot'),
