@@ -18,6 +18,8 @@ class Calculator(models.Model, HitCountMixin):
     start_date = models.DateField(help_text=DATE_FORMAT)
     end_date = models.DateField(help_text=DATE_FORMAT)
 
+    is_open = models.BooleanField(default=True)
+
     # ForeignKeys
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 

@@ -127,11 +127,11 @@
 
                     </div>
                     <div class="col-md-6">
-                        <a href="/accounts/login/" role="button"
+                        <a href="{% url 'account_login' %}" role="button"
                            class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
                             <i class="fas fa-sign-in-alt text-muted"></i>&nbsp; 아이디로 로그인
                         </a>
-                        <a href="/accounts/signup/" role="button"
+                        <a href="{% url 'account_signup' %}" role="button"
                            class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
                             <i class="fas fa-user-plus text-muted"></i>&nbsp; 회원가입
                         </a>

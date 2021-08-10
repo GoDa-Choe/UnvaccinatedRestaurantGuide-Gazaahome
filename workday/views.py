@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 
 from hitcount.views import HitCountDetailView
 from django.views.generic import ListView
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, UpdateView
 from django.views.generic import View, FormView
 from django.views.generic.edit import FormMixin
 
@@ -13,7 +13,7 @@ import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from workday.forms import CalculatorForm, LeaveForm, DayoffForm, CalculatorSearchForm
+from workday.forms import CalculatorForm, LeaveForm, DayoffForm, CalculatorSearchForm, CalculatorSettingsForm
 
 from workday.library import calculator_lib
 
@@ -38,7 +38,8 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name'])
+        searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name']).filter(
+            is_open=True)
         return searched_calculator_list
 
     def post(self, request, *args, **kwargs):
@@ -117,7 +118,15 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return super(CalculatorDetail, self).dispatch(request, *args, **kwargs)
+            current_calculator = Calculator.objects.filter(id=self.kwargs['pk']).first()
+
+            if current_calculator and current_calculator.is_open:
+                return super(CalculatorDetail, self).dispatch(request, *args, **kwargs)
+            else:
+                if current_calculator.author == request.user:
+                    return super(CalculatorDetail, self).dispatch(request, *args, **kwargs)
+                else:
+                    raise PermissionDenied
         else:
             raise PermissionDenied
 
@@ -197,6 +206,20 @@ class LeaveDelete(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('workday:detail', args=(self.kwargs['cal'],))
+
+
+class CalculatorSettings(LoginRequiredMixin, UpdateView):
+    model = Calculator
+    form_class = CalculatorSettingsForm
+    template_name = 'workday/calculator_settings.html'
+    success_url = reverse_lazy('workday:index')
+
+    def dispatch(self, request, *args, **kwargs):
+        current_calculator = Calculator.objects.get(pk=self.kwargs['pk'])
+        if current_calculator.author == self.request.user:
+            return super(CalculatorSettings, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 
 class CalculatorDelete(LoginRequiredMixin, DeleteView):

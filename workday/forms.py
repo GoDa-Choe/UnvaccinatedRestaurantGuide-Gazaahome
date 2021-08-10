@@ -22,11 +22,12 @@ class CalculatorSearchForm(Form):
 class CalculatorForm(ModelForm):
     class Meta:
         model = Calculator
-        fields = ('name', 'start_date', 'end_date')
+        fields = ('name', 'start_date', 'end_date', 'is_open')
         labels = {
             'name': '계산기 별명',
             'start_date': '입대일',
             'end_date': '전역일',
+            'is_open': '검색 허용',
         }
 
     def clean_end_date(self):
@@ -36,6 +37,16 @@ class CalculatorForm(ModelForm):
             raise ValidationError("전역일이 입대일보다 빠를 수 없습니다.")
         else:
             return end_date
+
+
+class CalculatorSettingsForm(ModelForm):
+    class Meta:
+        model = Calculator
+        fields = ('name', 'is_open')
+        labels = {
+            'name': '계산기 별명',
+            'is_open': '검색 허용',
+        }
 
 
 class LeaveForm(ModelForm):

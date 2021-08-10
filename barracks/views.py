@@ -212,7 +212,8 @@ class SearchedCalculatorList(LoginRequiredMixin, FormMixin, ListView):
         return response
 
     def get_queryset(self):
-        searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name'])
+        searched_calculator_list = Calculator.objects.filter(name__icontains=self.kwargs['calculator_name']).filter(
+            is_open=True)
         return searched_calculator_list
 
     def post(self, request, *args, **kwargs):
