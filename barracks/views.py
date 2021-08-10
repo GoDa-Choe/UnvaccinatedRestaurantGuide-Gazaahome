@@ -14,7 +14,7 @@ from django.core.exceptions import PermissionDenied
 from barracks.models import Barracks, Invitation, GuestBook
 from workday.models import Calculator
 
-from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm
+from barracks.forms import BarracksForm, CalculatorSearchForm, GuestBookForm, BarracksSettingsForm
 
 # Core Lib
 from workday.library import calculator_lib
@@ -62,6 +62,25 @@ class DeleteBarracks(DeleteView):
     model = Barracks
     template_name = "barracks/barracks_delete.html"
     success_url = reverse_lazy('barracks:barracks_list')
+
+
+class BarracksSettings(LoginRequiredMixin, UpdateView):
+    model = Barracks
+    form_class = BarracksSettingsForm
+    template_name = 'barracks/barracks_settings.html'
+
+    def dispatch(self, request, *args, **kwargs):
+
+        current_barracks = Barracks.objects.get(pk=self.kwargs['pk'])
+        current_user = self.request.user
+
+        if current_barracks.members.filter(author=current_user).first():
+            return super(BarracksSettings, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def get_success_url(self):
+        return reverse_lazy('barracks:barracks_detail', args=(self.kwargs['pk'],))
 
 
 class CreateBarracks(LoginRequiredMixin, CreateView):

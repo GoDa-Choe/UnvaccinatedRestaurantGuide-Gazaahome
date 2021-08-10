@@ -26,11 +26,14 @@
                 {% endif %}
 
                 {% if current_calculator in barracks.members.all %}
-                    <a class="btn btn-outline-secondary btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
-                       role="button">퇴장</a>
                     <a class="btn btn-outline-secondary btn-sm"
                        href="{% url "barracks:search_calculator" barracks.pk %}"
                        role="button">초대</a>
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url "barracks:barracks_settings" barracks.pk %}"
+                       role="button">설정</a>
+                    <a class="btn btn-outline-danger btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
+                    role="button">퇴장</a>
                 {% endif %}
             </div>
 

@@ -15,6 +15,16 @@ class BarracksForm(ModelForm):
         }
 
 
+class BarracksSettingsForm(ModelForm):
+    class Meta:
+        model = Barracks
+        fields = ('name', 'is_close')
+        labels = {
+            'name': '생활관 이름',
+            'is_close': '비공개',
+        }
+
+
 class GuestBookForm(ModelForm):
     class Meta:
         model = GuestBook

@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:pk>/new_guest_book/', views.new_guest_book, name='guest_book_create'),
 
     path('<int:pk>/', views.BarracksDetail.as_view(), name="barracks_detail"),
+    path('<int:pk>/settings/', views.BarracksSettings.as_view(), name="barracks_settings"),
     path('<int:pk>/delete/', views.DeleteBarracks.as_view(), name="delete_barracks"),
 
     path('<int:pk>/invite/', views.CalculatorSearch.as_view(), name="search_calculator"),
