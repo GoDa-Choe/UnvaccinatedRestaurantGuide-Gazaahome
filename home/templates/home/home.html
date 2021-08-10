@@ -43,7 +43,11 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'home/css/home.css' %}" rel="stylesheet" type="text/css" media="screen">
     <link href="{% static 'home/css/features.css' %}" rel="stylesheet" type="text/css" media="screen">
-
+    <style>
+        body {
+            padding-top: 4.5rem;
+        }
+    </style>
     {% block custom_style %}
     {% endblock %}
 
@@ -90,186 +94,193 @@
         gtag('config', 'AW-329024456');
     </script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 
-<main class="container">
+<div class="container">
+
     {% include 'forum/navbar.html' %}
+    <main class="container px-0">
+        {% include 'home/home_banner.html' %}
 
-    {% include 'home/home_banner.html' %}
+        {% if calculator %}
+            <div class="row mb-3">
 
-    {% if calculator %}
-        <div class="row mb-3">
+                <div class="col">
+                    <h3 class="text-center my-0">군복무</h3>
+                    <div class="d-flex justify-content-between align-items-end text-muted">
+                        <p class="d-inline text-start my-0 small">
+                            <small>{{ calculator.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                        <div class="d-inline">
+                            <p class="text-end my-0 small"><small>전역</small></p>
+                            <p class="text-end my-0 small"><small>{{ calculator.end_date|date:'Y/m/d' }}</small></p>
+                        </div>
+                    </div>
 
-            <div class="col">
-                <h3 class="text-center my-0">군복무</h3>
-                <div class="d-flex justify-content-between align-items-end text-muted">
-                    <p class="d-inline text-start my-0 small"><small>{{ calculator.start_date|date:'Y/m/d' }}</small>
-                    </p>
-                    <div class="d-inline">
-                        <p class="text-end my-0 small"><small>전역</small></p>
-                        <p class="text-end my-0 small"><small>{{ calculator.end_date|date:'Y/m/d' }}</small></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                             style="width: {{ percent }}%"
+                             aria-valuenow="{{ percent }}"
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ percent }}%
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <p class="text-center my-0 fw-bold small">D-{{ num_remain_days }}</p>
                     </div>
                 </div>
 
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                         style="width: {{ percent }}%"
-                         aria-valuenow="{{ percent }}"
-                         aria-valuemin="0" aria-valuemax="100">
-                        {{ percent }}%
+                <div class="col">
+                    <h3 class="text-center my-0">실출근</h3>
+                    <div class="d-flex justify-content-between align-items-end text-muted">
+                        <p class="d-inline text-start my-0 small">
+                            <small>{{ calculator.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                        <div class="d-inline">
+                            <p class="text-end my-0 small"><small>막출</small></p>
+                            <p class="text-end my-0 small"><small>{{ end_workday|date:'Y/m/d' }}</small></p>
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-end align-items-center">
-                    <p class="text-center my-0 fw-bold small">D-{{ num_remain_days }}</p>
-                </div>
-            </div>
-
-            <div class="col">
-                <h3 class="text-center my-0">실출근</h3>
-                <div class="d-flex justify-content-between align-items-end text-muted">
-                    <p class="d-inline text-start my-0 small"><small>{{ calculator.start_date|date:'Y/m/d' }}</small>
-                    </p>
-                    <div class="d-inline">
-                        <p class="text-end my-0 small"><small>막출</small></p>
-                        <p class="text-end my-0 small"><small>{{ end_workday|date:'Y/m/d' }}</small></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                             role="progressbar"
+                             style="width: {{ workday_percent }}%"
+                             aria-valuenow="{{ workday_percent }}"
+                             aria-valuemin="0" aria-valuemax="100">
+                            {{ workday_percent }}%
+                        </div>
                     </div>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
-                         role="progressbar"
-                         style="width: {{ workday_percent }}%"
-                         aria-valuenow="{{ workday_percent }}"
-                         aria-valuemin="0" aria-valuemax="100">
-                        {{ workday_percent }}%
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end align-items-center">
-                    <p class="text-center my-0 fw-bold small">D-{{ num_workdays }}</p>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
-
-    <div class="row mb-2">
-
-        <div class="col-md-6">
-            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
-                <div class="col p-4 d-flex flex-column position-static">
-                    <a href="{% url 'likes_post' %}" class="text-decoration-none">
-                        <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
-                    </a>
-                    <!-- Most Likes-->
-                    <div class="list-group-flush">
-                        {% for post in most_likes_posts %}
-                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
-                               style="border: 0">
-                                <div class="d-flex text-muted">
-                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-
-                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
-                                        <p class="pb-0 mb-1 lh-sm">
-                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
-                                        </p>
-                                        <div class="d-flex text-muted justify-content-between small">
-                                            <div class="d-inline">
-
-                                                {% if post.category.name == "익명" %}
-                                                    <strong class="text-gray-dark">익명</strong>
-                                                {% else %}
-                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
-                                                {% endif %}
-
-                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
-                                            </div>
-                                            <div class="d-inline">
-                                                <div class="d-inline"><i
-                                                        class="fas fa-heart"></i> {{ post.num_likes }}
-                                                </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-comment"></i> {{ post.num_comments }}
-                                                </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
+                    <div class="d-flex justify-content-end align-items-center">
+                        <p class="text-center my-0 fw-bold small">D-{{ num_workdays }}</p>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
-        <div class="col-md-6">
-            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
-                <div class="col p-4 d-flex flex-column position-static">
 
-                    <a href="{% url 'popular_post' %}" class="text-decoration-none">
-                        <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
-                    </a>
+        <div class="row mb-2">
 
-                    <!-- Popular Post/most hits-->
-                    <div class="list-group-flush">
-                        {% for post in popular_posts %}
-                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
-                               style="border: 0">
-                                <div class="d-flex text-muted">
-                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <a href="{% url 'likes_post' %}" class="text-decoration-none">
+                            <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
+                        </a>
+                        <!-- Most Likes-->
+                        <div class="list-group-flush">
+                            {% for post in most_likes_posts %}
+                                <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                                   style="border: 0">
+                                    <div class="d-flex text-muted">
+                                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
 
-                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
-                                        <p class="pb-0 mb-1 lh-sm">
-                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
-                                        </p>
-                                        <div class="d-flex text-muted justify-content-between small">
-                                            <div class="d-inline">
+                                            <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                            <p class="pb-0 mb-1 lh-sm">
+                                                {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                            </p>
+                                            <div class="d-flex text-muted justify-content-between small">
+                                                <div class="d-inline">
 
-                                                {% if post.category.name == "익명" %}
-                                                    <strong class="text-gray-dark">익명</strong>
-                                                {% else %}
-                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
-                                                {% endif %}
+                                                    {% if post.category.name == "익명" %}
+                                                        <strong class="text-gray-dark">익명</strong>
+                                                    {% else %}
+                                                        <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                    {% endif %}
 
-                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
-                                            </div>
-                                            <div class="d-inline">
-                                                <div class="d-inline"><i
-                                                        class="fas fa-heart"></i> {{ post.num_likes }}
+                                                    <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
                                                 </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-comment"></i> {{ post.num_comments }}
+                                                <div class="d-inline">
+                                                    <div class="d-inline"><i
+                                                            class="fas fa-heart"></i> {{ post.num_likes }}
+                                                    </div>
+                                                    <div class="d-inline"><i
+                                                            class="far fa-comment"></i> {{ post.num_comments }}
+                                                    </div>
+                                                    <div class="d-inline"><i
+                                                            class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
                                                 </div>
-                                                <div class="d-inline"><i
-                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                        {% endfor %}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+
+                        <a href="{% url 'popular_post' %}" class="text-decoration-none">
+                            <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
+                        </a>
+
+                        <!-- Popular Post/most hits-->
+                        <div class="list-group-flush">
+                            {% for post in popular_posts %}
+                                <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                                   style="border: 0">
+                                    <div class="d-flex text-muted">
+                                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                            <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                            <p class="pb-0 mb-1 lh-sm">
+                                                {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                            </p>
+                                            <div class="d-flex text-muted justify-content-between small">
+                                                <div class="d-inline">
+
+                                                    {% if post.category.name == "익명" %}
+                                                        <strong class="text-gray-dark">익명</strong>
+                                                    {% else %}
+                                                        <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                    {% endif %}
+
+                                                    <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                                </div>
+                                                <div class="d-inline">
+                                                    <div class="d-inline"><i
+                                                            class="fas fa-heart"></i> {{ post.num_likes }}
+                                                    </div>
+                                                    <div class="d-inline"><i
+                                                            class="far fa-comment"></i> {{ post.num_comments }}
+                                                    </div>
+                                                    <div class="d-inline"><i
+                                                            class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    
-    </div>
 
+        <div class="container py-3 mb-3 rounded shadow-sm">
+            <div class="row">
+                <!-- Main-->
+                <div class="col-md-9">
 
-    <div class="row g-5">
-        <!-- Main-->
-        <div class="col-md-9">
+                    {% include 'home/features.html' %}
 
-            {% include 'home/features.html' %}
+                </div>
+
+                <!-- Side-->
+                {% include 'home/home_side.html' %}
+
+            </div>
 
         </div>
 
-        <!-- Side-->
-        {% include 'home/home_side.html' %}
 
-    </div>
-
-</main>
+    </main>
+</div>
 
 {% include 'forum/footer.html' %}
 
