@@ -1,13 +1,19 @@
-import datetime
 from django.utils import timezone
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from forum.models import Post, Category
 from workday.models import Calculator
 from workday.library import calculator_lib
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DeleteView, FormView
 from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_CODE
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+
+from home.forms import CheckPasswordForm
 
 
 def home(request):
@@ -69,3 +75,45 @@ class PolicyView(TemplateView):
 
 class LicenseView(TemplateView):
     template_name = 'home/policy/license.html'
+
+
+class PofileView(LoginRequiredMixin, TemplateView):
+    template_name = 'account/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PofileView, self).get_context_data(**kwargs)
+        calculator = Calculator.objects.filter(author=self.request.user).first()
+        context['calculator'] = calculator
+        password_form = CheckPasswordForm(self.request.user)
+        context['password_form'] = password_form
+        return context
+
+
+class AccountDeleteView(LoginRequiredMixin, FormView):
+    form_class = CheckPasswordForm
+    template_name = 'account/account_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+
+        current_user = self.request.user
+
+        if current_user.is_authenticated:
+            current_user_id = current_user.id
+
+            if current_user_id == self.kwargs['pk']:
+                return super(AccountDeleteView, self).dispatch(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+
+        else:
+            raise PermissionDenied
+
+    def get_form(self, form_class=None):
+        return CheckPasswordForm(self.request.user, self.request.POST)
+
+    def form_valid(self, form):
+        self.request.user.delete()
+        return super(AccountDeleteView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('home:home')
