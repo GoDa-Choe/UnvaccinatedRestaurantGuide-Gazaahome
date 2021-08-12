@@ -44,7 +44,12 @@
                 <strong>이후 복구할 수 없습니다.</strong>
             </p>
 
-            <p class="mt-3 mb-1 text-muted">비밀번호 확인</p>
+            {% if user.has_usable_password %}
+                <p class="mt-3 mb-1 text-muted">비밀번호 확인</p>
+            {% else %}
+                <p class="mt-3 mb-1 text-muted">이메일 확인</p>
+            {% endif %}
+
             {{ form|crispy }}
             <button type="submit" class="btn btn-danger btn-sm">계정 삭제</button>
 

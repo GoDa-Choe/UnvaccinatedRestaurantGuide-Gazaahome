@@ -79,23 +79,37 @@
         </form>
 
         <div class="row row-cols-1 mt-3 mb-5">
+
+            <div class="col">
+                <a href="{% provider_login_url 'kakao' %}" role="button"
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/kakaolink_btn_small.png' %}" alt="이미지 오류"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 카카오톡으로 로그인</div>
+                </a>
+            </div>
+
             <div class="col">
                 <a href="{% provider_login_url 'google' %}" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                    <i class="fab fa-google" style="color: green"></i>&nbsp; 구글 계정으로 로그인
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/g-logo.png' %}"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 구글계정으로 로그인</div>
                 </a>
             </div>
 
             <div class="col">
                 <a href="{% provider_login_url 'facebook' %}" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                    <i class="fab fa-facebook-square" style="color: blue"></i>&nbsp; 페이스북으로 로그인
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/facebook.png' %}"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 페이스북으로 로그인</div>
                 </a>
             </div>
 
             <div class="col">
-                <a href="/accounts/signup/" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
+                <a href="{% url 'account_login' %}" role="button"
+                   class="btn btn-outline-dark btn-sm my-1 w-100">
                     <i class="fas fa-user-plus text-muted"></i>&nbsp; 회원가입
                 </a>
             </div>

@@ -13,9 +13,16 @@ class CheckPasswordForm(forms.Form):
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        confirm_password = self.user.password
 
-        if not check_password(password, confirm_password):
-            raise forms.ValidationError("비밀번호가 일치하지 않습니다.")
+        if self.user.has_usable_password():
+            confirm_password = self.user.password
+            if not check_password(password, confirm_password):
+                raise forms.ValidationError("비밀번호가 일치하지 않습니다.")
+            else:
+                return password
         else:
-            return password
+            confirm_email = self.user.email
+            if password != confirm_email:
+                raise forms.ValidationError("이메일이 일치하지 않습니다.")
+            else:
+                return password

@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 {% load account socialaccount %}
 {% load static %}
-
+{% load i18n %}
 
 {% block title %}회원가입{% endblock %}
 
@@ -31,11 +31,16 @@
 
     <main class="form-signin">
 
-
-        <form class="login" id="signup_form" method="POST" action="{% url 'account_signup' %}">
+        <form class="login" id="signup_form" method="POST" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
 
             <img class="mb-4" src="{% static 'home/images/logo.png' %}" alt="" width="200" height="90">
+
+            <p>
+                <strong>{{ account.get_provider.name }}</strong>의 계정으로 <strong>집에가자</strong>에 가입하려고 합니다.
+                마지막으로 이메일과 아이디를 입력해주세요.
+            </p>
+
 
             {% if form.errors %}
                 {% for field in form %}
@@ -62,16 +67,6 @@
                 <label for="ID">아이디</label>
             </div>
 
-            <div class="form-floating">
-                {% render_field form.password1 type="password" class="form-control" id="Password1" placeholder="password" name="password1" autocomplete="new-password" %}
-                <label for="Password1">비밀번호</label>
-            </div>
-
-            <div class="form-floating">
-                {% render_field form.password2 type="password" class="form-control" id="Password2" placeholder="password confirm" name="password2" %}
-                <label for="Password2">비밀번호 확인</label>
-            </div>
-
 
             {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
@@ -81,30 +76,7 @@
         </form>
 
 
-        <div class="row row-cols-1 mt-3 mb-5">
-            <div class="col">
-                <a href="{% provider_login_url 'google' %}" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                    <i class="fab fa-google" style="color: green"></i>&nbsp; 구글 계정으로 로그인
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="{% provider_login_url 'facebook' %}" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                    <i class="fab fa-facebook-square" style="color: blue"></i>&nbsp; 페이스북으로 로그인
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="{% url 'account_login' %}" role="button"
-                   class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                    <i class="fas fa-sign-in-alt text-muted"></i>&nbsp; 로그인
-                </a>
-            </div>
-        </div>
-
-        <div class="d-flex mt-5 justify-content-between">
+        <div class="d-flex pt-3 mt-5 justify-content-between">
             <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
             <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
             <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
