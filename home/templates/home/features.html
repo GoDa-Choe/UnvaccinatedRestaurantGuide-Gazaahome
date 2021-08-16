@@ -29,7 +29,10 @@
 
     <h2 id="howtouse" class="pb-2 border-bottom text-shadow-1">How to use?</h2>
 
+    <!-- How to use Post Cards -->
     <div class="row row-cols-1 row-cols-lg-3 align-items-stretch py-3">
+
+        <!-- Main Post Card -->
         <div class="col mb-3">
             <div class="card card-cover overflow-hidden bg-dark text-white rounded-5 shadow-sm"
                  style="background-image: url({% static 'home/images/main_900_700.png' %}); height: 18em; border-color: #EEEEEE">
@@ -39,7 +42,7 @@
                             {% if user.is_authenticated %}
                                 <a href="{% url "workday:index" %}"
                                    class="icon-link text-success text-decoration-none small">
-                                    <i class="fas fa-calculator"></i> 계산기 만들기
+                                    <i class="fas fa-calculator"></i>&nbsp; 계산기 만들기
                                     <svg class="bi" width="1em" height="1em">
                                         <use xlink:href="#chevron-right"/>
                                     </svg>
@@ -48,7 +51,7 @@
                                 <a class="icon-link text-success text-decoration-none small" href="#"
                                    data-bs-toggle="modal"
                                    data-bs-target="#loginModal">
-                                    <i class="fas fa-calculator"></i> 계산기 만들기
+                                    <i class="fas fa-calculator"></i>&nbsp; 계산기 만들기
                                     <svg class="bi" width="1em" height="1em">
                                         <use xlink:href="#chevron-right"/>
                                     </svg>
@@ -61,6 +64,7 @@
         </div>
 
 
+        <!-- Ranking Post Card -->
         <div class="col mb-3">
             <div class="card card-cover overflow-hidden text-white bg-dark rounded-5 shadow-sm"
                  style="background-image: url({% static 'home/images/ranking_900_700.png' %}); height: 18em; border-color: #EEEEEE">
@@ -70,7 +74,7 @@
                             {% if user.is_authenticated %}
                                 <a href="{% url "rank:index" %}"
                                    class="icon-link text-success text-decoration-none small">
-                                    <i class="fas fa-chart-line"></i> 랭킹 알아보기
+                                    <i class="fas fa-chart-line"></i>&nbsp; 랭킹 알아보기
                                     <svg class="bi" width="1em" height="1em">
                                         <use xlink:href="#chevron-right"/>
                                     </svg>
@@ -79,7 +83,7 @@
                                 <a class="icon-link text-success text-decoration-none small" href="#"
                                    data-bs-toggle="modal"
                                    data-bs-target="#loginModal">
-                                    <i class="fas fa-chart-line"></i> 랭킹 알아보기
+                                    <i class="fas fa-chart-line"></i>&nbsp; 랭킹 알아보기
                                     <svg class="bi" width="1em" height="1em">
                                         <use xlink:href="#chevron-right"/>
                                     </svg>
@@ -92,6 +96,8 @@
 
         </div>
 
+
+        <!-- Barracks Ranking Post Card -->
         <div class="col mb-3">
             <div class="card card-cover overflow-hidden bg-dark rounded-5 shadow-sm"
                  style="background-image: url({% static 'home/images/barracks_900_700.png' %}); height: 18em; border-color: #EEEEEE">
@@ -101,7 +107,7 @@
                         <li class="d-flex align-items-end me-3">
                             <a href="{% url "barracks:barracks_detail" 3 %}"
                                class="icon-link text-decoration-none text-success small">
-                                <i class="fas fa-campground"></i> 생활관 구경
+                                <i class="fas fa-campground"></i>&nbsp; 생활관 구경
                                 <svg class="bi" width="1em" height="1em">
                                     <use xlink:href="#chevron-right"/>
                                 </svg>
@@ -111,6 +117,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 
