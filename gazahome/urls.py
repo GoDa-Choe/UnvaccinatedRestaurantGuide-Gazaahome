@@ -25,6 +25,7 @@ urlpatterns = [
     path('workday/', include('workday.urls')),
     path('barracks/', include('barracks.urls')),
     path('ranking/', include('rank.urls')),
+    path('troop_review/', include('troop_review.urls')),
 
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('bestgoda/', admin.site.urls),

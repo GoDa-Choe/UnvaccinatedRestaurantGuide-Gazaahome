@@ -1,0 +1,155 @@
+{% extends 'forum/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block head-title %}
+    {{ post.title|truncatechars:15 }}
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <!-- Category Scroll Bar -->
+    {% include 'troop_review/scroll_navbar.html' %}
+
+
+
+    <div class="my-3 p-3 rounded shadow-sm">
+
+
+        <!-- Titile-->
+        <div>
+            <h2 class="h4">
+                {{ troop.name }}
+            </h2>
+        </div>
+
+
+        <div class="d-flex justify-content-between align-items-center small">
+            <div class="d-inline">
+                <p class="d-inline text-muted mx-1 small">
+                    {{ troop.created_at|date:'Y-m-d H:i' }}
+                </p>
+            </div>
+            <div class="d-inline text-muted small">
+                <div class="d-inline"><i class="fas fa-heart"></i> {{ troop.get_num_reivews }}</div>
+                <div class="d-inline"><i class="far fa-eye"></i> {{ troop.hit_count.hits }}</div>
+                <div class="d-inline"><i class="far fa-comment"></i> {{ troop.get_avg_star_rating }}</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Reviews -->
+    <div class="my-3 p-3 rounded shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between border-bottom pb-2 mb-0">
+            <h2 class="h5">
+                부대 평가
+            </h2>
+            {% if user.is_authenticated %}
+                <a role="button" class="btn btn-outline-secondary btn-sm"
+                   href="{% url 'troop_review:create_review' troop.pk %}">리뷰 작성</a>
+            {% else %}
+                <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url 'account_login' %}">리뷰 작성</a>
+            {% endif %}
+        </div>
+
+
+        {% for review in troop.review_set.iterator %}
+
+            <div class="d-flex  pt-3">
+                <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
+
+                    <div class="float-end">
+                        {% if user.is_authenticated and review.reviewer == user %}
+                            <a href="{% url 'troop_review:update_review' troop.pk review.pk %}"
+                               class="text-dark text-decoration-none mx-1">
+                                <small>수정</small>
+                            </a>
+                            <a href="{% url 'troop_review:delete_review' troop.pk review.pk %}"
+                               class="text-dark text-decoration-none mx-1">
+                                <small>삭제</small>
+                            </a>
+
+                        {% endif %}
+                    </div>
+
+                    <div class="d-inline text-muted">
+                        <strong class="text-gray-dark">군번 {{ review.year }}-{{ review.month }}</strong>
+
+                        <div class="d-inline text-muted">{{ review.duty_assignment }}</div>
+
+                    </div>
+                    <div class="d-block">
+                        별점 :
+                        <div class="d-inline text-warning">
+                            {% for i in "x"|rjust:review.star_rating %}
+                                X
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <p class="text-primary">별점 : {{ review.star_rating }}</p>
+                    <p class="text-dark">좋아요 : {{ review.num_likes }}</p>
+
+                    <p class="text-muted">{{ review.updated_at|date:'Y-m-d H:i:s' }}</p>
+
+                    <p class="small lh-sm text-muted">{{ review.content|linebreaks }}</p>
+
+
+                    <!-- Likes -->
+                    <div class="d-flex justify-content-center my-3">
+
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'troop_review:like_review' troop.pk review.pk %}"
+                                  method="POST">{% csrf_token %}
+                                <button type="submit" name="review_pk" value="{{ review.pk }}"
+                                        class="btn btn-sm btn-outline-success position-relative border-1"
+                                        style="background-color: #aacfaa">
+                                    특급
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                            {{ review.num_likes }}
+                        </span>
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-success position-relative border-1"
+                                    style="background-color: #aacfaa">
+                                특급
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                        {{ review.num_likes }}
+                    </span>
+                            </button>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

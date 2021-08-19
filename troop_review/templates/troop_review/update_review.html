@@ -1,0 +1,30 @@
+{% extends 'forum/base.html' %}
+{% load crispy_forms_filters %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    부대평가 수정
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h1>부대평가 수정</h1>
+
+        <hr>
+
+        <h3 class="my-2">{{ current_troop }}</h3>
+
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            {{ form | crispy }}
+
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-primary">수정</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

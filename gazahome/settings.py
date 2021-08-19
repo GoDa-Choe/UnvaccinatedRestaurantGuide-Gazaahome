@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'workday',
     'barracks',
     'rank',
+    'troop_review',
 ]
 
 MIDDLEWARE = [
