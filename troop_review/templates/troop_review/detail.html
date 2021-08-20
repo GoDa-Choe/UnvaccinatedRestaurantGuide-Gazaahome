@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="col mt-3">
-                    <h3 class="h4 fw-bold text-center mt-2 my-0">휴가량</h3>
+                    <h3 class="h4 fw-bold text-center mt-2 my-0">휴가</h3>
                     <canvas id="myChart2"></canvas>
                 </div>
             </div>
@@ -196,7 +196,7 @@
             data: {
                 labels: {{ training_keys|safe }},
                 datasets: [{
-                    label: '훈련(업무) 강도',
+                    label: '훈련(업무)량',
                     data: {{ training_values }},
                     backgroundColor: [
                         'rgb(197, 208, 228)',
@@ -225,7 +225,7 @@
                                 return " " + label + " " + percent.toFixed(1) + "%";
                             },
                             title: function (tooltipItems, data) {
-                                return "훈련(업무) 강도";
+                                return "훈련(업무)량";
                             }
                         }
                     }
