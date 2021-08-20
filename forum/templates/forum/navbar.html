@@ -16,9 +16,6 @@
                     {% if user.is_authenticated %}
                         <a class="nav-link" aria-current="page" href="{% url 'workday:index' %}">실출근 계산기</a>
                     {% else %}
-                        {# <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">#}
-                        {# 실출근 계산기#}
-                        {# </a>#}
                         <a class="nav-link" aria-current="page" href="{% url 'account_login' %}">실출근 계산기</a>
                     {% endif %}
                 </li>
@@ -30,37 +27,24 @@
                 <li class="nav-item">
                     {% if user.is_authenticated %}
                         <a class="nav-link" aria-current="page" href="{% url 'rank:index' %}">
-                            <div class="d-inline py-1 position-relative">
-                                랭킹<span
-                                    class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
-                                    style="background-color: darkseagreen"><small>new</small></span>
-                            </div>
+                            랭킹
                         </a>
                     {% else %}
-                        {% comment %}
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <div class="d-inline py-1 position-relative">
-                                랭킹<span
-                                    class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
-                                    style="background-color: #9F81F7"><small>new</small></span>
-                            </div>
-                        </a>
-                        {% endcomment %}
                         <a class="nav-link" aria-current="page" href="{% url 'account_login' %}">
-                            <div class="d-inline py-1 position-relative">
-                                랭킹<span
-                                    class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
-                                    style="background-color: darkseagreen"><small>new</small></span>
-                            </div>
+                            랭킹
                         </a>
                     {% endif %}
                 </li>
 
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link" href="{% url 'troop_review:index' %}">#}
-{#                        부대리뷰#}
-{#                    </a>#}
-{#                </li>#}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'troop_review:index' %}">
+                        <div class="d-inline py-1 position-relative">
+                            부대리뷰<span
+                                class="position-absolute top-0 start-50 translate-middle badge rounded-pill px-1 py-0"
+                                style="background-color: darkseagreen"><small>new</small></span>
+                        </div>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">게시판</a>
@@ -95,11 +79,6 @@
                         </ul>
                     </li>
                 {% else %}
-                    {% comment %}
-                      <a class="nav-link text-dark" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                        로그인
-                    </a>
-                    {% endcomment %}
                     <a class="nav-link text-dark" href="{% url 'account_login' %}">
                         로그인
                     </a>

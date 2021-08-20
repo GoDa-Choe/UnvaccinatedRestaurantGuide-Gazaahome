@@ -33,7 +33,7 @@
                        href="{% url "barracks:barracks_settings" barracks.pk %}"
                        role="button">설정</a>
                     <a class="btn btn-outline-danger btn-sm" href="{% url "barracks:quit_barracks" barracks.pk %}"
-                    role="button">퇴장</a>
+                       role="button">퇴장</a>
                 {% endif %}
             </div>
 
@@ -59,8 +59,6 @@
                             <a href="{% url 'workday:detail' calculator_color.0.pk %}"
                                class="card-link  d-inline text-decoration-none text-dark">
                                 {{ calculator_color.0.name }}
-                                <div class="d-inline text-muted small align-baseliner">
-                                    <small>{{ calculator_color.0.author }}</small></div>
                             </a>
                             <p class="card-subtitle small text-white">
                                 <small>입대 : {{ calculator_color.0.start_date|date:'Y/m/d' }}</small></p>
@@ -256,9 +254,10 @@
                             </div>
 
                             <div class="d-inline">
-                                <strong class="text-gray-dark">{{ guestbook.author.username }}</strong> |
                                 {% if guestbook.calculator %}
                                     <strong class="text-gray-dark">{{ guestbook.calculator.name }}</strong>
+                                {% else %}
+                                    <strong class="text-gray-dark">{{ guestbook.author.username }}</strong>
                                 {% endif %}
                                 <div class="d-inline text-muted small">{{ guestbook.modified_at|date:'Y/m/d H:i' }}</div>
                             </div>
