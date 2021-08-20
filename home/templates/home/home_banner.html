@@ -26,12 +26,30 @@
                     </a>
                 </div>
 
+                <!-- Troop Review Update-->
+                <div class="col">
+                    <div class="p-2 mt-1 text-white rounded bg-success small">
+                        <h3 class="h5 mb-0"><small>New Update 부대리뷰</small></h3>
+                        <p class="my-0 fw-bold text-black-50"><small>부대리뷰부터 별점까지 모두 한번에</small></p>
+
+                        <a href="{% url "troop_review:detail" 1 %}"
+                           class="icon-link text-white text-decoration-none small">
+                            <i class="fas fa-edit"></i>&nbsp; 리뷰 구경하기
+                            <svg class="bi" width="1em" height="1em">
+                                <use xlink:href="#chevron-right"/>
+                            </svg>
+                        </a>
+
+                    </div>
+                </div>
+
+
+
                 <!-- Ranking Update-->
                 <div class="col">
-
-                    <div class="p-2 mt-1 text-white rounded bg-success small">
-                        <h3 class="h5 mb-0"><small>New Update 랭킹</small></h3>
-                        <p class="my-0 fw-bold text-black-50"><small>실출근 계산기로 나의 D-day 랭킹을 알아보자</small></p>
+                    <div class="p-2 mt-1 text-white rounded bg-warning small">
+                        <h3 class="h5 mb-0"><small>랭킹</small></h3>
+                        <p class="my-0 fw-bold text-muted"><small>실출근 계산기로 나의 D-day 랭킹을 알아보자</small></p>
                         {% if user.is_authenticated %}
                             <a href="{% url "rank:index" %}" class="icon-link text-white text-decoration-none small">
                                 <i class="fas fa-chart-line"></i>&nbsp; 랭킹 알아보기
@@ -49,28 +67,9 @@
                             </a>
                         {% endif %}
                     </div>
-
-
                 </div>
 
-                <!-- Barracks Update-->
-                <div class="col">
 
-                    <div class="p-2 mt-1 text-white rounded bg-warning small">
-                        <h3 class="h5 mb-0"><small>생활관</small></h3>
-                        <p class="my-0 fw-bold text-secondary"><small>친구들과 복무율, 실출근, 휴가 비교를 한번에</small></p>
-
-                        <a href="{% url "barracks:barracks_detail" 3 %}"
-                           class="icon-link text-white text-decoration-none small">
-                            <i class="fas fa-campground"></i>&nbsp; 생활관 구경하기
-                            <svg class="bi" width="1em" height="1em">
-                                <use xlink:href="#chevron-right"/>
-                            </svg>
-                        </a>
-
-                    </div>
-
-                </div>
 
                 <!-- Open Kakaotalk-->
                 <div class="col"></div>
