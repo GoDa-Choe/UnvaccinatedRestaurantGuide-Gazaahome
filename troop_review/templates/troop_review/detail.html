@@ -1,5 +1,4 @@
 {% extends 'forum/base.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block custom_style %}
@@ -23,26 +22,50 @@
     <div class="my-3 p-3 rounded shadow-sm">
 
 
-        <!-- Titile-->
+        <!-- Titile -->
         <div>
-            <h2 class="h4">
+            <h2 class="h2">
                 {{ troop.name }}
             </h2>
         </div>
 
+        <div class="d-flex justify-content-between align-items-center small mb-3">
 
-        <div class="d-flex justify-content-between align-items-center small">
+            <!-- Avg Star Rating -->
             <div class="d-inline">
-                <p class="d-inline text-muted mx-1 small">
-                    {{ troop.created_at|date:'Y-m-d H:i' }}
-                </p>
+               {% for i in ""|rjust:troop.get_avg_star_rating %}
+                    <i class="fas fa-star text-warning"></i>
+                {% endfor %}
             </div>
+
+
             <div class="d-inline text-muted small">
-                <div class="d-inline"><i class="fas fa-heart"></i> {{ troop.get_num_reivews }}</div>
+                <div class="d-inline"><i class="fas fa-comment"></i> {{ troop.get_num_reivews }}</div>
                 <div class="d-inline"><i class="far fa-eye"></i> {{ troop.hit_count.hits }}</div>
-                <div class="d-inline"><i class="far fa-comment"></i> {{ troop.get_avg_star_rating }}</div>
             </div>
         </div>
+
+        <!-- Charts -->
+        {% if troop.review_set.exists %}
+            <div class="row row-cols-1 row-cols-lg-3">
+
+                <div class="col my-3">
+                    <h3 class="h4 fw-bold text-center my-0">훈련</h3>
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <div class="col my-3">
+                    <h3 class="h4 fw-bold text-center my-0">군기</h3>
+                    <canvas id="myChart1"></canvas>
+                </div>
+
+                <div class="col mt-3">
+                    <h3 class="h4 fw-bold text-center mt-2 my-0">휴가량</h3>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
 
 
@@ -51,9 +74,9 @@
 
         <!-- Header -->
         <div class="d-flex justify-content-between border-bottom pb-2 mb-0">
-            <h2 class="h5">
-                부대 평가
-            </h2>
+            <h3 class="h5">
+                리뷰 목록
+            </h3>
             {% if user.is_authenticated %}
                 <a role="button" class="btn btn-outline-secondary btn-sm"
                    href="{% url 'troop_review:create_review' troop.pk %}">리뷰 작성</a>
@@ -68,69 +91,79 @@
             <div class="d-flex  pt-3">
                 <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
 
-                    <div class="float-end">
-                        {% if user.is_authenticated and review.reviewer == user %}
-                            <a href="{% url 'troop_review:update_review' troop.pk review.pk %}"
-                               class="text-dark text-decoration-none mx-1">
-                                <small>수정</small>
-                            </a>
-                            <a href="{% url 'troop_review:delete_review' troop.pk review.pk %}"
-                               class="text-dark text-decoration-none mx-1">
-                                <small>삭제</small>
-                            </a>
 
-                        {% endif %}
-                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-inline text-muted">
+                            <strong class="text-gray-dark">군번 {{ review.year }}-{{ review.month }}</strong>
+                            <div class="d-inline text-muted">{{ review.duty_assignment }}</div>
 
-                    <div class="d-inline text-muted">
-                        <strong class="text-gray-dark">군번 {{ review.year }}-{{ review.month }}</strong>
-
-                        <div class="d-inline text-muted">{{ review.duty_assignment }}</div>
-
-                    </div>
-                    <div class="d-block">
-                        별점 :
-                        <div class="d-inline text-warning">
-                            {% for i in "x"|rjust:review.star_rating %}
-                                X
-                            {% endfor %}
+                            <div class="d-inline mx-1">
+                                <i class="far fa-thumbs-up text-success"></i> {{ review.num_likes }}
+                            </div>
                         </div>
-                    </div>
 
-                    <p class="text-primary">별점 : {{ review.star_rating }}</p>
-                    <p class="text-dark">좋아요 : {{ review.num_likes }}</p>
-
-                    <p class="text-muted">{{ review.updated_at|date:'Y-m-d H:i:s' }}</p>
-
-                    <p class="small lh-sm text-muted">{{ review.content|linebreaks }}</p>
-
-
-                    <!-- Likes -->
-                    <div class="d-flex justify-content-center my-3">
-
+                        <!-- Likes -->
                         {% if user.is_authenticated %}
                             <form action="{% url 'troop_review:like_review' troop.pk review.pk %}"
                                   method="POST">{% csrf_token %}
                                 <button type="submit" name="review_pk" value="{{ review.pk }}"
-                                        class="btn btn-sm btn-outline-success position-relative border-1"
-                                        style="background-color: #aacfaa">
-                                    특급
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                            {{ review.num_likes }}
-                        </span>
+                                        class="btn btn-sm btn-outline-success p-0 px-1">
+                                    <small>추천</small>
                                 </button>
+
                             </form>
                         {% else %}
-                            <button class="btn btn-sm btn-outline-success position-relative border-1"
-                                    style="background-color: #aacfaa">
-                                특급
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                        {{ review.num_likes }}
-                    </span>
+                            <button class="btn btn-sm btn-outline-success p-0 px-1">
+                                <small>추천</small>
                             </button>
+
                         {% endif %}
 
                     </div>
+
+                    <div class="d-block align-items-center">
+                        <div class="d-inline">
+                            {% for i in "x"|rjust:review.star_rating %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="d-block my-1">
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: royalblue">
+                                훈련 {{ review.get_training_display }}
+                            </span>
+                        </div>
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: seagreen">
+                                군기 {{ review.get_discipline_display }}
+                            </span>
+                        </div>
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: lightseagreen">
+                                휴가 {{ review.get_leave_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="lh-sm text-dark mt-2">{{ review.content|linebreaks }}</div>
+
+
+                    <!-- Update&Delete-->
+                    <div class="float-end">
+                        {% if user.is_authenticated and review.reviewer == user %}
+                            <a href="{% url 'troop_review:update_review' troop.pk review.pk %}"
+                               class="text-primary text-decoration-none mx-1">
+                                <small>수정</small>
+                            </a>
+                            <a href="{% url 'troop_review:delete_review' troop.pk review.pk %}"
+                               class="text-danger text-decoration-none mx-1">
+                                <small>삭제</small>
+                            </a>
+                        {% endif %}
+                    </div>
+
                 </div>
 
 
@@ -145,7 +178,151 @@
 {% endblock %}
 
 
+{% block chart %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+            integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+
+
+    <script>
+        var bdcolor = 'rgb(151,151,155)'
+
+        var ctx = document.getElementById('myChart');
+        <!-- Avg Training Rating -->
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ training_keys|safe }},
+                datasets: [{
+                    label: '훈련(업무) 강도',
+                    data: {{ training_values }},
+                    backgroundColor: [
+                        'rgb(197, 208, 228)',
+                        'rgb(139, 161, 200)',
+                        'rgb(81, 113, 173)',
+                        'rgb(23, 66, 145)',
+                        'rgb(10, 44, 107)'
+                    ],
+                    hoverOffset: 4,
+                    borderColor: bdcolor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                cutout: '40%',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var index = context.dataIndex;
+                                var label = context.label;
+                                var value = context.dataset.data[index];
+
+                                var percent = value / {{ training_size }} * 100;
+
+                                return " " + label + " " + percent.toFixed(1) + "%";
+                            },
+                            title: function (tooltipItems, data) {
+                                return "훈련(업무) 강도";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        var ctx1 = document.getElementById('myChart1');
+        <!-- Avg Discipline Rating -->
+        var myChart = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: {{ discipline_keys|safe }},
+                datasets: [{
+                    label: '군기',
+                    data: {{ discipline_values }},
+                    backgroundColor: [
+                        'rgb(211,234,221)',
+                        'rgb(148, 195, 168)',
+                        'rgb(74,145,105)',
+                        'rgb(30,111,65)',
+                        'rgb(15,71,39)'
+                    ],
+                    hoverOffset: 4,
+                    borderColor: bdcolor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var index = context.dataIndex;
+                                var label = context.label;
+                                var value = context.dataset.data[index];
+                                var percent = value / {{ discipline_size }} * 100;
+
+                                return " " + label + " " + percent.toFixed(1) + "%";
+                            },
+                            title: function (tooltipItems, data) {
+                                return "군기";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        var ctx2 = document.getElementById('myChart2');
+        <!-- Avg Leave Rating -->
+        var myChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: {{ leave_keys|safe }},
+                datasets: [{
+                    label: '휴가량',
+                    data: {{ leave_values }},
+                    backgroundColor: [
+                        'rgb(227, 238, 239)',
+                        'rgb(170, 204, 207)',
+                        'rgb(86, 153, 158)',
+                        'rgb(29, 119, 126)',
+                        'rgb(14, 95, 101)'
+                    ],
+                    hoverOffset: 4,
+                    borderColor: bdcolor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                cutout: '40%',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var index = context.dataIndex;
+                                var label = context.label;
+                                var value = context.dataset.data[index];
+                                var percent = value / {{ leave_size }} * 100;
+
+                                return " " + label + " " + percent.toFixed(1) + "%";
+                            },
+                            title: function (tooltipItems, data) {
+                                return "휴가량";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+
+{% endblock %}
 
 
 

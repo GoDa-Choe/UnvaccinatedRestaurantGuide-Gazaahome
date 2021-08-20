@@ -13,11 +13,53 @@
     {% include 'home/home_sub_banner.html' %}
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h2>부대평가 삭제</h2>
+        <h2>부대리뷰 삭제</h2>
         <hr>
         <form method="post" enctype="multipart/form-data"> {% csrf_token %}
 
-            <p><strong>{{ review.content }}</strong>을/를</p>
+            <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-inline text-muted">
+                            <strong class="text-gray-dark">군번 {{ review.year }}-{{ review.month }}</strong>
+                            <div class="d-inline text-muted">{{ review.duty_assignment }}</div>
+
+                            <div class="d-inline mx-1">
+                                <i class="far fa-thumbs-up text-success"></i> {{ review.num_likes }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-block align-items-center">
+                        <div class="d-inline">
+                            {% for i in "x"|rjust:review.star_rating %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="d-block my-1">
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: royalblue">
+                                훈련 {{ review.get_training_display }}
+                            </span>
+                        </div>
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: seagreen">
+                                군기 {{ review.get_discipline_display }}
+                            </span>
+                        </div>
+                        <div class="d-inline">
+                            <span class="badge rounded-pill" style="background-color: lightseagreen">
+                                휴가 {{ review.get_leave_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="lh-sm text-dark mt-2">{{ review.content|linebreaks }}</div>
+
+                </div>
+
+            <br>
 
             <p>정말로 <strong>삭제</strong>하시겠습니까?"</p>
 

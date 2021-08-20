@@ -21,14 +21,14 @@ class Troop(models.Model, HitCountMixin):
     def get_avg_star_rating(self):
         reviews = self.review_set
         star_ratings = [review.star_rating for review in reviews.iterator()]
-        return sum(star_ratings) / reviews.count()
+
+        return round(sum(star_ratings) / reviews.count()) if reviews.count() else 0
 
     def get_num_reivews(self):
         return self.review_set.count()
 
 
 class Review(models.Model):
-    RATING_CHOICES = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
     YEAR_CHOICES = [(2018, 2018), (2019, 2019), (2020, 2020), (2021, 2021)]
     MONTH_CHOICES = [
         (1, 1), (2, 2), (3, 3),
@@ -37,14 +37,40 @@ class Review(models.Model):
         (10, 10), (11, 11), (12, 12),
     ]
 
+    RATING_CHOICES = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
+    TRANING_CHOICES = (
+        ('very_high', '매우 많음'),
+        ('high', '많음'),
+        ('nomal', '보통'),
+        ('low', '적음'),
+        ('very_low', '매우 적음'),
+    )
+    DISCIPLINE_CHOICES = (
+        ('very_high', '매우 빡셈'),
+        ('high', '빡셈'),
+        ('nomal', '보통'),
+        ('low', '빠짐'),
+        ('very_low', '매우 빠짐'),
+    )
+    LEAVE_CHOICES = (
+        ('very_high', '매우 많음'),
+        ('high', '많음'),
+        ('nomal', '보통'),
+        ('low', '적음'),
+        ('very_low', '매우 적음'),
+    )
+
     year = models.IntegerField(choices=YEAR_CHOICES)
     month = models.IntegerField(choices=MONTH_CHOICES)
+    duty_assignment = models.CharField(max_length=20)
 
     star_rating = models.IntegerField(choices=RATING_CHOICES)
 
-    duty_assignment = models.CharField(max_length=20)
+    training = models.CharField(max_length=9, choices=TRANING_CHOICES, default='nomal')
+    discipline = models.CharField(max_length=9, choices=DISCIPLINE_CHOICES, default='nomal')
+    leave = models.CharField(max_length=9, choices=LEAVE_CHOICES, default='nomal')
 
-    content = models.TextField()
+    content = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

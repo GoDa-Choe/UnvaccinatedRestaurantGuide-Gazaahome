@@ -23,11 +23,15 @@ class TroopForm(ModelForm):
 class ReviewForm(ModelForm):
     class Meta:
         model = Review
-        fields = ('year', 'month', 'duty_assignment', 'star_rating', 'content')
+        fields = ('year', 'month', 'duty_assignment', 'star_rating', 'training', 'discipline','leave', 'content')
+
         labels = {
-            'year': '입대 연도',
-            'month': '입대 월',
+            'year': '기준 군번(연도)',
+            'month': '기준 군번(월)',
             'duty_assignment': '보직',
             'star_rating': '별점',
+            'training': '훈련(업무)량',
+            'discipline': '군기',
+            'leave': '휴가량',
             'content': '내용',
         }

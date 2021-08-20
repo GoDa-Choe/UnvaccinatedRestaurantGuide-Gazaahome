@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from forum.forms import CommentForm, PostForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.utils.text import slugify
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -14,9 +12,10 @@ from hitcount.views import HitCountDetailView
 from troop_review.forms import TroopForm, ReviewForm
 
 # models
-from forum.models import Post, Category, Tag
 from troop_review.models import Troop, Review
-from django.contrib.auth.models import User
+
+# python lib
+from collections import Counter
 
 
 @require_POST
@@ -31,193 +30,6 @@ def like(request, troop_pk, pk):
     return HttpResponseRedirect(reverse('troop_review:detail', args=(troop_pk,)))
 
 
-# class PostDelete(LoginRequiredMixin, DeleteView):
-#     model = Post
-#     template_name = 'forum/post_delete_form.html'
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         post = Post.objects.get(pk=self.kwargs['pk'])
-#         if post.author == self.request.user:
-#             return super(PostDelete, self).dispatch(request, *args, **kwargs)
-#         else:
-#             raise PermissionDenied
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(PostDelete, self).get_context_data(**kwargs)
-#         post = Post.objects.get(pk=self.kwargs['pk'])
-#         context['post'] = post
-#         return context
-#
-#     def get_success_url(self):
-#         return reverse_lazy('index')
-#
-#
-# class PostUpdate(LoginRequiredMixin, UpdateView):
-#     model = Post
-#     form_class = PostForm
-#     template_name = 'forum/post_update_form.html'
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         if request.user.is_authenticated and request.user == self.get_object().author:
-#             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
-#         else:
-#             raise PermissionDenied
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(PostUpdate, self).get_context_data()
-#         if self.object.tags.exists():
-#             tags_str_list = []
-#             for tag in self.object.tags.all():
-#                 tags_str_list.append(tag.name)
-#             context['tags_str_default'] = '#' + '#'.join(tags_str_list)
-#
-#         return context
-#
-#     def form_valid(self, form):
-#         response = super(PostUpdate, self).form_valid(form)
-#         self.object.tags.clear()
-#
-#         tags_str = self.request.POST.get('tags_str')
-#
-#         if tags_str:
-#             tags_str = tags_str.strip(' #')
-#             tags_str = tags_str.replace(',', '#')
-#             tags_list = tags_str.split('#')
-#
-#             for tag in tags_list:
-#                 tag = tag.strip(' #')
-#                 tag, is_tag_created = Tag.objects.get_or_create(name=tag)
-#                 if is_tag_created:
-#                     tag.slug = slugify(tag, allow_unicode=True)
-#                     tag.save()
-#                 self.object.tags.add(tag)
-#
-#         return response
-#
-#
-# class PostCreate(LoginRequiredMixin, CreateView):
-#     model = Post
-#     form_class = PostForm
-#
-#     def form_valid(self, form):
-#         current_user = self.request.user
-#         if current_user.is_authenticated:
-#             form.instance.author = current_user
-#             response = super(PostCreate, self).form_valid(form)
-#
-#             tags_str = self.request.POST.get('tags_str')
-#
-#             if tags_str:
-#                 tags_str = tags_str.strip(' #')
-#                 tags_str = tags_str.replace(',', '#')
-#                 tags_list = tags_str.split('#')
-#
-#                 for tag in tags_list:
-#                     tag = tag.strip()
-#                     tag, is_tag_created = Tag.objects.get_or_create(name=tag)
-#                     if is_tag_created:
-#                         tag.slug = slugify(tag, allow_unicode=True)
-#                         tag.save()
-#                     self.object.tags.add(tag)
-#
-#             return response
-#         else:
-#             return redirect('/forum/')
-#
-#
-# class LikesPostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     paginate_by = 10
-#     queryset = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)[:20]
-#
-#     context_object_name = 'post_list'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(LikesPostList, self).get_context_data()
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['category'] = "특급"
-#
-#         return context
-#
-#
-# class PopularPostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     paginate_by = 10
-#     context_object_name = 'post_list'
-#     queryset = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(PopularPostList, self).get_context_data()
-#         context['post_list'] = context['post_list'][:15]
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['category'] = "인기"
-#
-#         return context
-#
-#
-# class CategoryPostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     paginate_by = 10
-#     context_object_name = 'post_list'
-#
-#     def get_queryset(self):
-#         category = Category.objects.get(slug=self.kwargs['slug'])
-#         notice_manager = User.objects.get(username="공지사항")
-#         return category.post_set.exclude(author=notice_manager).order_by('-pk')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(CategoryPostList, self).get_context_data()
-#         category = Category.objects.get(slug=self.kwargs['slug'])
-#         notice_manager = User.objects.get(username="공지사항")
-#         notice_list = category.post_set.filter(author=notice_manager)
-#
-#         context['category'] = category
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['notice_list'] = notice_list
-#         return context
-#
-#
-# class PostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     context_object_name = 'post_list'
-#     paginate_by = 10
-#
-#     def get_queryset(self):
-#         notice_manager = User.objects.get(username="공지사항")
-#         post_list = Post.objects.exclude(author=notice_manager).order_by('-pk')
-#         return post_list
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(PostList, self).get_context_data()
-#         context['categories'] = Category.objects.all().order_by("priority")
-#
-#         return context
-#
-#
-# class PostDetail(HitCountDetailView):
-#     model = Post
-#     template_name = 'forum/post_detail.html'
-#     count_hit = True
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(PostDetail, self).get_context_data()
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['comment_form'] = CommentForm
-#
-#         likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
-#         liked = False
-#         if likes_connected.likes.filter(pk=self.request.user.pk).exists():
-#             liked = True
-#         context['num_likes'] = likes_connected.num_likes()
-#         context['is_liked'] = liked
-#
-#         return context
-
-
 class TroopList(ListView):
     model = Troop
     template_name = 'troop_review/index.html'
@@ -225,7 +37,7 @@ class TroopList(ListView):
     paginate_by = 10
 
 
-class TroopDetail(HitCountDetailView):
+class TroopDetail(LoginRequiredMixin, HitCountDetailView):
     model = Troop
     template_name = 'troop_review/detail.html'
     count_hit = True
@@ -233,15 +45,27 @@ class TroopDetail(HitCountDetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TroopDetail, self).get_context_data()
 
-        # context['categories'] = Category.objects.all().order_by("priority")
-        # context['comment_form'] = CommentForm
-        #
-        # likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
-        # liked = False
-        # if likes_connected.likes.filter(pk=self.request.user.pk).exists():
-        #     liked = True
-        # context['num_likes'] = likes_connected.num_likes()
-        # context['is_liked'] = liked
+        current_troop = context['troop']
+
+        review_list = current_troop.review_set
+
+        training_list = [review.get_training_display() for review in review_list.iterator()]
+        training_counter = Counter(training_list)
+        context["training_size"] = len(training_list)
+        context["training_keys"] = list(training_counter.keys())
+        context["training_values"] = list(training_counter.values())
+
+        discipline_list = [review.get_discipline_display() for review in review_list.iterator()]
+        discipline_counter = Counter(discipline_list)
+        context["discipline_size"] = len(discipline_list)
+        context["discipline_keys"] = list(discipline_counter.keys())
+        context["discipline_values"] = list(discipline_counter.values())
+
+        leave_list = [review.get_leave_display() for review in review_list.iterator()]
+        leave_counter = Counter(leave_list)
+        context["leave_size"] = len(leave_list)
+        context["leave_keys"] = list(leave_counter.keys())
+        context["leave_values"] = list(leave_counter.values())
 
         return context
 
@@ -299,7 +123,7 @@ class UpdateReview(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UpdateReview, self).get_context_data(**kwargs)
-        context['current_troop'] = Troop.objects.get(pk=self.kwargs['pk'])
+        context['current_troop'] = Troop.objects.get(pk=self.kwargs['troop_pk'])
 
         return context
 
