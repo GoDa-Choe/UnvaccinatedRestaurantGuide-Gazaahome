@@ -55,7 +55,8 @@
                     </div>
                     <div class="d-inline">
                         <p class="text-end my-0 small"><small>막출</small></p>
-                        <p class="text-end my-0 small"><small>{{ current_chart_item.end_workday|date:'Y/m/d' }}</small></p>
+                        <p class="text-end my-0 small"><small>{{ current_chart_item.end_workday|date:'Y/m/d' }}</small>
+                        </p>
                     </div>
                 </div>
                 <div class="progress">
@@ -143,6 +144,7 @@
                             }
                         },
                         type: 'linear',
+                        grace: '5%'
                     }
                 }
             }
@@ -192,6 +194,7 @@
                             }
                         },
                         type: 'linear',
+                        grace: '5%'
                     }
                 }
             }

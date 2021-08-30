@@ -1,0 +1,164 @@
+<div id="carouselExampleDark" class="carousel carousel-dark slide border rounded shadow-sm mb-3" data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a href="{% url 'index' %}" class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-secondary">최근 게시글</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+                    <!-- Most Recently-->
+                    <div class="list-group-flush">
+                        {% for post in most_recently_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between small">
+                                            <div class="d-inline">
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart text-danger"></i> {{ post.num_likes }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment text-success"></i> {{ post.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item" data-bs-interval="5000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a href="{% url 'likes_post' %}" class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-success">특급 게시글</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+                    <!-- Most Likes-->
+                    <div class="list-group-flush">
+                        {% for post in most_likes_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between small">
+                                            <div class="d-inline">
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart text-danger"></i> {{ post.num_likes }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment text-success"></i> {{ post.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item" data-bs-interval="5000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+
+                    <a href="{% url 'popular_post' %}" class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-primary">인기 게시글</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Popular Post/most hits-->
+                    <div class="list-group-flush">
+                        {% for post in popular_posts %}
+                            <a href="{% url 'detail' post.pk %}" class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:30 }}</h3>
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                        </p>
+                                        <div class="d-flex text-muted justify-content-between small">
+                                            <div class="d-inline">
+
+                                                {% if post.category.name == "익명" %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart text-danger"></i> {{ post.num_likes }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment text-success"></i> {{ post.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

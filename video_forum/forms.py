@@ -21,6 +21,6 @@ class VideoForm(forms.ModelForm):
         fields = ('title', 'url', 'is_anonymous')
         labels = {
             'title': '제목',
-            'url': "동영상 주소(url)",
+            'url': "유튜브 동영상 주소(url)",
             'is_anonymous': "익명",
         }

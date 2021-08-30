@@ -1,8 +1,6 @@
 from django.utils import timezone
 
 from django.shortcuts import render, redirect
-from forum.models import Post, Category
-from workday.models import Calculator
 from workday.library import calculator_lib
 from django.views.generic import TemplateView, DeleteView, FormView
 from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_CODE
@@ -13,17 +11,29 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
+from forum.models import Post, Category
+from workday.models import Calculator
+from video_forum.models import Video
+
 from home.forms import CheckPasswordForm
 
 
 def home(request):
-    popular_posts = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:3]
+    popular_posts = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:4]
 
     most_likes_posts = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)
-    most_likes_posts = most_likes_posts[:3]
+    most_likes_posts = most_likes_posts[:4]
+
+    most_recently_posts = Post.objects.order_by('-pk')[:4]
+
+    most_recently_videos = Video.objects.order_by('-pk')[:2]
+
     context = {
         'popular_posts': popular_posts,
         'most_likes_posts': most_likes_posts,
+        'most_recently_posts': most_recently_posts,
+        'most_recently_videos': most_recently_videos,
+
         'categories': Category.objects.order_by('priority'),
         'google_site_register_code': GOOGLE_SITE_REGISTER_CODE,
         'naver_site_register_code': NAVER_SITE_REGISTER_CODE,
