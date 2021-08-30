@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'hitcount',
     'admin_honeypot',
     'widget_tweaks',
+    'embed_video',
 
     # cloudinary
     'cloudinary_storage',
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 
     # apps
     'forum',
+    'video_forum',
     'home',
     'workday',
     'barracks',

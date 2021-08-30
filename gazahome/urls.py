@@ -22,6 +22,8 @@ urlpatterns = [
     path('', include('home.urls')),
 
     path('forum/', include('forum.urls')),
+    path('video_forum/', include('video_forum.urls')),
+
     path('workday/', include('workday.urls')),
     path('barracks/', include('barracks.urls')),
     path('ranking/', include('rank.urls')),

@@ -20,7 +20,7 @@ class MembershipInline(admin.TabularInline):
 
 @admin.register(Barracks)
 class BarracksAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'created_at', 'updated_at', 'host', ]
+    list_display = ['id', 'name', 'created_at', 'updated_at', 'host', 'is_close']
     list_display_links = ['id', 'name', ]
     inlines = [
         GuestBookInline,

@@ -15,7 +15,7 @@ class DayoffInline(admin.TabularInline):
 
 @admin.register(Calculator)
 class CalculatorAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'created_at', 'updated_at', 'start_date', 'end_date', 'author']
+    list_display = ['id', 'name', 'is_open', 'created_at', 'updated_at', 'start_date', 'end_date', 'author']
     list_display_links = ['id', 'name']
     inlines = [
         LeaveInline,

@@ -1,0 +1,28 @@
+{% extends 'forum/base.html' %}
+{% load crispy_forms_filters %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    비디오 삭제
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h2>비디오 삭제</h2>
+        <hr>
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+            <p><span class="h5 fw-bold">{{ video.title }}</span>을/를</p>
+            <p>정말로 <strong>삭제</strong>하시겠습니까?"</p>
+
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
