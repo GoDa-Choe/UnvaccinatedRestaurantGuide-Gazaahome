@@ -4,7 +4,7 @@
 {% load embed_video_tags %}
 
 {% block head-title %}
-    비디오 게시판
+    비디오
 {% endblock %}
 
 {% block custom_style %}
@@ -87,24 +87,40 @@
                                     </div>
 
                                     <button type="submit"
-                                            class="btn bnt-sm btn-link text-decoration-none p-0 px-1">
-                                        <small class="text-dark">
+                                            class="btn bnt-sm btn-link text-decoration-none p-1 py-0">
+                                        <small class="text-muted">
                                             <i class="fas fa-heart text-danger"></i> {{ video.num_likes }}
                                         </small>
                                     </button>
+
+                                    <button class="btn btn-sm btn-primary text-warning p-1 py-0" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseExample-{{ video.pk }}" aria-expanded="false"
+                                            aria-controls="collapseExample">
+                                        <i class="fas fa-comment"></i> {{ video.num_comments }}
+                                    </button>
                                 </form>
                             {% else %}
-                                <a class="text-decoration-none text-dark"
-                                   href="{% url "account_login" %}">
-                                    <i class="fas fa-heart text-danger"></i> {{ video.num_likes }}
-                                </a>
+                                <div class="d-flex align-items-center">
+                                    <div class="d-inline mx-1">
+                                        <i class="far fa-eye text-muted"></i> {{ video.hit_count.hits }}
+                                    </div>
+                                    <a class="btn btn-sm btn-link text-decoration-none text-muted p-0 pe-1"
+                                       href="{% url "account_login" %}" type="button">
+                                        <i class="fas fa-heart text-danger"></i> {{ video.num_likes }}
+                                    </a>
+                                    <button class="btn btn-sm btn-primary text-warning p-1 py-0" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseExample-{{ video.pk }}" aria-expanded="false"
+                                            aria-controls="collapseExample">
+                                        <i class="fas fa-comment"></i> {{ video.num_comments }}
+                                    </button>
+                                </div>
                             {% endif %}
                         </div>
-
-
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex justify-content-start align-items-center mb-2">
                         <div class="d-inline">
                             {% if video.tags.exists %}
                                 <i class="fas fa-tags"></i>
@@ -114,15 +130,6 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-
-
-                        <button class="btn btn-sm btn-primary text-warning p-1 py-0" type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample-{{ video.pk }}" aria-expanded="false"
-                                aria-controls="collapseExample">
-                            <i class="fas fa-comment"></i> {{ video.num_comments }}
-                        </button>
-
                     </div>
 
                     <div class="collapse" id="collapseExample-{{ video.pk }}">

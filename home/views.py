@@ -26,7 +26,7 @@ def home(request):
 
     most_recently_posts = Post.objects.order_by('-pk')[:4]
 
-    most_recently_videos = Video.objects.order_by('-pk')[:2]
+    most_recently_videos = Video.objects.order_by('-pk')[:3]
 
     context = {
         'popular_posts': popular_posts,
