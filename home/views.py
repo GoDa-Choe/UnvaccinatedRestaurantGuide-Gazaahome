@@ -14,6 +14,8 @@ from django.views.decorators.http import require_POST
 from forum.models import Post, Category
 from workday.models import Calculator
 from video_forum.models import Video
+from troop_review.models import Troop
+from barracks.models import Barracks
 
 from home.forms import CheckPasswordForm
 
@@ -23,16 +25,24 @@ def home(request):
 
     most_likes_posts = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)
     most_likes_posts = most_likes_posts[:4]
-
     most_recently_posts = Post.objects.order_by('-pk')[:4]
 
     most_recently_videos = Video.objects.order_by('-pk')[:3]
+
+    popular_troops = Troop.objects.order_by("-hit_count_generic__hits", '-pk')[:2]
+
+    popular_barracks = Barracks.objects.order_by("-hit_count_generic__hits", '-pk')[:2]
 
     context = {
         'popular_posts': popular_posts,
         'most_likes_posts': most_likes_posts,
         'most_recently_posts': most_recently_posts,
+
         'most_recently_videos': most_recently_videos,
+
+        'popular_troops': popular_troops,
+
+        'popular_barracks': popular_barracks,
 
         'categories': Category.objects.order_by('priority'),
         'google_site_register_code': GOOGLE_SITE_REGISTER_CODE,
