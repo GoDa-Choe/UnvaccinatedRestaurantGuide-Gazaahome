@@ -184,6 +184,9 @@
                     <svg class="bi" width="1em" height="1em">
                         <use xlink:href="#chevron-right"/>
                     </svg>
+                    <div class="spinner-grow spinner-grow-sm text-primary" role="status">
+                        <span class="visually-hidden">Click me</span>
+                    </div>
                 </a>
             {% else %}
                 <a class="icon-link text-decoration-none text-primary" href="{% url 'account_login' %}">
@@ -191,6 +194,9 @@
                     <svg class="bi" width="1em" height="1em">
                         <use xlink:href="#chevron-right"/>
                     </svg>
+                    <div class="spinner-grow spinner-grow-sm text-primary" role="status">
+                        <span class="visually-hidden">Click me</span>
+                    </div>
                 </a>
             {% endif %}
         </div>
@@ -228,6 +234,9 @@
                     <svg class="bi" width="1em" height="1em">
                         <use xlink:href="#chevron-right"/>
                     </svg>
+                    <div class="spinner-grow spinner-grow-sm text-muted" role="status">
+                        <span class="visually-hidden">Click me</span>
+                    </div>
                 </a>
             {% else %}
                 <a class="icon-link text-decoration-none text-secondary" href="{% url 'account_login' %}">
@@ -235,11 +244,15 @@
                     <svg class="bi" width="1em" height="1em">
                         <use xlink:href="#chevron-right"/>
                     </svg>
+                    <div class="spinner-grow spinner-grow-sm text-muted" role="status">
+                        <span class="visually-hidden">Click me</span>
+                    </div>
                 </a>
             {% endif %}
         </div>
 
     </div>
+
 </div>
 
 
@@ -259,7 +272,7 @@
                 <p class="small text-muted mb-0"><small>비디오 게시판 업데이트</small></p>
                 <p class="small text-muted mb-1"><small>홈페이지 UI/UX 개선선</small></p>
 
-               <p class="mb-0 small">v1.3.0 <small>2021.08.21</small></p>
+                <p class="mb-0 small">v1.3.0 <small>2021.08.21</small></p>
                 <p class="small text-muted mb-1"><small>부대리뷰 기능 업데이트</small></p>
             </div>
         </div>
