@@ -6,6 +6,9 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+
+from django.db.models import Count
+
 from hitcount.views import HitCountDetailView
 
 # forms
@@ -47,7 +50,7 @@ class TroopDetail(LoginRequiredMixin, HitCountDetailView):
 
         current_troop = context['troop']
 
-        review_list = current_troop.review_set
+        review_list = current_troop.review_set.order_by('likes')
 
         training_list = [review.get_training_display() for review in review_list.iterator()]
         training_counter = Counter(training_list)
@@ -66,6 +69,8 @@ class TroopDetail(LoginRequiredMixin, HitCountDetailView):
         context["leave_size"] = len(leave_list)
         context["leave_keys"] = list(leave_counter.keys())
         context["leave_values"] = list(leave_counter.values())
+
+        context["review_list"] = current_troop.review_set.annotate(num_likes=Count('likes')).order_by('-num_likes')
 
         return context
 

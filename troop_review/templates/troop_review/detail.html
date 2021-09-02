@@ -33,7 +33,7 @@
 
             <!-- Avg Star Rating -->
             <div class="d-inline">
-               {% for i in ""|rjust:troop.get_avg_star_rating %}
+                {% for i in ""|rjust:troop.get_avg_star_rating %}
                     <i class="fas fa-star text-warning"></i>
                 {% endfor %}
             </div>
@@ -85,8 +85,8 @@
             {% endif %}
         </div>
 
-
-        {% for review in troop.review_set.iterator %}
+        <!-- Review List -->
+        {% for review in review_list %}
 
             <div class="d-flex  pt-3">
                 <div class="pb-2 mb-0 small lh-sm border-bottom w-100">
