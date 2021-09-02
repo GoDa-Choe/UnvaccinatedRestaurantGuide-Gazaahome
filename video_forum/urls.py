@@ -5,8 +5,8 @@ app_name = 'video_forum'
 urlpatterns = [
     # path('tag/<str:slug>/', views.tag_post, name='tag_post'),
 
-    # path('likes/', views.LikesPostList.as_view(), name='likes_post'),
-    # path('popular/', views.PopularPostList.as_view(), name='popular_post'),
+    path('likes/', views.LikesVideoList.as_view(), name='likes_video'),
+    path('popular/', views.PopularVideoList.as_view(), name='popular_video'),
 
     path('<int:video_pk>/like_video_comment/<int:pk>/', views.like_video_comment, name='like_video_comment'),
     path('<int:pk>/like_video/', views.like_video, name='like_video'),

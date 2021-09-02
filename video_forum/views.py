@@ -10,8 +10,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from hitcount.views import HitCountDetailView
 
-from forum.models import Post, Category, Tag, Comment
-from forum.forms import CommentForm, PostForm
 from video_forum.forms import VideoCommentForm, VideoForm
 from video_forum.models import Video, VideoTag, VideoComment
 from django.contrib.auth.models import User
@@ -34,38 +32,30 @@ from django.contrib.auth.models import User
 #     )
 #
 #
-# class LikesPostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     paginate_by = 10
-#     queryset = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)[:20]
-#
-#     context_object_name = 'post_list'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(LikesPostList, self).get_context_data()
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['category'] = "특급"
-#
-#         return context
-#
-#
-# class PopularPostList(ListView):
-#     model = Post
-#     template_name = 'forum/post_list.html'
-#     paginate_by = 10
-#     context_object_name = 'post_list'
-#     queryset = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(PopularPostList, self).get_context_data()
-#         context['post_list'] = context['post_list'][:15]
-#         context['categories'] = Category.objects.all().order_by("priority")
-#         context['category'] = "인기"
-#
-#         return context
-#
-#
+class LikesVideoList(ListView):
+    model = Video
+    template_name = 'video_forum/index.html'
+    context_object_name = 'video_list'
+    paginate_by = 5
+    queryset = sorted(Video.objects.all(), key=lambda video: (video.num_likes(), video.pk), reverse=True)[:20]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(LikesVideoList, self).get_context_data()
+        context['video_comment_form'] = VideoCommentForm
+        return context
+
+
+class PopularVideoList(ListView):
+    model = Video
+    template_name = 'video_forum/index.html'
+    context_object_name = 'video_list'
+    paginate_by = 5
+    queryset = Video.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PopularVideoList, self).get_context_data()
+        context['video_comment_form'] = VideoCommentForm
+        return context
 
 
 class VideoList(ListView):
