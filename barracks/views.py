@@ -36,11 +36,10 @@ class BarracksList(ListView):
     model = Barracks
     template_name = 'barracks/barracks_list.html'
     context_object_name = 'barracks_list'
-    ordering = '-created_at'
     paginate_by = 10
 
     def get_queryset(self):
-        barracks_list = Barracks.objects.exclude(is_close=True)
+        barracks_list = Barracks.objects.exclude(is_close=True).order_by('-pk')
 
         return barracks_list
 

@@ -37,6 +37,7 @@ class TroopList(ListView):
     model = Troop
     template_name = 'troop_review/index.html'
     context_object_name = 'troop_reivew_list'
+    ordering = '-pk'
     paginate_by = 10
 
 
