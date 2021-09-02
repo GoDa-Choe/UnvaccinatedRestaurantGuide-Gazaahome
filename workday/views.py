@@ -155,8 +155,11 @@ class CalculatorDetail(LoginRequiredMixin, FormMixin, HitCountDetailView):
                 "start_date": calculator.start_date,
                 "end_date": calculator.end_date,
                 "end_workday": new['end_workday'],
+
                 "num_remaindays": new['num_remain_days'],
                 "num_workdays": new['num_workdays'],
+                "num_leaves": new['num_leaves'],
+
                 "percent": float(new['percent']),
                 "workday_percent": float(new['workday_percent'])
             }

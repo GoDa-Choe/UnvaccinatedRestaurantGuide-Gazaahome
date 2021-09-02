@@ -15,5 +15,7 @@ class RankingChart(models.Model):
     percent = models.FloatField(null=True, blank=True)
     workday_percent = models.FloatField(null=True, blank=True)
 
+    num_leaves = models.IntegerField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

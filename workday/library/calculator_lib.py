@@ -220,6 +220,8 @@ def get_workday_from_calculator_ranking(calculator):
 
         'percent': percent if percent <= 100 else 100.0,
         'num_remain_days': len(remain_days),
+
+        'num_leaves': len(leaves)
     }
 
     return data

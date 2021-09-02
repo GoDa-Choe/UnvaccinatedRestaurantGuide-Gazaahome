@@ -23,6 +23,7 @@ class Command(BaseCommand):
 
                         'num_remaindays': info['num_remain_days'],
                         'num_workdays': info['num_workdays'],
+                        'num_leaves': info['num_leaves'],
 
                         'percent': info['percent'],
                         'workday_percent': info['workday_percent']

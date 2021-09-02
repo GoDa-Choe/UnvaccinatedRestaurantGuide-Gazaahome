@@ -1,0 +1,311 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block head-title %}
+    랭킹
+{% endblock %}
+
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <div class="my-3 p-3 rounded shadow-sm">
+        <h2 class="h4 my-0 text-start text-muted"><i class="fas fa-chart-line"></i> 랭킹</h2>
+
+        <!-- 복무 랭킹 -->
+        <div class="mb-5 mt-3 pb-2">
+            <div class="col mb-2">
+                <h5 class="text-center my-0">군복무</h5>
+                <div class="d-flex justify-content-between align-items-end text-muted">
+                    <div class="d-inline">
+                        <p class="text-start my-0 small"><small>입대</small></p>
+                        <p class="text-start my-0 small"><small>{{ current_chart_item.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-end my-0 small"><small>전역</small></p>
+                        <p class="text-end my-0 small"><small>{{ current_chart_item.end_date|date:'Y/m/d' }}</small></p>
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: {{ current_chart_item.percent }}%"
+                         aria-valuenow="{{ current_chart_item.percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ current_chart_item.percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-center my-0 fw-bold">
+                        {{ current_remaindays_ranking }}위<small
+                            class="text-muted">(상위 {{ current_remaindays_ranking_percentage }}%)</small>
+                    </p>
+                    <p class="text-center my-0 text-muted small">D-{{ current_chart_item.num_remaindays }}</p>
+                </div>
+            </div>
+            <p class="d-inline text-muted small">분포(%)</p>
+            <p class="float-end m-0 text-primary fw-bold">복무 랭킹</p>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <!-- 실출근 랭킹 -->
+        <div class="my-5 pt-2">
+            <div class="col mb-2">
+                <h5 class="text-center my-0">실출근</h5>
+                <div class="d-flex justify-content-between align-items-end text-muted">
+                    <div class="d-inline">
+                        <p class="text-start my-0 small"><small>입대</small></p>
+                        <p class="text-start my-0 small"><small>{{ current_chart_item.start_date|date:'Y/m/d' }}</small>
+                        </p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-end my-0 small"><small>막출</small></p>
+                        <p class="text-end my-0 small"><small>{{ current_chart_item.end_workday|date:'Y/m/d' }}</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                         role="progressbar"
+                         style="width: {{ current_chart_item.workday_percent }}%"
+                         aria-valuenow="{{ current_chart_item.workday_percent }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ current_chart_item.workday_percent }}%
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-center my-0 fw-bold">
+                        {{ current_workdays_ranking }}위<small
+                            class="text-muted">(상위 {{ current_workdays_ranking_percentage }}%)</small>
+                    </p>
+                    <p class="text-center my-0 text-muted small">D-{{ current_chart_item.num_workdays }}</p>
+                </div>
+            </div>
+            <p class="d-inline text-muted small">분포(%)</p>
+            <p class="float-end m-0 text-success fw-bold">실출근 랭킹</p>
+            <canvas id="myChart1"></canvas>
+        </div>
+
+        <!-- 휴가 랭킹 -->
+        <div class="my-5 pt-2">
+            <div class="col mb-2">
+                <h5 class="text-center my-0">휴가</h5>
+                <div class="d-flex justify-content-between align-items-end text-muted">
+                    <div class="d-inline">
+                        <p class="text-start my-0 small"><small>0일</small></p>
+                    </div>
+                    <div class="d-inline">
+                        <p class="text-end my-0 small"><small>{{ leaves_days.0 }}일(1위)</small></p>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-secondary progress-bar-animated"
+                         role="progressbar"
+                         style="width: {{ leaves_percent }}%"
+                         aria-valuenow="{{ current_chart_item.num_leaves }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                        {{ current_chart_item.num_leaves }}일
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start align-items-center">
+                    <p class="text-center my-0 fw-bold">
+                        {{ current_leaves_ranking }}위<small
+                            class="text-muted">(상위 {{ current_leaves_ranking_percentage }}%)</small>
+                    </p>
+                </div>
+            </div>
+            <p class="d-inline text-muted small">분포(%)</p>
+            <p class="float-end m-0 text-secondary fw-bold">휴가 랭킹</p>
+            <canvas id="myChart2"></canvas>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block chart %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+            integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ remaindays_days|safe }},
+                datasets: [{
+                    label: '복무 랭킹',
+                    data: {{ remaindays_counter }},
+                    backgroundColor: {{ remaindays_colors|safe }},
+                    borderColor: '#3390cd',
+                    fill: {
+                        target: true,
+                        above: '#add9f5',    // And blue below the origin
+                    },
+                    tension: 0.1,
+                    borderWidth: 1,
+                    radius: 1.5
+                }]
+            },
+            options: {
+                interaction: {
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var days_ranking = {{ remaindays_ranking }};
+                                var label = days_ranking[context.parsed.x];
+                                var percent = label / {{ remaindays_ranking_length }} * 100;
+                                var text = label + "위" + "(" + percent.toFixed(1) + "%)";
+                                return text;
+                            },
+                            title: function (tooltipItems, data) {
+                                return 'D-' + tooltipItems[0].label;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '남은 복무(d-day)',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        type: 'linear',
+                        grace: 5
+                    }
+                }
+            }
+        });
+
+
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+        var myChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: {{ workdays_days|safe }},
+                datasets: [{
+                    label: '실출근 랭킹',
+                    data: {{ workdays_counter }},
+                    backgroundColor: {{ workdays_colors|safe }},
+                    borderColor: '#539d52',
+                    fill: {
+                        target: true,
+                        above: '#98ca98',    // And blue below the origin
+                    },
+                    tension: 0.1,
+                    borderWidth: 1,
+                    radius: 1
+                }]
+            },
+            options: {
+                interaction: {
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var days_ranking = {{ workdays_ranking }};
+                                var label = days_ranking[context.parsed.x];
+                                var percent = label / {{ workdays_ranking_length }} * 100;
+                                return label + "위" + "(" + percent.toFixed(1) + "%)";
+                            },
+                            title: function (tooltipItems, data) {
+                                return 'D-' + tooltipItems[0].label;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '남은 실출근(d-day)',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        type: 'linear',
+                        grace: 5
+                    }
+                }
+            }
+        });
+
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var myChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: {{ leaves_days|safe }},
+                datasets: [{
+                    label: '휴가 랭킹',
+                    data: {{ leaves_counter }},
+                    backgroundColor: {{ leaves_colors|safe }},
+                    borderColor: '#343333',
+                    fill: {
+                        target: true,
+                        above: '#a0a3a0',    // And blue below the origin
+                    },
+                    tension: 0.1,
+                    borderWidth: 1,
+                    radius: 1
+                }]
+            },
+            options: {
+                interaction: {
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var days_ranking = {{ leaves_ranking }};
+                                var label = days_ranking[context.parsed.x];
+                                var percent = label / {{ leaves_ranking_length }} * 100;
+                                return label + "위" + "(" + percent.toFixed(1) + "%)";
+                            },
+                            title: function (tooltipItems, data) {
+                                return '휴가 ' + tooltipItems[0].label + '일';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '휴가 일수',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        type: 'linear',
+                        grace: 5
+                    }
+                }
+            }
+        });
+
+    </script>
+
+{% endblock %}

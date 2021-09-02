@@ -19,6 +19,7 @@ import ranking
 GREEN = 'rgb(7,123,6)'
 BLUE = 'rgb(6,44,187)'
 RED = 'rgb(174,9,9)'
+GRAY = 'rgb(128, 139, 150)'
 
 
 class RankingView(LoginRequiredMixin, TemplateView):
@@ -95,7 +96,7 @@ class RankingView(LoginRequiredMixin, TemplateView):
 
 
 class RankingLineView(LoginRequiredMixin, TemplateView):
-    template_name = "rank/ranking_test.html"
+    template_name = "rank/ranking_line.html"
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -121,6 +122,8 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
                 'num_remaindays': info['num_remain_days'],
                 'num_workdays': info['num_workdays'],
 
+                'num_leaves': info['num_leaves'],
+
                 'percent': info['percent'],
                 'workday_percent': info['workday_percent']
             }
@@ -136,8 +139,12 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
         num_workdays = [chart_itme.num_workdays
                         for chart_itme in RankingChart.objects.exclude(num_workdays=0).order_by('num_workdays')]
 
+        num_leaves = [chart_itme.num_leaves
+                      for chart_itme in RankingChart.objects.order_by('-num_leaves')]
+
         remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
         workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
+        leaves_ranking = ranking.Ranking(num_leaves, start=1, reverse=False)
 
         try:
             current_remaindays_ranking = remaindays_ranking.rank(current_chart_item.num_remaindays)
@@ -151,19 +158,29 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
             current_workdays_ranking = 0
         context["current_workdays_ranking"] = current_workdays_ranking
 
+        try:
+            current_leaves_ranking = leaves_ranking.rank(current_chart_item.num_leaves)
+        except ValueError:
+            current_leaves_ranking = 0
+        context["current_leaves_ranking"] = current_leaves_ranking
+
         remaindays_ranking_length = len(num_remain_days)
         context["remaindays_ranking_length"] = remaindays_ranking_length
         workdays_ranking_length = len(num_workdays)
         context["workdays_ranking_length"] = workdays_ranking_length
+        leaves_ranking_length = len(num_leaves)
+        context["leaves_ranking_length"] = leaves_ranking_length
 
         current_remaindays_ranking_percentage = round(current_remaindays_ranking / remaindays_ranking_length * 100, 1)
         context["current_remaindays_ranking_percentage"] = current_remaindays_ranking_percentage
-
         current_workdays_ranking_percentage = round(current_workdays_ranking / workdays_ranking_length * 100, 1)
         context["current_workdays_ranking_percentage"] = current_workdays_ranking_percentage
+        current_leaves_ranking_percentage = round(current_leaves_ranking / leaves_ranking_length * 100, 1)
+        context["current_leaves_ranking_percentage"] = current_leaves_ranking_percentage
 
         context["remaindays_ranking"] = {value: rank for rank, value in remaindays_ranking}
         context["workdays_ranking"] = {value: rank for rank, value in workdays_ranking}
+        context["leaves_ranking"] = {value: rank for rank, value in leaves_ranking}
 
         remaindays_days_counter = Counter(num_remain_days)
         context["remaindays_days"] = [day for day in remaindays_days_counter.keys()]
@@ -175,10 +192,20 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
         context["workdays_counter"] = [round(counter / workdays_ranking_length * 100, 1)
                                        for counter in workdays_days_counter.values()]
 
+        leaves_days_counter = Counter(num_leaves)
+        context["leaves_days"] = [day for day in leaves_days_counter.keys()]
+        context["leaves_counter"] = [round(counter / leaves_ranking_length * 100, 1)
+                                     for counter in leaves_days_counter.values()]
+
         context["remaindays_colors"] = [RED if day == current_chart_item.num_remaindays
                                         else BLUE for day in remaindays_days_counter.keys()]
 
         context["workdays_colors"] = [RED if day == current_chart_item.num_workdays
                                       else GREEN for day in workdays_days_counter.keys()]
+
+        context["leaves_colors"] = [RED if day == current_chart_item.num_leaves
+                                    else GRAY for day in leaves_days_counter.keys()]
+
+        context["leaves_percent"] = round(current_chart_item.num_leaves / context["leaves_days"][0] * 100, 1)
 
         return context

@@ -31,7 +31,7 @@ def home(request):
 
     popular_troops = Troop.objects.order_by("-hit_count_generic__hits", '-pk')[:2]
 
-    popular_barracks = Barracks.objects.order_by("-hit_count_generic__hits", '-pk')[:2]
+    popular_barracks = Barracks.objects.exclude(is_close=True).order_by("-hit_count_generic__hits", '-pk')[:2]
 
     context = {
         'popular_posts': popular_posts,
