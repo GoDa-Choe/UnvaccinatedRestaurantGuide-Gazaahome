@@ -35,13 +35,15 @@ from django.contrib.auth.models import User
 class LikesVideoList(ListView):
     model = Video
     template_name = 'video_forum/index.html'
-    context_object_name = 'video_list'
     paginate_by = 5
     queryset = sorted(Video.objects.all(), key=lambda video: (video.num_likes(), video.pk), reverse=True)[:20]
+    context_object_name = 'video_list'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(LikesVideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
+
         return context
 
 
@@ -55,6 +57,7 @@ class PopularVideoList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularVideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
         return context
 
 
@@ -68,6 +71,7 @@ class VideoList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(VideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
         return context
 
 
@@ -79,6 +83,7 @@ class VideoDetail(HitCountDetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(VideoDetail, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
 
         return context
 

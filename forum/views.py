@@ -189,6 +189,7 @@ class LikesPostList(ListView):
         context = super(LikesPostList, self).get_context_data()
         context['categories'] = Category.objects.all().order_by("priority")
         context['category'] = "특급"
+        context['num_post'] = Post.objects.count()
 
         return context
 
@@ -205,6 +206,7 @@ class PopularPostList(ListView):
         context['post_list'] = context['post_list'][:15]
         context['categories'] = Category.objects.all().order_by("priority")
         context['category'] = "인기"
+        context['num_post'] = Post.objects.count()
 
         return context
 
@@ -229,6 +231,8 @@ class CategoryPostList(ListView):
         context['category'] = category
         context['categories'] = Category.objects.all().order_by("priority")
         context['notice_list'] = notice_list
+        context['num_post'] = Post.objects.count()
+
         return context
 
 
@@ -246,6 +250,7 @@ class PostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = Category.objects.all().order_by("priority")
+        context['num_post'] = Post.objects.count()
 
         return context
 
@@ -259,6 +264,8 @@ class PostDetail(HitCountDetailView):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all().order_by("priority")
         context['comment_form'] = CommentForm
+
+        context['num_post'] = Post.objects.count()
 
         likes_connected = get_object_or_404(Post, pk=self.kwargs['pk'])
         liked = False
