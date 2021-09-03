@@ -111,6 +111,8 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
         context = super(RankingLineView, self).get_context_data()
 
         current_calculator = Calculator.objects.get(author=self.request.user)
+        context["current_calculator"] = current_calculator
+
         info = calculator_lib.get_workday_from_calculator_ranking(current_calculator)
         obj, is_created = RankingChart.objects.update_or_create(
             calculator=current_calculator,
@@ -140,7 +142,7 @@ class RankingLineView(LoginRequiredMixin, TemplateView):
                         for chart_itme in RankingChart.objects.exclude(num_workdays=0).order_by('num_workdays')]
 
         num_leaves = [chart_itme.num_leaves
-                      for chart_itme in RankingChart.objects.order_by('-num_leaves')]
+                      for chart_itme in RankingChart.objects.exclude(num_leaves=0).order_by('-num_leaves')]
 
         remaindays_ranking = ranking.Ranking(num_remain_days, start=1, reverse=True)
         workdays_ranking = ranking.Ranking(num_workdays, start=1, reverse=True)
