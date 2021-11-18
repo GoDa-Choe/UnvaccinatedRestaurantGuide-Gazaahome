@@ -1,0 +1,42 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block head-title %}
+    훈남 테스트
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
+            <h2 class="h3 mb-0">
+                훈남 테스트
+            </h2>
+            <a role="button" class="btn btn-outline-primary btn-sm" href="{% url 'beauty:test' %}">
+                테스트
+            </a>
+
+            <a role="button" class="btn btn-outline-primary btn-sm" href="{% url 'beauty:test_no_create' %}">
+                테스트 No Create
+            </a>
+        </div>
+
+        <div class="d-block">
+            {% if obj.face %}
+                <img class="img-fluid rounded" src="{{ obj.face.url }}" alt="..."/>
+            {% endif %}
+        </div>
+
+
+    </div>
+
+{% endblock %}

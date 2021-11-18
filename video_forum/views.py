@@ -12,26 +12,10 @@ from hitcount.views import HitCountDetailView
 
 from video_forum.forms import VideoCommentForm, VideoForm
 from video_forum.models import Video, VideoTag, VideoComment
-from django.contrib.auth.models import User
 
 
-# def tag_post(request, slug):
-#     tag = Tag.objects.get(slug=slug)
-#     post_list = tag.post_set.all()
-#
-#     context = {
-#         'post_list': post_list.order_by('-pk'),
-#         'tag': tag,
-#         'categories': Category.objects.all().order_by("priority"),
-#     }
-#
-#     return render(
-#         request,
-#         'forum/post_list.html',
-#         context,
-#     )
-#
-#
+
+
 class LikesVideoList(ListView):
     model = Video
     template_name = 'video_forum/index.html'
