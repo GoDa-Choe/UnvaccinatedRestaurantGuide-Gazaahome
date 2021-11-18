@@ -30,10 +30,33 @@
             </a>
         </div>
 
+
         <div class="d-block">
-            {% if obj.face %}
-                <img class="img-fluid rounded" src="{{ obj.face.url }}" alt="..."/>
+            {% if recode %}
+                <img class="img-fluid rounded" src="{{ recode.face.url }}" alt="..."/>
             {% endif %}
+
+            <p class="text-center my-3 display-3">{{ recode.score }}</p>
+
+            <p class="text-center my-3 display-3">{{ form_raw_image }}</p>
+            <img class="img-fluid rounded" src="{{ form_raw_image }}" alt="..."/>
+
+        </div>
+
+        <div class="d-block">
+
+            <p class="text-center my-3">recode_save_time: {{ recode_save_time }}</p>
+
+            <p class="text-center my-3">image_load_time: {{ image_load_time }}</p>
+
+            <p class="text-center my-3">face_detection_time: {{ face_detection_time }}</p>
+
+            <p class="text-center my-3">model_load_time: {{ model_load_time }}</p>
+
+            <p class="text-center my-3">predition_time: {{ predition_time }}</p>
+
+            <p class="text-center my-3">total_time: {{ total_time }}</p>
+
         </div>
 
 
