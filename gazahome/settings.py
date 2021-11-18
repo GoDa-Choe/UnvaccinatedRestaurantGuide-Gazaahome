@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'barracks',
     'rank',
     'troop_review',
+    'beauty',
 ]
 
 MIDDLEWARE = [
