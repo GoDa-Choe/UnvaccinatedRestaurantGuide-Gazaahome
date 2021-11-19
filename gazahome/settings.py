@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
 
     # library
-    'crispy_forms',
+    "crispy_forms",
+    "crispy_bootstrap5",
     'markdownx',
     'hitcount',
     'admin_honeypot',
@@ -174,8 +175,8 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # crispy setup
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-# CRISPY_TEMPLATE_PACK = 'uni_form'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # allauth
 AUTHENTICATION_BACKENDS = [
