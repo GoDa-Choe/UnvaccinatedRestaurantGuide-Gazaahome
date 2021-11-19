@@ -174,7 +174,8 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # crispy setup
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+# CRISPY_TEMPLATE_PACK = 'uni_form'
 
 # allauth
 AUTHENTICATION_BACKENDS = [
