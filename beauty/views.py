@@ -18,9 +18,10 @@ class PredictView(FormView):
     template_name = 'beauty/prediction.html'
 
     def form_valid(self, form):
-        predictor = get_resnet18()
         form.instance.author = self.request.user
         face = form.save()
+
+        predictor = get_resnet18()
 
         with torch.no_grad():
             image = get_image(face.face.url)
