@@ -24,13 +24,22 @@ class PredictView(FormView):
 
         with torch.no_grad():
             image = get_image(face.face.url)
-            score = predictor(image)
-            face.score = normalize_score(score.item())
+            score = predictor(image).item()
+            face.score = normalize_score(score)
 
         face.save()
 
+        full_start, half_star, empty_star = get_star(score)
+
+        context_data = {
+            "face": face,
+            "full_start": full_start,
+            "half_star": half_star,
+            "empty_star": empty_star,
+        }
+
         return render(self.request, template_name="beauty/result.html",
-                      context={"face": face, })
+                      context=context_data)
 
 
 def get_resnet18():
@@ -69,3 +78,19 @@ def normalize_score(score):
         score = 1.0
 
     return score
+
+
+def get_star(score):
+    integer = round(score)
+    floating = score - integer
+
+    full_star = integer
+    half_star = 0
+
+    if floating > 0.75:
+        full_star += 1
+    elif floating > 0.25:
+        half_star += 1
+
+    empty_star = 5 - (full_star + half_star)
+    return full_star, half_star, empty_star
