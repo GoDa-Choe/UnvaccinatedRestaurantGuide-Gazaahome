@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+import cloudinary.models
 
 
-class Recode(models.Model):
+class Face(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -10,7 +11,7 @@ class Recode(models.Model):
 
     GENDER_CHOICES = [
         ("m", "남자"),
-        ("f", "여자"),
+        ("f", "여자(업데이트 예정)"),
     ]
 
     gender = models.CharField(
@@ -20,10 +21,10 @@ class Recode(models.Model):
 
     )
 
-    score = models.FloatField()
+    score = models.FloatField(default=0.0)
 
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"[Beauty Recode](id-{self.pk})(author-{self.author})"
+        return f"[Face](id-{self.pk})(score-{self.score})(author-{self.author})"

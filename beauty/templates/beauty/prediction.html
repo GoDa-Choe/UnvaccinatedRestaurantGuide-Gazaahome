@@ -1,0 +1,90 @@
+{% extends 'forum/base.html' %}
+{% load crispy_forms_filters %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    훈남 테스트
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-center align-items-center mb-2">
+            <h1 class="h3 text-center my-0">
+                AI 훈남 테스트
+            </h1>
+        </div>
+
+        <!-- Form -->
+        <div class="d-flex justify-content-center align-items-center border my-2">
+            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                {{ form | crispy }}
+
+                <div class="d-flex d-flex justify-content-end my-3">
+                    <button type="submit"
+                            class="btn btn-primary btn-sm" id="toastbtn">
+                        테스트
+                    </button>
+
+
+                </div>
+            </form>
+        </div>
+
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <div class="spinner-border spinner-border-sm text-success" role="status">
+                        <span class="visually-hidden">Predicting...</span>
+                    </div>
+                    <div class="spinner-border spinner-border-sm text-warning" role="status">
+                        <span class="visually-hidden">Predicting...</span>
+                    </div>
+                    <i class="fas fa-robot text-primary mx-1"></i>
+                    <strong class="me-auto">집에가자 봇</strong>
+
+                    <small>방금전</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    지금 사진을 분석 중에 있으니 조금만 기다려주세요.
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+
+
+{% block script %}
+    <script>
+
+        var option = {
+            animation: true,
+            autohide: true,
+            delay: 5000,
+        }
+
+        document.getElementById("toastbtn").onclick = function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+                // Creates an array of toasts (it only initializes them)
+                return new bootstrap.Toast(toastEl, option) // No need for options; use the default options
+            });
+            toastList.forEach(toast => toast.show()); // This show them
+
+            console.log(toastList); // Testing to see if it works
+        };
+    </script>
+
+{% endblock %}

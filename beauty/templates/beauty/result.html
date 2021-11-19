@@ -1,0 +1,50 @@
+{% extends 'forum/base.html' %}
+
+{% load static %}
+
+{% block head-title %}
+    훈남 테스트
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-center align-items-center mb-2">
+            <h1 class="h3 text-center my-0">
+                AI 훈남 테스트 결과
+            </h1>
+        </div>
+
+        <!-- Result -->
+        <div class="justify-content-center align-items-center my-2">
+
+            <div class="d-block justify-content-center">
+                <img class="img-thumbnail rounded" src="{{ face.face.url }}" alt="..."/>
+            </div>
+
+            <p class="text-center my-2 lead fw-bold">{{ face.score }}</p>
+
+            <div class="d-flex justify-content-end m-2">
+                <a role="button"
+                   class="btn btn-primary btn-sm"
+                   href="{% url 'beauty:index' %}">
+                    다시 도전
+                </a>
+            </div>
+
+        </div>
+
+
+    </div>
+
+{% endblock %}
