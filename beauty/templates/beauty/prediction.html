@@ -1,7 +1,7 @@
 {% extends 'forum/base.html' %}
 {% load crispy_forms_filters %}
-
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block head-title %}
     제목 뭐로 하지?
@@ -12,6 +12,7 @@
     <!-- Sub Banner -->
     {% include 'home/home_sub_banner.html' %}
 
+    <!-- Main Content -->
     <div class="my-3 p-3 bg-body rounded shadow-sm">
 
         <!-- Header -->
@@ -21,7 +22,7 @@
 
 
         <!-- Title Image -->
-        <div class="d-flex justify-content-center align-items-center my-2">
+        <div class="d-flex justify-content-center my-2">
 
             <img class="img-fluid rounded" src="https://via.placeholder.com/1200.jpg" alt="300 * 300 size image">
 
@@ -41,9 +42,9 @@
             </form>
         </div>
 
-
         <!-- bottom right fixed toast -->
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div class="position-fixed bottom-0 end-0 p-3">
+{#        <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">#}
 
             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
@@ -60,9 +61,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
-                    지금 사진을 분석 중에 있으니 조금만 기다려주세요.
+                    지금 사진을 분석 중에 있습니다...
                 </div>
             </div>
+
         </div>
 
 
