@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block head-title %}
-    훈남 테스트
+    제목 뭐로 하지?
 {% endblock %}
 
 {% block main-area %}
@@ -15,30 +15,36 @@
     <div class="my-3 p-3 bg-body rounded shadow-sm">
 
         <!-- Header -->
-        <div class="d-flex justify-content-center align-items-center mb-2">
-            <h1 class="h3 text-center my-0">
-                AI 훈남 테스트
-            </h1>
+        <h1 class="h3 text-center pb-3 border-bottom">
+            제목 뭐로 하지?
+        </h1>
+
+
+        <!-- Title Image -->
+        <div class="d-block justify-content-center align-items-center my-2">
+
+            <img class="img-fluid rounded" src="https://via.placeholder.com/1200.jpg" alt="300 * 300 size image">
+
         </div>
 
         <!-- Form -->
-        <div class="d-flex justify-content-center align-items-center border my-2">
+        <div class="d-block justify-content-center align-items-center border rounded shadow-sm py-2 px-3">
             <form method="post" enctype="multipart/form-data"> {% csrf_token %}
                 {{ form | crispy }}
 
                 <div class="d-flex d-flex justify-content-end my-3">
                     <button type="submit"
-                            class="btn btn-primary btn-sm" id="toastbtn">
+                            class="btn btn-primary btn-sm" id="liveToastBtn">
                         테스트
                     </button>
-
-
                 </div>
             </form>
         </div>
 
 
+        <!-- bottom right fixed toast -->
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+
             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
                     <div class="spinner-border spinner-border-sm text-success" role="status">
@@ -67,24 +73,16 @@
 
 
 {% block script %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
-
-        var option = {
-            animation: true,
-            autohide: true,
-            delay: 5000,
-        }
-
-        document.getElementById("toastbtn").onclick = function () {
-            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-            var toastList = toastElList.map(function (toastEl) {
-                // Creates an array of toasts (it only initializes them)
-                return new bootstrap.Toast(toastEl, option) // No need for options; use the default options
+        $(document).ready(function () {
+            $("#liveToastBtn").click(function () {
+                $('.toast').toast('show');
             });
-            toastList.forEach(toast => toast.show()); // This show them
-
-            console.log(toastList); // Testing to see if it works
-        };
+        });
     </script>
+
 
 {% endblock %}
