@@ -20,9 +20,23 @@
 
         <!-- Header -->
         <div class="d-flex justify-content-center align-items-center mb-3">
-            <h1 class="h3 text-center my-0">
-                0000 결과
+
+            <div class="spinner-grow spinner-grow-sm text-success" role="status">
+                <span class="visually-hidden">Predicting...</span>
+            </div>
+
+            <i class="fas fa-robot text-muted mx-1"></i>
+
+            <h1 class="d-inline h3 text-center my-0">
+                000 결과
             </h1>
+
+            <i class="fas fa-robot text-muted mx-1"></i>
+
+            <div class="spinner-grow spinner-grow-sm text-warning" role="status">
+                <span class="visually-hidden">Predicting...</span>
+            </div>
+
         </div>
 
         <!-- Result Board -->
@@ -35,7 +49,7 @@
             </div>
 
             <!-- Star -->
-            <div class="d-flex justify-content-center my-3">
+            <div class="d-flex justify-content-center mt-3 mb-2">
                 <div class="d-inline">
                     {% for i in ""|rjust:full_start %}
                         <i class="fas fa-star text-warning"></i>
@@ -54,25 +68,22 @@
                 <p class="d-inline my-2 lead fw-bold mx-2">{{ face.score }}점</p>
 
                 <!-- Grade -->
-                <p class="d-inline my-2 lead">
-                    {% if face.score >= 4 %}
-                        존잘
-                    {% elif face.score >= 3.5 %}
-                        훈남
-                    {% elif face.score >= 3 %}
-                        흔남
-                    {% else %}
-                        미안
-                    {% endif %}
+                <p class="d-inline my-2 lead text-success fw-bold ">
+                    {{ grade }}
                 </p>
             </div>
 
 
             <!-- Ranking -->
-            <p class="text-center my-2 lead fw-bold">상위 00%(00/0000)</p>
+            <div class="d-flex justify-content-center">
+                <p class="d-inline">상위 {{ percent }}%</p>
+                <p class="d-inline text-muted text-sm">({{ rank }}등/{{ length }})</p>
+            </div>
+
 
             <!-- Chart -->
-            <p class="d-inline text-muted small">분포(%)</p>
+            <p class="d-inline text-muted small">인원(%)</p>
+            <p class="float-end m-0 text-primary fw-bold">점수 분포</p>
             <div>
                 <canvas id="myChart"></canvas>
             </div>
@@ -87,13 +98,13 @@
                     다시 도전
                 </a>
             </div>
-
         </div>
 
 
     </div>
 
 {% endblock %}
+
 
 {% block chart %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
@@ -102,74 +113,13 @@
     <script>
 
         const data = {
-            datasets: [{
-                label: '점수 분포',
-                data: [
-                    {
-                        x: 1,
-                        y: 2,
-                        r: 5
-                    },
-                    {
-                        x: 1.5,
-                        y: 5,
-                        r: 5
-                    },
-                    {
-                        x: 2,
-                        y: 10,
-                        r: 5
-                    },
-                    {
-                        x: 2.5,
-                        y: 20,
-                        r: 5
-                    },
-                    {
-                        x: 3,
-                        y: 30,
-                        r: 3
-                    },
-                    {
-                        x: 3.5,
-                        y: 30,
-                        r: 8
-                    },
-                    {
-                        x: 4,
-                        y: 15,
-                        r: 3
-                    },
-                    {
-                        x: 4.5,
-                        y: 12,
-                        r: 2
-                    },
-                    {
-                        x: 3.7,
-                        y: 10,
-                        r: 3
-                    },
-                    {
-                        x: 4.8,
-                        y: 2,
-                        r: 8
-                    },
-                ],
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(51,144,205)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 99, 132)',
-                ]
-            }]
-        };
+                datasets: [{
+                    label: '점수 분포',
+                    data: {{ chart_data|safe }},
+                    backgroundColor:{{ colors|safe }}
+                }]
+            }
+        ;
 
         const config = {
             type: 'bubble',
@@ -180,7 +130,8 @@
                         callbacks: {
                             label: function (context) {
                                 {#return context.parsed.x + context.parsed.y + "%";#}
-                                return context.parsed.x + "점 " + "(상위 00%)";
+
+                                return context.parsed.x + "점";
                             },
                         }
                     },
