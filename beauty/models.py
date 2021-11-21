@@ -25,4 +25,4 @@ class Face(models.Model):
 
 
     def __str__(self):
-        return f"[Face](id-{self.pk})(score-{self.score})(author-{self.author})"
+        return f"[Face](id-{self.pk})(author-{self.gender})(score-{self.score})"
