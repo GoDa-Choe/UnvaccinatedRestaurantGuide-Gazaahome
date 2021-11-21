@@ -15,6 +15,9 @@ from collections import Counter
 
 from bisect import bisect_left
 
+import math
+import ranking
+
 
 class PredictView(FormView):
     model = Face
@@ -53,7 +56,7 @@ class PredictView(FormView):
 
             "rank": my_rank,
             "length": length,
-            "percent": round(my_rank / length, 2),
+            "percent": round(my_rank / length, 2) * 100,
 
             "chart_data": chart_data,
 
@@ -126,7 +129,7 @@ def get_grade(norm_score, gender):
 
 
 def get_star(score):
-    integer = round(score)
+    integer = math.trunc(score)
     floating = score - integer
 
     full_star = integer
@@ -164,9 +167,14 @@ class Rank:
 
     def get_rank_and_counter_length(self):
         scores = self.get_scores()
+
+        scores.sort(reverse=True)
+        rank_obj = ranking.Ranking(scores, reverse=False)
         counter = Counter(scores)
 
         my_rank = self.rank(counter, self.my_score)
+
+        my_rank = rank_obj.rank(self.my_score)
 
         return my_rank, counter, len(scores)
 
