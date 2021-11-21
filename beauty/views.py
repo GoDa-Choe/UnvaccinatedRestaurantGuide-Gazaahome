@@ -169,7 +169,7 @@ class Rank:
         scores = self.get_scores()
 
         scores.sort(reverse=True)
-        rank_obj = ranking.Ranking(scores, reverse=False)
+        rank_obj = ranking.Ranking(scores, reverse=False, start=1)
         counter = Counter(scores)
 
         my_rank = self.rank(counter, self.my_score)
