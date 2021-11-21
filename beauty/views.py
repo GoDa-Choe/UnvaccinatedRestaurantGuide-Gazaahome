@@ -56,7 +56,7 @@ class PredictView(FormView):
 
             "rank": my_rank,
             "length": length,
-            "percent": round(my_rank / length, 2) * 100,
+            "percent": round(my_rank / length * 100, 2),
 
             "chart_data": chart_data,
 
