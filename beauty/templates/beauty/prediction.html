@@ -30,7 +30,7 @@
 
         <!-- Form -->
         <div class="d-block justify-content-center align-items-center rounded py-2">
-            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <form method="post" enctype="multipart/form-data" id="faceform"> {% csrf_token %}
 
                 {{ form | crispy }}
 
@@ -93,10 +93,26 @@
     <script>
         $(document).ready(function () {
             $("#liveToastBtn").click(function () {
+
+                // disable button
+                $(this).prop("disabled", true);
+
+                // show toast
                 $('.toast').toast('show');
+
+                // add spinner to button
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <i class="fas fa-robot text-warning mx-1"></i>분석중...`
+                );
+
+                // submit
+                $("#faceform").submit();
             });
         });
     </script>
+
+
 
 
 {% endblock %}
