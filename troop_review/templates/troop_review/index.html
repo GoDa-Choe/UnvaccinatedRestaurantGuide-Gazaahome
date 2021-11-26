@@ -57,10 +57,20 @@
                             </p>
 
                             <div class="d-flex text-muted justify-content-between">
+
+                                <!-- Star -->
                                 <div class="d-inline">
-                                    {% for i in ""|rjust:troop.get_avg_star_rating %}
-                                        <i class="fas fa-star text-warning"></i>
-                                    {% endfor %}
+                                    {% if troop.get_full_star %}
+                                        {% for i in ""|rjust:troop.get_full_star %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in ""|rjust:troop.get_half_star %}
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in ""|rjust:troop.get_empty_star %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
 
                                 <div class="d-inline mb-1">

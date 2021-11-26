@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from hitcount.models import HitCountMixin
 from hitcount.settings import MODEL_HITCOUNT
 from django.contrib.contenttypes.fields import GenericRelation
+import math
 
 
 class Troop(models.Model, HitCountMixin):
@@ -21,8 +22,40 @@ class Troop(models.Model, HitCountMixin):
     def get_avg_star_rating(self):
         reviews = self.review_set
         star_ratings = [review.star_rating for review in reviews.iterator()]
+        avr_star_rating = sum(star_ratings) / reviews.count() if reviews.count() else 0
+        return round(avr_star_rating, 2)
 
-        return round(sum(star_ratings) / reviews.count()) if reviews.count() else 0
+    def get_full_star(self):
+        start = self.get_avg_star_rating()
+        integer = math.trunc(start)
+        floating = start - integer
+
+        full_star = integer
+
+        if floating > 0.75:
+            full_star += 1
+
+        return full_star
+
+    def get_half_star(self):
+        start = self.get_avg_star_rating()
+        integer = math.trunc(start)
+        floating = start - integer
+
+        half_star = 0
+
+        if floating > 0.25:
+            half_star += 1
+
+        return half_star
+
+    def get_empty_star(self):
+
+        full_star = self.get_full_star()
+        half_star = self.get_half_star()
+
+        empty_star = 5 - (full_star + half_star)
+        return empty_star
 
     def get_num_reivews(self):
         return self.review_set.count()
