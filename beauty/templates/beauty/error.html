@@ -1,0 +1,56 @@
+{% extends 'forum/base.html' %}
+{% load crispy_forms_filters %}
+{#{% load crispy_forms_tags %}#}
+{% load static %}
+
+{% block head-title %}
+    AI 훈훈 테스트
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'home/home_sub_banner.html' %}
+
+    <!-- Main Content -->
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-center align-items-center mb-0">
+
+            <div class="spinner-grow spinner-grow-sm text-success" role="status">
+                <span class="visually-hidden">...</span>
+            </div>
+
+            <i class="fas fa-robot text-muted mx-1"></i>
+
+            <h1 class="d-inline h3 text-center my-0">
+                사진 분석 오류
+            </h1>
+
+            <i class="fas fa-robot text-muted mx-1"></i>
+
+            <div class="spinner-grow spinner-grow-sm text-warning" role="status">
+                <span class="visually-hidden">...</span>
+            </div>
+
+        </div>
+        <div class="d-flex justify-content-end text-muted small mb-1">BETA version</div>
+
+
+        <article class="text-muted mt-4 mb-2">
+            사진 분석 과정에서 오류가 발생하였습니다. 사진을 바꿔 보시겠어요?
+        </article>
+
+        <!-- Retry -->
+        <div class="d-flex justify-content-end m-2">
+            <a role="button"
+               class="btn btn-primary"
+               href="{% url 'beauty:index' %}">
+                다시 도전
+            </a>
+        </div>
+
+    </div>
+
+{% endblock %}

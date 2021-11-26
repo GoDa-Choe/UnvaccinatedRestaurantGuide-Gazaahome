@@ -5,5 +5,5 @@ from beauty.models import Face
 # Register your models here.
 @admin.register(Face)
 class FaceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'gender', 'score', 'created_at']
-    list_display_links = ['id', 'score', ]
+    list_display = ['id', 'author', 'gender', 'score', 'created_at']
+    list_display_links = ['id', 'author', ]

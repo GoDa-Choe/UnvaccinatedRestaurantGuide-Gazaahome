@@ -23,6 +23,8 @@ class Face(models.Model):
 
     score = models.FloatField(default=0.0)
 
+    # ForeignKeys
+    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"[Face](id-{self.pk})(author-{self.gender})(score-{self.score})"

@@ -25,14 +25,21 @@ class PredictView(FormView):
     template_name = 'beauty/prediction.html'
 
     def form_valid(self, form):
+        author = self.request.user
+        if author.is_authenticated:
+            form.instance.author = author
+
         face = form.save()
 
         predictor = get_resnet18()
 
         with torch.no_grad():
-            image = get_image(face.face.url)
-            score = predictor(image).item()
-            face.score = normalize_score(score)
+            try:
+                image = get_image(face.face.url)
+                score = predictor(image).item()
+                face.score = normalize_score(score)
+            except:
+                return render(self.request, template_name="beauty/error.html")
 
         face.save()
 
