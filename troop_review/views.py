@@ -41,7 +41,7 @@ class TroopList(ListView):
     paginate_by = 10
 
 
-class TroopDetail(LoginRequiredMixin, HitCountDetailView):
+class TroopDetail(HitCountDetailView):
     model = Troop
     template_name = 'troop_review/detail.html'
     count_hit = True
