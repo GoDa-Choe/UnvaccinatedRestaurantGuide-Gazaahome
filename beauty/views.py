@@ -38,7 +38,9 @@ class PredictView(FormView):
                 image = get_image(face.face.url)
                 score = predictor(image).item()
                 face.score = normalize_score(score)
-            except:
+
+            except:  # catch face detection error
+                face.delete()
                 return render(self.request, template_name="beauty/error.html")
 
         face.save()
