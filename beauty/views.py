@@ -159,7 +159,7 @@ class Rank:
     def get_scores():
         faces_iter = Face.objects.all()
 
-        scores = [face.score for face in faces_iter]
+        scores = [face.score for face in faces_iter if face.score >= 1]
 
         return scores
 
