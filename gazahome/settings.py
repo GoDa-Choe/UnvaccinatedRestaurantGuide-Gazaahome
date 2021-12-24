@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'rank',
     'troop_review',
     'beauty',
+    'corona',
 ]
 
 MIDDLEWARE = [
