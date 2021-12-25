@@ -325,7 +325,7 @@ class CategoryPostList(ListView):
         return context
 
     def get_queryset(self):
-        queryset = Post.objects.filter(category__name=self.kwargs['name'])
+        queryset = Post.objects.filter(category__name=self.kwargs['name']).order_by('-pk')
         return queryset
 
 
