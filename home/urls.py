@@ -21,6 +21,7 @@ from home import views
 app_name = 'home'
 urlpatterns = [
     path('', views.home, name='home'),
+    path('goda_soft_studio/', views.GodaSoftStudioView.as_view(), name='goda_soft_studio'),
     path('profile/', views.PofileView.as_view(), name='profile'),
     path('profile/delete_account/<int:pk>/', views.AccountDeleteView.as_view(), name='delete_account'),
 

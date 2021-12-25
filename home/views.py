@@ -65,6 +65,10 @@ def home(request):
     )
 
 
+class GodaSoftStudioView(TemplateView):
+    template_name = 'home/goda_soft_studio.html'
+
+
 class RobotView(TemplateView):
     template_name = 'home/robots.txt'
     content_type = 'text/plain'
