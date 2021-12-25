@@ -1,0 +1,25 @@
+{% extends 'corona/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    댓글 수정
+{% endblock %}
+
+{% block main-area %}
+    <!-- Sub Banner -->
+    {% include 'corona/sub_banner.html' %}
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h2>댓글 수정</h2>
+        <hr>
+        <form method="post" id="comment-form"> {% csrf_token %}
+            {{ form | crispy }}
+            <br>
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-primary">수정</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

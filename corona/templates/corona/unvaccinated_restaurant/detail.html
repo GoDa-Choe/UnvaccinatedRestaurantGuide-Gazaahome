@@ -1,4 +1,4 @@
-{% extends 'forum/base.html' %}
+{% extends 'corona/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
 
@@ -20,15 +20,21 @@
 {% block main-area %}
 
     <!-- Sub Banner -->
-    {% include 'home/home_sub_banner.html' %}
+    {% include 'corona/sub_banner.html' %}
 
-    <!-- Category Scroll Bar -->
-    {% include 'forum/scroll_navbar.html' %}
-
-
+    <!-- Scroll Bar -->
+    {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
 
     <article class="my-3 p-3 rounded shadow-sm">
 
+        <div class="d-flex justify-content-end mb-2">
+            <!-- Restaurant Eidt-->
+            <a class="btn mx-1 btn-sm btn-outline-primary"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>수정</small>
+            </a>
+
+        </div>
 
         <!-- Title-->
         <h2 class="h3">
@@ -36,9 +42,15 @@
         </h2>
 
 
-        <p class="pb-0 mb-1 lh-sm text-muted">
-            {{ restaurant.address }}
-        </p>
+        {% if restaurant.address %}
+            <p class="pb-0 mb-1 lh-sm text-muted">
+                {{ restaurant.address }}
+            </p>
+        {% else %}
+            <p class="pb-0 mb-1 lh-sm text-muted">
+                주소 확인 중
+            </p>
+        {% endif %}
 
 
         <div class="d-flex justify-content-between align-items-center small">
@@ -52,7 +64,7 @@
                 {% endif %}
             </div>
 
-            <div class="d-inline mb-1">
+            <div class="d-inline mb-1 text-muted">
                 <div class="d-inline"><i
                         class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }}
                 </div>
@@ -67,37 +79,51 @@
 
         </div>
 
-        <div class="d-flex justify-content-between">
-            <div class="d-inline">
-                <i class="fas fa-tags"></i>
 
-                {% if unvaccinated_pass == "미접종자 친절" %}
+        <div class="d-flex justify-content-between small">
+            <div class="d-inline">
+                {% if restaurant.unvaccinated_pass.type == "미접종 친절" %}
                     <span class="badge rounded-pill"
-                          style="background-color: darkseagreen">{{ restaurant.unvaccinated_pass }}</span>
+                          style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>
                 {% else %}
                     <span class="badge rounded-pill"
-                          style="background-color: rebeccapurple">{{ restaurant.unvaccinated_pass }}</span>
+                          style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>
                 {% endif %}
             </div>
 
             <div class="d-inline">
-                <a href="{{ restaurant.url }}">
-                    <img src="{% static 'corona/kakao_map.png' %}" style="width: 20px; height: 20px">
-                </a>
+                {% if restaurant.tags.exists %}
+                    <i class="fas fa-tags text-muted"></i>
+                    {% for tag in restaurant.tags.iterator %}
+                        <span class="badge rounded-pill"
+                              style="background-color: darkseagreen">{{ tag }}</span>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="d-inline">
+                    {% if restaurant.url %}
+                        <a href="{{ restaurant.url }}">
+                            <img src="{% static 'corona/kakao_map.png' %}" style="width: 20px; height: 20px">
+                        </a>
+                    {% endif %}
+                </div>
             </div>
+
         </div>
 
 
         <hr>
 
         <!-- Restaurant Map-->
-        <div>
-            <div id="map" style="height: 350px"></div>
-            <div id="roadview" style="height:250px"></div>
-        </div>
+        {% if restaurant.latitude and restaurant.longitude %}
+            <div>
+                <div id="map" style="height: 350px"></div>
+                <div id="roadview" style="height:250px"></div>
+            </div>
 
+            <hr>
+        {% endif %}
 
-        <hr>
 
 
         <!-- Likes and Dislikes -->
@@ -128,18 +154,18 @@
                     </button>
                 </form>
             {% else %}
-                <a class="btn btn-sm btn-outline-success position-relative border-1"
-                   style="background-color: #aacfaa" href="{% url 'account_login' %}">
+                <a class="btn btn-sm btn-outline-primary position-relative border-1 mx-3"
+                   href="{% url 'account_login' %}?next={{ request.path }}">
                     좋아요
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
                         <i class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }}
                     </span>
                 </a>
-                <a class="btn btn-sm btn-outline-success position-relative border-1"
-                   style="background-color: #aacfaa" href="{% url 'account_login' %}">
+                <a class="btn btn-sm btn-outline-danger position-relative border-1 mx-3"
+                   href="{% url 'account_login' %}?next={{ request.path }}">
                     싫어요
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
-                        <i class="far fa-thumbs-down text-danger"></i> {{ restaurant.dislikes }}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+                        <i class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }}
                     </span>
                 </a>
             {% endif %}
@@ -177,14 +203,15 @@
                             <!-- Comments Likes -->
                             <div class="d-inline mx-1">
                                 {% if user.is_authenticated %}
-                                    <form action="{% url 'video_forum:like_video_comment'  restaurant.pk restaurant_comment.pk %}"
+                                    <form action="{% url 'corona:like_restaurant_comment'  restaurant.pk restaurant_comment.pk %}"
                                           method="POST">{% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-outline-success p-0 px-1">
                                             <small>추천</small>
                                         </button>
                                     </form>
                                 {% else %}
-                                    <a class="btn btn-sm btn-outline-success p-0 px-1" href="{% url "account_login" %}">
+                                    <a class="btn btn-sm btn-outline-success p-0 px-1"
+                                       href="{% url 'account_login' %}?next={{ request.path }}">
                                         <small>추천</small>
                                     </a>
                                 {% endif %}
@@ -194,10 +221,10 @@
 
                         <p class="small lh-sm text-muted">{{ restaurant_comment.content|linebreaks }}</p>
 
-                        <!-- Update&Delete-->
+                        <!-- Update & Delete-->
                         <div class="float-end">
                             {% if user.is_authenticated and restaurant_comment.author == user %}
-                                <a href="{% url 'video_forum:update_video_comment' restaurant_comment.pk %}"
+                                <a href="{% url 'corona:update_restaurant_comment' restaurant.pk restaurant_comment.pk %}"
                                    class="text-primary text-decoration-none mx-1">
                                     <small>수정</small>
                                 </a>
@@ -232,7 +259,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
                                 </button>
                                 <a role="button" class="btn btn-danger"
-                                   href="{% url 'comment_delete'  restaurant_comment.pk %}">삭제</a>
+                                   href="{% url 'corona:delete_restaurant_comment' restaurant.pk restaurant_comment.pk %}">삭제</a>
                             </div>
                         </div>
                     </div>
@@ -244,7 +271,7 @@
         <div class="mt-3 p-3 bg-light rounded shadow-sm">
             {% if user.is_authenticated %}
                 <form class="mt-2" id="video-comment-form" method="POST"
-                      action="{{ restaurant.get_absolute_url }}create_video_comment/">
+                      action="{{ restaurant.get_absolute_url }}comment/create/">
                     {% csrf_token %}
                     <div class="form-group">{{ restaurant_comment_form|crispy }}</div>
 
@@ -255,9 +282,12 @@
 
 
             {% else %}
-                <a role="button" class="btn btn-outline-secondary btn-sm w-100 text-center"
-                   href="{% url 'account_login' %}">
-                    로그인 후 댓글을 작성할 수 있습니다.</a>
+                <div class="d-flex justify-content-center">
+                    <a role="button" class="btn btn-outline-secondary btn-sm"
+                       href="{% url 'account_login' %}?next={{ request.path }}">
+                        로그인 후 댓글을 작성할 수 있습니다.</a>
+                </div>
+
             {% endif %}
         </div>
     </div>
@@ -280,7 +310,74 @@
 
         var map = new kakao.maps.Map(mapContainer, mapOption);
 
-        var content = '<div>{{ restaurant.name }}</div>';
+        if ("{{restaurant.unvaccinated_pass}}" == "미접종 친절") {
+            var borderColor = ' border-primary"';
+        } else {
+            var borderColor = ' border-danger"';
+        }
+
+        var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 18em;">' +
+            '<div class="card-header d-flex justify-content-between align-items-center">' +
+            '<a class="text-decoration-none text-dark h5 my-0" href="{% url "corona:restaurant_detail" restaurant.pk %}">' +
+            '{{ restaurant.name }}' +
+            '</a>' +
+            '<i class="fas fa-external-link-alt text-muted mx-2"></i>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<div class="card-subtitle d-flex align-items-center">' +
+            '<h6 class="text-muted">' +
+            '{% if restaurant.address %}'+
+                '{% if restaurant.url %}'+
+                    '<a href="{{ restaurant.url }}" class="card-link d-inline text-decoration-none">'+
+                    '<img src="{% static "corona/kakao_map.png" %}" style="width: 20px; height: 20px"> '+
+                    '</a>'+
+                    '{% endif %}'+
+                '{{ restaurant.address }}'+
+                '{% else %}'+
+                '주소 확인 중'+
+                '{% endif %}' +
+            '</h6>' +
+            '</div>' +
+
+            '<div class="card-text d-flex justify-content-between align-items-center small my-0">' +
+            '<div class="d-inline">' +
+            '<strong class="text-gray-dark">{{ restaurant.category }} </strong>' +
+            '<div class="d-inline">' +
+            '{% if restaurant.unvaccinated_pass.type == "미접종 친절" %}'+
+                '<span class="badge rounded-pill"'+
+                'style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>'+
+                '{% else %}'+
+                '<span class="badge rounded-pill"'+
+                'style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>'+
+                '{% endif %}' +
+            '</div>' +
+            '</div>' +
+            '<div class="d-inline text-muted">' +
+            '<div class="d-inline">' +
+            '<i class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }} ' +
+            '</div>' +
+            '<div class="d-inline">' +
+            '<i class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }} ' +
+            '</div>' +
+            '<div class="d-inline"><i class="far fa-comment"></i> {{ restaurant.num_comments }} ' +
+            '</div>' +
+            '<div class="d-inline"><i class="far fa-eye"></i> {{ restaurant.hit_count.hits }} ' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="card-text d-flex justify-content-start small">' +
+            '<div class="d-inline">' +
+            '{% if restaurant.tags.exists %}'+
+                '<i class="fas fa-tags text-muted"></i>'+
+                '{% for tag in restaurant.tags.iterator %}'+
+                    '<span class="badge rounded-pill"'+
+                    'style="background-color: darkseagreen">{{ tag }}</span> '+
+                    '{% endfor %}'+
+                '{% endif %}' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            ' </div>';
 
         // 커스텀 오버레이가 표시될 위치입니다
         var position = new kakao.maps.LatLng({{restaurant.latitude}}, {{restaurant.longitude}});

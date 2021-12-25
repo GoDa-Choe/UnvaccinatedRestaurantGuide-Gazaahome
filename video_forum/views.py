@@ -208,7 +208,7 @@ class UpdateVideoComment(LoginRequiredMixin, UpdateView):
 def delete_video_comment(request, pk):
     video_comment = get_object_or_404(VideoComment, pk=pk)
     video = video_comment.video
-    if request.user.is_authenticated and request.user == video.author:
+    if request.user.is_authenticated and request.user == video_comment.author:
         video_comment.delete()
         return redirect(video.get_absolute_url())
     else:

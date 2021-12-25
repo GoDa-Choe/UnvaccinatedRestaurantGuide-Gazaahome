@@ -48,10 +48,11 @@
                         {{ category_iter }}
                         <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category_iter.post_set.count }}</span>
                     </a>
+
                 {% endif %}
+
+
             {% endfor %}
-
-
 
             {% else %}{% comment %}Post Detail{% endcomment %}
 
@@ -65,6 +66,7 @@
 
 
             {% for category_iter in categories %}
+
                 {% if category_iter == post.category %}
                     <a class="nav-link text-success" href="{% url 'category_post' category_iter.slug %}">
                         {{ category_iter }}
@@ -78,7 +80,9 @@
                         {{ category_iter }}
                         <span class="badge bg-light text-dark rounded-pill align-text-bottom">{{ category_iter.post_set.count }}</span>
                     </a>
+
                 {% endif %}
+
             {% endfor %}
 
         {% endif %}

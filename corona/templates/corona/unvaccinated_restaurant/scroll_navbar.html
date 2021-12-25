@@ -1,0 +1,84 @@
+<!-- Un Vaccianted Restaurant Scroll Bar -->
+<div class="nav-scroller bg-body shadow-sm">
+
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+
+        <!-- Map -->
+        {% if request.path == "/corona/unvaccinated_restaurant/map/" %}
+            <a class="nav-link text-success" href="{% url 'corona:restaurant_map' %}">
+                지도
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    <i class="fas fa-map-marked-alt"></i>
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:restaurant_map' %}">
+                지도
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    <i class="fas fa-map-marked-alt"></i>
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- All -->
+        {% if request.path == "/corona/unvaccinated_restaurant/" %}
+            <a class="nav-link text-success" href="{% url 'corona:restaurant_index' %}">
+                전체
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    {{ num_restaurants }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:restaurant_index' %}">
+                전체
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_restaurants }}
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- Available -->
+        {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
+            <a class="nav-link text-success" href="{% url 'corona:available_restaurant_index' %}">
+                친절 식당
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    {{ num_unvaccinated_available }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:available_restaurant_index' %}">
+                친절 식당
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_unvaccinated_available }}
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- Unavailable -->
+        {% if request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
+            <a class="nav-link text-success" href="{% url 'corona:unavailable_restaurant_index' %}">
+                거부 식당
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    {{ num_unvaccinated_unavailable }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:unavailable_restaurant_index' %}">
+                거부 식당
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_unvaccinated_unavailable }}
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- Popular -->
+        {% if request.path == "/corona/unvaccinated_restaurant/popular/" %}
+            <a class="nav-link text-success" href="{% url 'corona:popular_restaurant_index' %}">인기 식당</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:popular_restaurant_index' %}">인기 식당</a>
+        {% endif %}
+
+
+    </nav>
+
+</div>

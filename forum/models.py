@@ -20,7 +20,7 @@ class Tag(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=False)
     slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
     priority = models.IntegerField(default=1)
 

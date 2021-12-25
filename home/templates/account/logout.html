@@ -31,8 +31,22 @@
         <form method="post" action="{% url 'account_logout' %}">
             {% csrf_token %}
 
-            <img class="mb-4" src="{% static 'home/images/logo.png' %}" alt="" width="200" height="90">
-            <p class="h5"><strong>{{ user }}</strong>님</p>
+            <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}" alt="" width="240"
+                 height="150">
+
+            <div class="d-flex  justify-content-center">
+                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
+                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
+                         width="120" height="54">
+                </a>
+                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                         width="120" height="60">
+                </a>
+            </div>
+            <p class="text-muted small mb-5"> click me!</p>
+
+            <p class="h5 my-2"><strong>{{ user }}</strong>님</p>
             <p> 정말로 로그아웃 하시겠습니까?</p>
 
             {% if redirect_field_value %}

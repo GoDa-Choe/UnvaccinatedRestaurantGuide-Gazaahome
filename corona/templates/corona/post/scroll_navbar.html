@@ -1,0 +1,46 @@
+<!-- Un Vaccianted Restaurant Scroll Bar -->
+<div class="nav-scroller bg-body shadow-sm">
+
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+
+        <!-- All -->
+        {% if request.path == "/corona/post/" %}
+            <a class="nav-link text-success" href="{% url 'corona:post_index' %}">
+                전체
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    {{ post_list.count }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:post_index' %}">
+                전체
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_post }}
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- Categories -->
+        {% for category in categories %}
+            {% if request.path == category.get_absolute_url %}
+                <a class="nav-link text-success" href="{% url 'corona:category_post_index' category.name %}">
+                    {{ category.name }}
+                    <span class="badge text-white rounded-pill align-text-bottom"
+                          style="background-color: darkseagreen">
+                    {{ category.post_set.count }}
+                </span>
+                </a>
+            {% else %}
+                <a class="nav-link" href="{% url 'corona:category_post_index' category.name %}">
+                    {{ category.name }}
+                    <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ category.post_set.count }}
+                </span>
+                </a>
+            {% endif %}
+        {% endfor %}
+
+
+    </nav>
+
+</div>

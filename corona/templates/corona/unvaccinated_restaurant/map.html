@@ -1,0 +1,251 @@
+{% extends 'corona/base.html' %}
+{% load static %}
+{#{% load crispy_forms_tags %}#}
+{#{% load embed_video_tags %}#}
+
+{% block head-title %}
+    미접종 식당 지도
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block head_script %}
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xri0uk8n3k"></script>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a944db919cc44b18664fe04ef31cd301"></script>
+{% endblock %}
+
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'corona/sub_banner.html' %}
+
+    <!-- Search Bar -->
+    <form class="d-flex">{% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="준비중" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
+    <!-- Scroll Bar -->
+    {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-start align-items-center border-bottom pb-2 mb-0">
+            <img src="{% static 'corona/map.png' %}" style="width: 27px; height: 27px" class="me-1">
+            <h2 class="h3 mb-0">
+                미접종 식당 지도
+            </h2>
+        </div>
+
+        <div class="d-flex justify-content-between my-2">
+            <div class="d-inline">
+                <img src="{% static 'corona/marker_blue.png' %}" class="mx-1" style="width: 30px; height: 30px"> 친절식당
+                <img src="{% static 'corona/marker_red.png' %}" class="mx-1" style="width: 30px; height: 30px"> 거부식당
+            </div>
+
+            <div class="d-inline">
+                {% if user.is_authenticated %}
+                    <a role="button" class="btn btn-outline-secondary btn-sm px-1 py-1"
+                       href="{% url 'corona:restaurant_create' %}">
+                        식당 등록
+                    </a>
+                {% else %}
+                    <a role="button" class="btn btn-outline-secondary btn-sm px-1 py-1"
+                       href="{% url 'account_login' %}?next={{ request.path }}">
+                        식당 등록
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="map" class="my-3" style="height: 400px"></div>
+        <div class="d-flex justify-content-end">
+            <a class="text-decoration-none text-muted text-end small" href="{% url 'corona:restaurant_index' %}">
+                <i class="fas fa-utensils"></i> 식당 목록 살펴보기
+                <i class="fas fa-chevron-right text-primary"></i>
+            </a>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+    <script>
+
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
+        var positions = [];
+
+        {% for restaurant in restaurant_list %}
+
+            if ("{{restaurant.unvaccinated_pass}}" == "미접종 친절") {
+                var borderColor = ' border-primary"';
+            } else {
+                var borderColor = ' border-danger"';
+            }
+
+            var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 18em;">' +
+                '<div class="card-header d-flex justify-content-between align-items-center">' +
+                '<a class="text-decoration-none text-dark h5 my-0" href="{% url "corona:restaurant_detail" restaurant.pk %}">' +
+                '{{ restaurant.name }}' +
+                '</a>' +
+                '<i class="fas fa-external-link-alt text-muted mx-2"></i>' +
+                '</div>' +
+                '<div class="card-body">' +
+                '<div class="card-subtitle d-flex align-items-center">' +
+                '<h6 class="text-muted">' +
+                '{% if restaurant.address %}'+
+                    '{% if restaurant.url %}'+
+                        '<a href="{{ restaurant.url }}" class="card-link d-inline text-decoration-none">'+
+                        '<img src="{% static "corona/kakao_map.png" %}" style="width: 20px; height: 20px"> '+
+                        '</a>'+
+                        '{% endif %}'+
+                    '{{ restaurant.address }}'+
+                    '{% else %}'+
+                    '주소 확인 중'+
+                    '{% endif %}' +
+                '</h6>' +
+                '</div>' +
+
+                '<div class="card-text d-flex justify-content-between align-items-center small my-0">' +
+                '<div class="d-inline">' +
+                '<strong class="text-gray-dark">{{ restaurant.category }} </strong>' +
+                '<div class="d-inline">' +
+                '{% if restaurant.unvaccinated_pass.type == "미접종 친절" %}'+
+                    '<span class="badge rounded-pill"'+
+                    'style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>'+
+                    '{% else %}'+
+                    '<span class="badge rounded-pill"'+
+                    'style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>'+
+                    '{% endif %}' +
+                '</div>' +
+                '</div>' +
+                '<div class="d-inline text-muted">' +
+                '<div class="d-inline">' +
+                '<i class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }} ' +
+                '</div>' +
+                '<div class="d-inline">' +
+                '<i class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }} ' +
+                '</div>' +
+                '<div class="d-inline"><i class="far fa-comment"></i> {{ restaurant.num_comments }} ' +
+                '</div>' +
+                '<div class="d-inline"><i class="far fa-eye"></i> {{ restaurant.hit_count.hits }} ' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-text d-flex justify-content-start small">' +
+                '<div class="d-inline">' +
+                '{% if restaurant.tags.exists %}'+
+                    '<i class="fas fa-tags text-muted"></i>'+
+                    '{% for tag in restaurant.tags.iterator %}'+
+                        '<span class="badge rounded-pill"'+
+                        'style="background-color: darkseagreen">{{ tag }}</span> '+
+                        '{% endfor %}'+
+                    '{% endif %}' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                ' </div>';
+
+            positions[{{ forloop.counter0 }}] = {
+                content: content,
+                latlng: new kakao.maps.LatLng({{restaurant.latitude}}, {{restaurant.longitude}}),
+                unvaccinated_pass: '{{ restaurant.unvaccinated_pass }}',
+            };
+
+        {% endfor %}
+
+
+
+
+        // 마커 이미지의 이미지 주소입니다
+
+        var blueMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_blue_jrf7fx.png'
+        var redMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_red_thsqtb.png'
+
+        for (var i = 0; i < positions.length; i++) {
+
+            // 마커 이미지의 이미지 크기 입니다
+            var imageSize = new kakao.maps.Size(30, 30);
+
+            if (positions[i].unvaccinated_pass == "미접종 친절") {
+                var imageSrc = blueMarker;
+            } else {
+                var imageSrc = redMarker;
+            }
+
+
+            // 마커 이미지를 생성합니다
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: positions[i].latlng, // 마커를 표시할 위치
+                {#title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다#}
+                image: markerImage, // 마커 이미지
+                clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+            });
+
+
+            // 마커에 표시할 인포윈도우를 생성합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: positions[i].content, // 인포윈도우에 표시할 내용
+                removable: true
+            });
+
+            // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+            // 이벤트 리스너로는 클로저를 만들어 등록합니다
+            // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+            kakao.maps.event.addListener(marker, 'click', clickListener(infowindow));
+        }
+
+        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+        function makeOverListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+        function clickListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+        function makeOutListener(infowindow) {
+            return function () {
+                infowindow.close();
+            };
+        }
+
+
+    </script>
+
+
+
+{% endblock %}
