@@ -27,19 +27,10 @@
 
     <article class="my-3 p-3 rounded shadow-sm">
 
-        <div class="d-flex justify-content-end mb-2">
-            <!-- Restaurant Eidt-->
-            <a class="btn mx-1 btn-sm btn-outline-primary"
-               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
-                <small>수정</small>
-            </a>
-
-        </div>
-
         <!-- Title-->
-        <h2 class="h3">
+        <h1 class="h4">
             {{ restaurant.name }}
-        </h2>
+        </h1>
 
 
         {% if restaurant.address %}
@@ -103,7 +94,7 @@
                 <div class="d-inline">
                     {% if restaurant.url %}
                         <a href="{{ restaurant.url }}">
-                            <img src="{% static 'corona/kakao_map.png' %}" style="width: 20px; height: 20px">
+                            <img src="{% static 'corona/naver_map.png' %}" style="width: 20px; height: 20px">
                         </a>
                     {% endif %}
                 </div>
@@ -121,10 +112,17 @@
                 <div id="roadview" style="height:250px"></div>
             </div>
 
-            <hr>
+
         {% endif %}
+        <!-- Restaurant Eidt-->
+        <div class="d-flex justify-content-end my-3">
+            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>식당 정보 수정</small>
+            </a>
+        </div>
 
-
+        <hr>
 
         <!-- Likes and Dislikes -->
         <div class="d-flex justify-content-center my-3">
@@ -171,6 +169,7 @@
             {% endif %}
 
         </div>
+
     </article>
 
 
@@ -287,7 +286,6 @@
                        href="{% url 'account_login' %}?next={{ request.path }}">
                         로그인 후 댓글을 작성할 수 있습니다.</a>
                 </div>
-
             {% endif %}
         </div>
     </div>
@@ -316,12 +314,11 @@
             var borderColor = ' border-danger"';
         }
 
-        var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 18em;">' +
+        var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 17em;">' +
             '<div class="card-header d-flex justify-content-between align-items-center">' +
-            '<a class="text-decoration-none text-dark h5 my-0" href="{% url "corona:restaurant_detail" restaurant.pk %}">' +
+            '<p class="text-decoration-none text-dark h5 my-0">' +
             '{{ restaurant.name }}' +
-            '</a>' +
-            '<i class="fas fa-external-link-alt text-muted mx-2"></i>' +
+            '</p>' +
             '</div>' +
             '<div class="card-body">' +
             '<div class="card-subtitle d-flex align-items-center">' +
@@ -329,7 +326,7 @@
             '{% if restaurant.address %}'+
                 '{% if restaurant.url %}'+
                     '<a href="{{ restaurant.url }}" class="card-link d-inline text-decoration-none">'+
-                    '<img src="{% static "corona/kakao_map.png" %}" style="width: 20px; height: 20px"> '+
+                    '<img src="{% static "corona/naver_map.png" %}" style="width: 20px; height: 20px"> '+
                     '</a>'+
                     '{% endif %}'+
                 '{{ restaurant.address }}'+
@@ -387,7 +384,7 @@
         var redMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_red_thsqtb.png';
 
 
-        var imageSize = new kakao.maps.Size(30, 30);
+        var imageSize = new kakao.maps.Size(40, 40);
 
         if ('{{restaurant.unvaccinated_pass}}' == "미접종 친절") {
             var imageSrc = blueMarker;
@@ -413,7 +410,7 @@
             content: content
         });
 
-        infowindow.open(map, marker);
+        {#infowindow.open(map, marker);#}
 
         var rvContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
         var rv = new kakao.maps.Roadview(rvContainer); //로드뷰 객체
@@ -442,7 +439,7 @@
                 content: content
             });
 
-            infowindow.open(rv, marker);
+            {#infowindow.open(rv, marker);#}
 
             var projection = rv.getProjection(); // viewpoint(화면좌표)값을 추출할 수 있는 projection 객체를 가져옵니다.
 

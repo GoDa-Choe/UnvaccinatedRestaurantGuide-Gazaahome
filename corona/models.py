@@ -37,7 +37,7 @@ class RestaurantCategory(models.Model):
 
 
 class Restaurant(models.Model, HitCountMixin):
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40, unique=True)
 
     address = models.CharField(max_length=200, blank=True, null=True,
                                help_text="주소 생략시 <가게 상호>을 구체적으로 입력해주세요. (예시: 최고다삽겹살 고다역점)")

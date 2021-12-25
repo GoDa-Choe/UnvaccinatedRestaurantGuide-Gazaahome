@@ -7,7 +7,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin
 from hitcount.settings import MODEL_HITCOUNT
 
-DATE_FORMAT = "날짜형식: <em>2021-01-01</em>"
+DATE_FORMAT = "날짜형식: 2021-01-01"
 
 
 class Calculator(models.Model, HitCountMixin):

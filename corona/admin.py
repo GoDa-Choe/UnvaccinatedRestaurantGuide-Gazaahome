@@ -6,7 +6,8 @@ from corona.models import Post, PostComment, PostCategory
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'unvaccinated_pass', 'verifieded', 'created_at']
+    list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'unvaccinated_pass', 'verifieded',
+                    'author', 'created_at']
     list_display_links = ['id', 'name', ]
 
 

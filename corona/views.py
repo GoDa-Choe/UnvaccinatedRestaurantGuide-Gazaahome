@@ -48,7 +48,7 @@ class RestaurantList(ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
-    paginate_by = 8
+    paginate_by = 5
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -62,7 +62,7 @@ class PopularRestaurantList(ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
-    paginate_by = 8
+    paginate_by = 5
     queryset = Restaurant.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -76,7 +76,7 @@ class AvailableRestaurantList(ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
-    paginate_by = 8
+    paginate_by = 5
     queryset = Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절')
     ordering = '-pk'
 
@@ -270,7 +270,7 @@ class PostList(ListView):
     model = Post
     template_name = 'corona/post/index.html'
     context_object_name = 'post_list'
-    paginate_by = 8
+    paginate_by = 5
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -284,7 +284,7 @@ class PopularPostList(ListView):
     model = Post
     template_name = 'corona/post/index.html'
     context_object_name = 'post_list'
-    paginate_by = 8
+    paginate_by = 5
     queryset = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):

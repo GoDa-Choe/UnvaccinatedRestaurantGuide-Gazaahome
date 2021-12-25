@@ -36,8 +36,23 @@
     <main class="form-signin">
         <form class="login" method="POST" action="{% url  'home:delete_account' user.id %}">
             {% csrf_token %}
-            <img class="mb-4" src="{% static 'home/images/logo.png' %}" alt="" width="200" height="90">
-            {% csrf_token %}
+
+            <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}"
+                 alt="Goda Soft Studio" width="240"                 height="150">
+
+            <div class="d-flex  justify-content-center">
+                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
+                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
+                         width="120" height="54">
+                </a>
+                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                         width="120" height="60">
+                </a>
+            </div>
+
+            <p class="text-muted small mb-3"> click me!</p>
+
             <p class="my-4">
                 <strong>{{ user }}</strong>님, 정말로 계정을<br> 삭제 하시겠습니까?
                 <br>즉시 관련 정보가 파기되며<br>

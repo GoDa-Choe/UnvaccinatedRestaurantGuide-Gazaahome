@@ -1,0 +1,1 @@
+corona/management/commands/data/seoul.xlsx
