@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 from corona.views import MapView
-from corona.views import RestaurantList, PopularRestaurantList, AvailableRestaurantList, UnavailableRestaurantList
+from corona.views import RestaurantList, PopularRestaurantList, AvailableRestaurantList, UnavailableRestaurantList, ConfirmRequiredRestaurantList
 from corona.views import RestaurantDetail
 from corona.views import CreateRestaurant, UpdateRestaurant
 from corona.views import RestaurantList, RestaurantDetail, CreateRestaurant, UpdateRestaurant
@@ -31,6 +31,8 @@ urlpatterns = [
     path('unvaccinated_restaurant/available/', AvailableRestaurantList.as_view(), name='available_restaurant_index'),
     path('unvaccinated_restaurant/unavailable/', UnavailableRestaurantList.as_view(),
          name='unavailable_restaurant_index'),
+    path('unvaccinated_restaurant/confirm_required/', ConfirmRequiredRestaurantList.as_view(),
+         name='confirm_required_restaurant_index'),
 
     path('unvaccinated_restaurant/map/', MapView.as_view(), name='restaurant_map'),
 

@@ -25,6 +25,7 @@ def get_num_restaurants():
         'num_restaurants': Restaurant.objects.count(),
         'num_unvaccinated_available': Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절').count(),
         'num_unvaccinated_unavailable': Restaurant.objects.filter(unvaccinated_pass__type='미접종 거부').count(),
+        'num_unvaccinated_confirm_required': Restaurant.objects.filter(unvaccinated_pass__type='확인 요청').count(),
     }
 
     return context
@@ -97,6 +98,21 @@ class UnavailableRestaurantList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UnavailableRestaurantList, self).get_context_data()
+        context.update(get_num_restaurants())
+
+        return context
+
+
+class ConfirmRequiredRestaurantList(ListView):
+    model = Restaurant
+    template_name = 'corona/unvaccinated_restaurant/index.html'
+    context_object_name = 'restaurant_list'
+    paginate_by = 8
+    queryset = Restaurant.objects.filter(unvaccinated_pass__type='확인 요청')
+    ordering = '-pk'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ConfirmRequiredRestaurantList, self).get_context_data()
         context.update(get_num_restaurants())
 
         return context

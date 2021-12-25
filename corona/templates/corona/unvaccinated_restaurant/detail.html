@@ -76,9 +76,12 @@
                 {% if restaurant.unvaccinated_pass.type == "미접종 친절" %}
                     <span class="badge rounded-pill"
                           style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>
-                {% else %}
+                {% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}
                     <span class="badge rounded-pill"
                           style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>
+                {% else %}
+                    <span class="badge rounded-pill"
+                          style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>
                 {% endif %}
             </div>
 
@@ -108,8 +111,8 @@
         <!-- Restaurant Map-->
         {% if restaurant.latitude and restaurant.longitude %}
             <div>
-                <div id="map" style="height: 350px"></div>
-                <div id="roadview" style="height:250px"></div>
+                <div id="map" class="mx-3" style="height: 300px"></div>
+                <div id="roadview" class="mx-3" style="height:200px"></div>
             </div>
 
 
@@ -310,8 +313,10 @@
 
         if ("{{restaurant.unvaccinated_pass}}" == "미접종 친절") {
             var borderColor = ' border-primary"';
-        } else {
+        } else if ("{{restaurant.unvaccinated_pass}}" == "미접종 거부") {
             var borderColor = ' border-danger"';
+        } else {
+            var borderColor = ' border-success"'
         }
 
         var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 17em;">' +
@@ -343,9 +348,12 @@
             '{% if restaurant.unvaccinated_pass.type == "미접종 친절" %}'+
                 '<span class="badge rounded-pill"'+
                 'style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>'+
-                '{% else %}'+
+                '{% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}'+
                 '<span class="badge rounded-pill"'+
                 'style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>'+
+                '{% else %}'+
+                '<span class="badge rounded-pill"'+
+                'style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>'+
                 '{% endif %}' +
             '</div>' +
             '</div>' +
@@ -382,14 +390,16 @@
 
         var blueMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_blue_jrf7fx.png';
         var redMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_red_thsqtb.png';
-
+        var greenMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640458945/static/corona/marker_green_uhkmdm.png'
 
         var imageSize = new kakao.maps.Size(40, 40);
 
         if ('{{restaurant.unvaccinated_pass}}' == "미접종 친절") {
             var imageSrc = blueMarker;
-        } else {
+        } else if ('{{restaurant.unvaccinated_pass}}' == "미접종 거부") {
             var imageSrc = redMarker;
+        } else {
+            var imageSrc = greenMarker;
         }
 
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);

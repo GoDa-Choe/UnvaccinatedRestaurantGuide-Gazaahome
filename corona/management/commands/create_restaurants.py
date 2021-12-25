@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 else:
                     unvaccinated_pass = UnvaccinatedPass.objects.get(type="미접종 거부")
 
-                restaurant, is_created = Restaurant.objects.get_or_create(
+                restaurant, is_created = Restaurant.objects.update_or_create(
                     name=name,
                     defaults={
                         'address': address,

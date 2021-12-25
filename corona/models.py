@@ -54,8 +54,9 @@ class Restaurant(models.Model, HitCountMixin):
 
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(RestaurantCategory, null=True, on_delete=models.SET_NULL)
-    tags = models.ManyToManyField(RestaurantTag, blank=True)
+    category = models.ForeignKey(RestaurantCategory, null=True, on_delete=models.SET_NULL,
+                                 help_text="PCR 음성 필요 여부는 <태그>를 통해 작성해주시면 감사하겠습니다.")
+    tags = models.ManyToManyField(RestaurantTag, blank=True, )
     unvaccinated_pass = models.ForeignKey(UnvaccinatedPass, null=True, on_delete=models.SET_NULL)
 
     # likes and dislikes

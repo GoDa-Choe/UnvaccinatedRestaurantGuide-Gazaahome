@@ -71,6 +71,23 @@
             </a>
         {% endif %}
 
+        <!-- Confirm Required -->
+        {% if request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
+            <a class="nav-link text-success" href="{% url 'corona:confirm_required_restaurant_index' %}">
+                확인요청 식당
+                <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
+                    {{ num_unvaccinated_confirm_required }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:confirm_required_restaurant_index' %}">
+                확인요청 식당
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_unvaccinated_confirm_required }}
+                </span>
+            </a>
+        {% endif %}
+
         <!-- Popular -->
         {% if request.path == "/corona/unvaccinated_restaurant/popular/" %}
             <a class="nav-link text-success" href="{% url 'corona:popular_restaurant_index' %}">인기 식당</a>

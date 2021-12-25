@@ -6,6 +6,8 @@
         친절
     {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
         거부
+    {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
+        확인요청
     {% elif request.path == "/corona/unvaccinated_restaurant/popular/" %}
         인기
     {% endif %}
@@ -39,6 +41,8 @@
                     친절 식당 목록
                 {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
                     거부 식당 목록
+                {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
+                    확인요청 식당 목록
                 {% elif request.path == "/corona/unvaccinated_restaurant/popular/" %}
                     인기 식당 목록
                 {% else %}
@@ -107,9 +111,12 @@
                                     {% if restaurant.unvaccinated_pass.type == "미접종 친절" %}
                                         <span class="badge rounded-pill"
                                               style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>
-                                    {% else %}
+                                    {% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}
                                         <span class="badge rounded-pill"
                                               style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>
+                                    {% else %}
+                                        <span class="badge rounded-pill"
+                                              style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>
                                     {% endif %}
                                 </div>
 

@@ -33,46 +33,38 @@
     <!-- Scroll Bar -->
     {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
 
-
     <div class="my-3 p-3 bg-body rounded shadow-sm">
 
         <!-- Header -->
-        <div class="d-flex justify-content-start align-items-center border-bottom pb-2 mb-0">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
             <img src="{% static 'corona/map.png' %}" style="width: 27px; height: 27px" class="me-1">
             <h1 class="h2 mb-2">
                 미접종 식당 지도
             </h1>
+
+            <div class="d-inline">
+                <a role="button" class="btn btn-outline-secondary btn-sm py-1"
+                   href="{% url 'corona:restaurant_create' %}">
+                    식당 등록
+                </a>
+            </div>
         </div>
 
         <div class="d-flex justify-content-between my-2">
             <div class="d-inline">
-                <img src="{% static 'corona/marker_blue.png' %}" class="mx-1" style="width: 30px; height: 30px"> 친절식당
-                <img src="{% static 'corona/marker_red.png' %}" class="mx-1" style="width: 30px; height: 30px"> 거부식당
-            </div>
-
-            <div class="d-inline">
-                {% if user.is_authenticated %}
-                    <a role="button" class="btn btn-outline-secondary btn-sm py-1"
-                       href="{% url 'corona:restaurant_create' %}">
-                        식당 등록
-                    </a>
-                {% else %}
-                    <a role="button" class="btn btn-outline-secondary btn-sm py-1"
-                       href="{% url 'account_login' %}?next={{ request.path }}">
-                        식당 등록
-                    </a>
-                {% endif %}
+                <img src="{% static 'corona/marker_blue.png' %}" class="mx-1" style="width: 30px; height: 30px">친절식당
+                <img src="{% static 'corona/marker_red.png' %}" class="mx-1" style="width: 30px; height: 30px">거부식당
+                <img src="{% static 'corona/marker_green.png' %}" class="mx-1" style="width: 30px; height: 30px">확인요청
             </div>
         </div>
 
-        <div id="map" class="my-3" style="height: 400px"></div>
-        <div class="d-flex justify-content-end">
+        <div id="map" class="my-3 mx-3" style="height: 350px"></div>
+        <div class="d-flex justify-content-end mb-3">
             <a class="text-decoration-none text-muted text-end small" href="{% url 'corona:restaurant_index' %}">
                 <i class="fas fa-utensils"></i> 식당 목록 살펴보기
                 <i class="fas fa-chevron-right text-primary"></i>
             </a>
         </div>
-
 
     </div>
 
@@ -100,8 +92,10 @@
 
             if ("{{restaurant.unvaccinated_pass}}" == "미접종 친절") {
                 var borderColor = ' border-primary"';
-            } else {
+            } else if ("{{restaurant.unvaccinated_pass}}" == "미접종 거부") {
                 var borderColor = ' border-danger"';
+            } else {
+                var borderColor = ' border-success"'
             }
 
             var content = '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 15em;">' +
@@ -134,9 +128,12 @@
                 '{% if restaurant.unvaccinated_pass.type == "미접종 친절" %}'+
                     '<span class="badge rounded-pill"'+
                     'style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>'+
-                    '{% else %}'+
+                    '{% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}'+
                     '<span class="badge rounded-pill"'+
                     'style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>'+
+                    '{% else %}'+
+                    '<span class="badge rounded-pill"'+
+                    'style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>'+
                     '{% endif %}' +
                 '</div>' +
                 '</div>' +
@@ -183,6 +180,7 @@
 
         var blueMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_blue_jrf7fx.png'
         var redMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_red_thsqtb.png'
+        var greenMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640458945/static/corona/marker_green_uhkmdm.png'
 
         var pre = null;
 
@@ -194,8 +192,10 @@
 
             if (positions[i].unvaccinated_pass == "미접종 친절") {
                 var imageSrc = blueMarker;
-            } else {
+            } else if (positions[i].unvaccinated_pass == "미접종 거부") {
                 var imageSrc = redMarker;
+            } else {
+                var imageSrc = greenMarker;
             }
 
 
