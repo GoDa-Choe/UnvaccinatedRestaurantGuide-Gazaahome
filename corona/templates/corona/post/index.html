@@ -9,7 +9,7 @@
     {% elif request.path == '/corona/post/category/문의/' %}
         문의
     {% endif %}
-        게시판
+    게시판
 {% endblock %}
 
 {% block custom_style %}
@@ -66,8 +66,9 @@
                             <h3 class="h6 text-dark">{{ post.title|truncatechars:35 }}</h3>
 
                             <p class="pb-0 mb-1 lh-sm">
-                                {{ post.content|cut:"#"|cut:"`"|truncatechars_html:55|safe }}
+                                {{ post.content|cut:"#"|cut:"`"|truncatechars:55|safe }}
                             </p>
+
                             <div class="d-flex text-muted justify-content-between">
                                 <div class="d-inline">
 
