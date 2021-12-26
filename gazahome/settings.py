@@ -15,6 +15,8 @@ import django_heroku
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# from django.conf.global_settings import LOGOUT_REDIRECT_URL
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -190,6 +192,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 LOGIN_REDIRECT_URL = "/profile/"
+LOGOUT_REDIRECT_URL = "/goda_soft_studio/"
 
 # SSL
 SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT', False))

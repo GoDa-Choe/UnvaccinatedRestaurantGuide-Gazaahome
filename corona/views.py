@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import FormMixin
 
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
@@ -16,8 +18,12 @@ from hitcount.views import HitCountDetailView
 from corona.models import Restaurant, RestaurantComment, RestaurantTag
 from corona.models import Post, PostComment, PostCategory
 
-from corona.forms import RestaurantForm, RestaurantCommentForm
+from corona.forms import RestaurantForm, RestaurantCommentForm, RestaurantSearchForm
 from corona.forms import PostForm, PostCommentForm
+
+from typing import List
+import operator
+from functools import reduce
 
 
 def get_num_restaurants():
@@ -31,21 +37,87 @@ def get_num_restaurants():
     return context
 
 
-class MapView(TemplateView):
-    template_name = 'corona/unvaccinated_restaurant/map.html'
+class SearchMixin(FormMixin):
+    form_class = RestaurantSearchForm
 
-    def get_context_data(self, **kwargs):
-        context = super(MapView, self).get_context_data(**kwargs)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
-        restaurant_list = Restaurant.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
-        context['restaurant_list'] = restaurant_list
-        context['test'] = Restaurant.objects.last()
+    def form_valid(self, form):
+        search_string = form.cleaned_data['search_string']
+        return redirect(reverse_lazy('corona:searched_restaurant_index', args=(search_string,)))
+
+    def form_invalid(self, form):
+        return redirect(reverse_lazy('corona:restaurant_index'))
+
+
+class SearchedRestaurantList(SearchMixin, ListView):
+    model = Restaurant
+    template_name = 'corona/unvaccinated_restaurant/searched.html'
+    context_object_name = 'restaurant_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        """
+        :return queryset
+
+        Big-O O(an + nlog(n))
+        an: search by keyword
+        nlong(n): sort by '-pk'
+        """
+
+        search_string = self.kwargs['search_string']
+        search_keywords = self.get_keywords(search_string)
+
+        lookups = []
+
+        # O(an) where a = num keywords
+        for keyword in search_keywords:
+            name_lookup = Q(name__contains=keyword)
+            address_lookup = Q(address__contains=keyword)
+            tag_lookup = Q(tags__name=keyword)
+
+            lookups.append(name_lookup | address_lookup | tag_lookup)
+
+        # O(nlog(n))
+        queryset = Restaurant.objects.filter(*lookups).order_by('-pk')
+
+        return queryset
+
+    @staticmethod
+    def get_keywords(search_string: str) -> List[str]:
+        """
+        :param search_string: str
+        :return keywords: List[str]
+
+        verifieded test cases
+
+        1. "aa bb cc"
+        2. "#aa#bb#cc#"
+        3. "#aa #bb #cc"
+
+        -> ["aa", "bb", "cc"]
+        """
+        keywords = search_string.strip(" #").replace("#", " ").split()
+
+        return keywords
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SearchedRestaurantList, self).get_context_data()
         context.update(get_num_restaurants())
+
+        search_string = self.kwargs['search_string']
+        search_keywords = self.get_keywords(search_string)
+        context['search_keywords'] = search_keywords
 
         return context
 
 
-class RestaurantList(ListView):
+class RestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
@@ -59,7 +131,41 @@ class RestaurantList(ListView):
         return context
 
 
-class PopularRestaurantList(ListView):
+class MapView(RestaurantList):
+    template_name = 'corona/unvaccinated_restaurant/map.html'
+    paginate_by = None
+
+    def get_queryset(self):
+        queryset = super(MapView, self).get_queryset()
+        queryset = queryset.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
+        return queryset
+
+    def form_valid(self, form):
+        search_string = form.cleaned_data['search_string']
+        return redirect(reverse_lazy('corona:searched_restaurant_map', args=(search_string,)))
+
+    def form_invalid(self, form):
+        return redirect(reverse_lazy('corona:restaurant_map'))
+
+
+class SearchedMapView(SearchedRestaurantList):
+    template_name = 'corona/unvaccinated_restaurant/searched_map.html'
+    paginate_by = None
+
+    def get_queryset(self):
+        queryset = super(SearchedMapView, self).get_queryset()
+        queryset = queryset.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
+        return queryset
+
+    def form_valid(self, form):
+        search_string = form.cleaned_data['search_string']
+        return redirect(reverse_lazy('corona:searched_restaurant_map', args=(search_string,)))
+
+    def form_invalid(self, form):
+        return redirect(reverse_lazy('corona:restaurant_map'))
+
+
+class PopularRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
@@ -73,7 +179,7 @@ class PopularRestaurantList(ListView):
         return context
 
 
-class AvailableRestaurantList(ListView):
+class AvailableRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
@@ -88,7 +194,7 @@ class AvailableRestaurantList(ListView):
         return context
 
 
-class UnavailableRestaurantList(ListView):
+class UnavailableRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
@@ -103,7 +209,7 @@ class UnavailableRestaurantList(ListView):
         return context
 
 
-class ConfirmRequiredRestaurantList(ListView):
+class ConfirmRequiredRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'

@@ -4,8 +4,9 @@ from django.conf.urls.static import static
 
 from django.views.generic import RedirectView
 
-from corona.views import MapView
-from corona.views import RestaurantList, PopularRestaurantList, AvailableRestaurantList, UnavailableRestaurantList, ConfirmRequiredRestaurantList
+from corona.views import MapView, SearchedMapView
+from corona.views import RestaurantList, PopularRestaurantList, AvailableRestaurantList, UnavailableRestaurantList, \
+    ConfirmRequiredRestaurantList, SearchedRestaurantList
 from corona.views import RestaurantDetail
 from corona.views import CreateRestaurant, UpdateRestaurant
 from corona.views import RestaurantList, RestaurantDetail, CreateRestaurant, UpdateRestaurant
@@ -26,6 +27,9 @@ app_name = 'corona'
 urlpatterns = [
     path('', RedirectView.as_view(url='unvaccinated_restaurant/map/'), name='index'),
 
+    path('unvaccinated_restaurant/map/', MapView.as_view(), name='restaurant_map'),
+    path('unvaccinated_restaurant/map/search/<str:search_string>/', SearchedMapView.as_view(), name='searched_restaurant_map'),
+
     path('unvaccinated_restaurant/', RestaurantList.as_view(), name='restaurant_index'),
     path('unvaccinated_restaurant/popular/', PopularRestaurantList.as_view(), name='popular_restaurant_index'),
     path('unvaccinated_restaurant/available/', AvailableRestaurantList.as_view(), name='available_restaurant_index'),
@@ -34,12 +38,14 @@ urlpatterns = [
     path('unvaccinated_restaurant/confirm_required/', ConfirmRequiredRestaurantList.as_view(),
          name='confirm_required_restaurant_index'),
 
-    path('unvaccinated_restaurant/map/', MapView.as_view(), name='restaurant_map'),
+    path('unvaccinated_restaurant/search/<str:search_string>/', SearchedRestaurantList.as_view(),
+         name='searched_restaurant_index'),
+    # Todo
 
     path('unvaccinated_restaurant/create/', CreateRestaurant.as_view(), name='restaurant_create'),
 
     path('unvaccinated_restaurant/<int:pk>/', RestaurantDetail.as_view(), name='restaurant_detail'),
-    path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
+    # path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
 
     path('unvaccinated_restaurant/<int:pk>/like/', like_restaurant, name='like_restaurant'),
     path('unvaccinated_restaurant/<int:pk>/dislike/', dislike_restaurant, name='dislike_restaurant'),

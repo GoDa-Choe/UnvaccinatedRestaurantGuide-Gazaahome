@@ -28,9 +28,9 @@
     <article class="my-3 p-3 rounded shadow-sm">
 
         <!-- Title-->
-        <h1 class="h4">
+        <h2 class="h4">
             {{ restaurant.name }}
-        </h1>
+        </h2>
 
 
         {% if restaurant.address %}
@@ -47,12 +47,14 @@
         <div class="d-flex justify-content-between align-items-center small">
 
             <div class="d-inline">
-                <strong class="text-gray-dark">{{ restaurant.category }}</strong>
-                {% if restaurant.verifieded %}
-                    <div class="d-inline mx-2 small text-success"> 유선확인 완료</div>
-                {% else %}
-                    <div class="d-inline mx-2 small text-success"> 유선확인 중</div>
-                {% endif %}
+                {% comment %}
+                    <strong class="text-gray-dark">{{ restaurant.category }}</strong>
+                    {% if restaurant.verifieded %}
+                        <div class="d-inline mx-2 small text-success"> 유선확인 완료</div>
+                    {% else %}
+                        <div class="d-inline mx-2 small text-success"> 유선확인 중</div>
+                    {% endif %}
+                {% endcomment %}
             </div>
 
             <div class="d-inline mb-1 text-muted">
@@ -117,13 +119,13 @@
 
 
         {% endif %}
-        <!-- Restaurant Eidt-->
-        <div class="d-flex justify-content-end my-3">
-            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
-               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
-                <small>식당 정보 수정</small>
-            </a>
-        </div>
+        {#        <!-- Restaurant Eidt-->#}
+        {#        <div class="d-flex justify-content-end my-3">#}
+        {#            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"#}
+        {#               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">#}
+        {#                <small>식당 정보 수정</small>#}
+        {#            </a>#}
+        {#        </div>#}
 
         <hr>
 

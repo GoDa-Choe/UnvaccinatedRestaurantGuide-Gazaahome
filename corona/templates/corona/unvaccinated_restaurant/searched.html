@@ -1,18 +1,8 @@
 {% extends 'corona/base.html' %}
 {% load static %}
 
-
 {% block head-title %}
-    {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
-        친절
-    {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
-        거부
-    {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
-        궁금
-    {% elif request.path == "/corona/unvaccinated_restaurant/popular/" %}
-        인기
-    {% endif %}
-    식당 목록
+    미접종 식당
 {% endblock %}
 
 {% block custom_style %}
@@ -27,33 +17,32 @@
     <!-- Search Bar -->
     {% include 'corona/unvaccinated_restaurant/search_bar.html' %}
 
-
     <!-- Scroll Bar -->
     {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
 
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
-            <h2 class="h2 mb-2">
-                {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
-                    친절 식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
-                    거부 식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
-                    궁금 식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/popular/" %}
-                    인기 식당 목록
-                {% else %}
-                    모든 식당 목록
-                {% endif %}
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="d-flex align-items-center h3">
+                검색 결과
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom mx-1">
+                    {{ restaurant_list.count }}
+                </span>
             </h2>
-
 
             <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url 'corona:restaurant_create' %}">
                 식당 등록
             </a>
+        </div>
 
+        <div class="d-flex justify-content-start border-bottom pb-3 align-items-center">
+            {% for search_keyword in search_keywords %}
+                <a class="btn mx-1 btn-sm btn-outline-{% cycle 'primary' 'success' 'danger' 'warning' 'info' 'dark' %}"
+                   href="{% url 'corona:searched_restaurant_index' search_keyword %}" role="button">
+                    {{ search_keyword }}
+                </a>
+            {% endfor %}
         </div>
 
 

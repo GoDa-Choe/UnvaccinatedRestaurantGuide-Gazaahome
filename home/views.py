@@ -140,4 +140,4 @@ class AccountDeleteView(LoginRequiredMixin, FormView):
         return super(AccountDeleteView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('home:home')
+        return reverse_lazy('home:goda_soft_studio')

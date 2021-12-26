@@ -1,43 +1,28 @@
 {% load humanize %}
 {% load static %}
 
-<div class="d-flex justify-content-between align-items-center p-3 mb-3 rounded shadow-sm text-white"
-style="background-color: #86b7fe">
+<div class="d-flex justify-content-between align-items-center p-2 mb-3 rounded shadow-sm text-white"
+     style="background-color: #86b7fe">
 
     <div class="lh-1">
-{#        <a href='https://play.google.com/store/apps/details?id=com.hustay.swing.d6cf5a98e91a94ddfb08b1c9a7644b9a8&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img#}
-{#                alt='다운로드하기 Google Play'#}
-{#                src='{% static 'home/images/play_download.png' %}'#}
-{#                style="height: 40px">#}
-{#        </a>#}
-        <div class="d-flex small">
-            코로나 현황
-        </div>
+        {#        <a href='https://play.google.com/store/apps/details?id=com.hustay.swing.d6cf5a98e91a94ddfb08b1c9a7644b9a8&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img#}
+        {#                alt='다운로드하기 Google Play'#}
+        {#                src='{% static 'home/images/play_download.png' %}'#}
+        {#                style="height: 40px">#}
+        {#        </a>#}
+        <h1 class="d-flex h6 small my-0">
+            미접종 식당 가이드
+        </h1>
     </div>
 
-    {% with user_calculator=user.calculator_set.first user_invitations=user.calculator_set.first.invitation_set %}
-        {% if user.is_authenticated and user_calculator and user_invitations.exists %}
 
-            <a href="{% url "barracks:invitation_list" %}" class="btn position-relative btn-sm rounded btn-primary">
-                초대장
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill fw-bold"
-                      style="background-color: #6495ED ">
-                     {{ user_invitations.count }}+
-                    <span class="visually-hidden">unread messages</span>
-                    </span>
-            </a>
-
-        {% else %}
-            <div class="float-end small">
-                <i class="fas fa-viruses"></i><small class="small">
-                {{ decided_count|intcomma }}(&#9652;{{ today_decided_count|intcomma }})</small>
-            </div>
-        {% endif %}
-
-
-
-
-    {% endwith %}
+    <div class="float-end text-dark small py-0">
+        <div class="d-flex small justify-content-center py-0">
+            코로나 현황
+        </div>
+        <i class="fas fa-viruses"></i><small class="small">
+        {{ decided_count|intcomma }}(&#9652;{{ today_decided_count|intcomma }})</small>
+    </div>
 
 
 </div>

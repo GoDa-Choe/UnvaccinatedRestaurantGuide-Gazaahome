@@ -53,11 +53,12 @@ class Restaurant(models.Model, HitCountMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     # ForeignKeys
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(RestaurantCategory, null=True, on_delete=models.SET_NULL,
                                  help_text="PCR 음성 필요 여부는 <태그>를 통해 작성해주시면 감사하겠습니다.")
     tags = models.ManyToManyField(RestaurantTag, blank=True, )
-    unvaccinated_pass = models.ForeignKey(UnvaccinatedPass, null=True, on_delete=models.SET_NULL)
+    unvaccinated_pass = models.ForeignKey(UnvaccinatedPass, null=True, on_delete=models.SET_NULL,
+                                          help_text="이용가능 여부 확인이 필요하시면 <궁금>으로 설정해주세요")
 
     # likes and dislikes
     likes = models.ManyToManyField(User, blank=True, related_name="restaurant_likers")

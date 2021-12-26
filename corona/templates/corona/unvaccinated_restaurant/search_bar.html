@@ -1,0 +1,11 @@
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+<!-- Restaurant Search Bar -->
+<form class="d-flex" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="col px-1">{{ form |crispy }}</div>
+    <div class="col-auto px-1">
+        <button class="btn btn-outline-success" type="submit">검색</button>
+    </div>
+</form>
+

@@ -30,6 +30,16 @@ class RestaurantForm(forms.ModelForm):
         }
 
 
+SEARCH_ATTRS = {
+    "placeholder": "식당을 검색해보세요",
+}
+
+
+class RestaurantSearchForm(forms.Form):
+    search_string = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs=SEARCH_ATTRS))
+    prefix = "restaurant_search_form"
+
+
 class PostCommentForm(forms.ModelForm):
     class Meta:
         model = PostComment
