@@ -31,7 +31,7 @@ def get_num_restaurants():
         'num_restaurants': Restaurant.objects.count(),
         'num_unvaccinated_available': Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절').count(),
         'num_unvaccinated_unavailable': Restaurant.objects.filter(unvaccinated_pass__type='미접종 거부').count(),
-        'num_unvaccinated_confirm_required': Restaurant.objects.filter(unvaccinated_pass__type='확인 요청').count(),
+        'num_unvaccinated_confirm_required': Restaurant.objects.filter(unvaccinated_pass__type='궁금').count(),
     }
 
     return context
@@ -60,6 +60,7 @@ class SearchedRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/searched.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
+    total_count = 0
 
     def get_queryset(self):
         """
@@ -80,11 +81,13 @@ class SearchedRestaurantList(SearchMixin, ListView):
             name_lookup = Q(name__contains=keyword)
             address_lookup = Q(address__contains=keyword)
             tag_lookup = Q(tags__name=keyword)
+            unvaccinated_lookup = Q(unvaccinated_pass__type__contains=keyword)
 
-            lookups.append(name_lookup | address_lookup | tag_lookup)
+            lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup)
 
         # O(nlog(n))
-        queryset = Restaurant.objects.filter(*lookups).order_by('-pk')
+        queryset = Restaurant.objects.filter(*lookups).order_by('-pk').distinct()
+        self.total_count = queryset.count()
 
         return queryset
 
@@ -113,7 +116,7 @@ class SearchedRestaurantList(SearchMixin, ListView):
         search_string = self.kwargs['search_string']
         search_keywords = self.get_keywords(search_string)
         context['search_keywords'] = search_keywords
-
+        context['num_searched'] = self.total_count
         return context
 
 
