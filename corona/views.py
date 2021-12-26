@@ -217,7 +217,7 @@ class ConfirmRequiredRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 8
-    queryset = Restaurant.objects.filter(unvaccinated_pass__type='확인 요청')
+    queryset = Restaurant.objects.filter(unvaccinated_pass__type='궁금')
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
