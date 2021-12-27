@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     'barracks',
     'rank',
     'troop_review',
-    'beauty',
+    # 'beauty',
     'corona',
 ]
 
