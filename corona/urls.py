@@ -27,9 +27,14 @@ app_name = 'corona'
 
 urlpatterns = [
     path('', RedirectView.as_view(url='/corona/unvaccinated_restaurant/'), name='index'),
-    path('unvaccinated_restaurant/map/', RedirectView.as_view(url='/corona/unvaccinated_restaurant/map/search/카페/'), name='restaurant_map'),
+    path('unvaccinated_restaurant/map/', RedirectView.as_view(url='/corona/unvaccinated_restaurant/map/search/카페/'),
+         name='restaurant_map'),
 
-    path('unvaccinated_restaurant/map/search/<str:search_string>/', SearchedMapView.as_view(), name='searched_restaurant_map'),
+    # Todo
+    path('unvaccinated_restaurant/map/test/', MapView.as_view(), name='restaurant_map_test'),
+
+    path('unvaccinated_restaurant/map/search/<str:search_string>/', SearchedMapView.as_view(),
+         name='searched_restaurant_map'),
 
     path('unvaccinated_restaurant/', RestaurantList.as_view(), name='restaurant_index'),
     path('unvaccinated_restaurant/popular/', PopularRestaurantList.as_view(), name='popular_restaurant_index'),
@@ -41,12 +46,12 @@ urlpatterns = [
 
     path('unvaccinated_restaurant/search/<str:search_string>/', SearchedRestaurantList.as_view(),
          name='searched_restaurant_index'),
-    # Todo
 
     path('unvaccinated_restaurant/create/', CreateRestaurant.as_view(), name='restaurant_create'),
 
     path('unvaccinated_restaurant/<int:pk>/', RestaurantDetail.as_view(), name='restaurant_detail'),
-    path('unvaccinated_restaurant/<int:pk>/create_delete_request/', CreateRestaurantDeleteRequest.as_view(), name='restaurant_delete_requset'),
+    path('unvaccinated_restaurant/<int:pk>/create_delete_request/', CreateRestaurantDeleteRequest.as_view(),
+         name='restaurant_delete_requset'),
     path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
 
     path('unvaccinated_restaurant/<int:pk>/like/', like_restaurant, name='like_restaurant'),
