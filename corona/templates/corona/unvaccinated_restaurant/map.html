@@ -203,8 +203,10 @@
                         '</a>';
                 }
 
-                var tags = "";
 
+                var tags = "";
+                {% comment %}
+                
                 if (restaurant.tags.length > 0) {
                     tags = tags + '<i class="fas fa-tags text-muted"></i> ';
                 }
@@ -214,6 +216,7 @@
                         'style="background-color: darkseagreen">' + restaurant.tags[i] + '</span> ';
                 }
 
+                {% endcomment %}
 
                 var content =
                     '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 15em;">' +
