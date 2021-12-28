@@ -52,9 +52,6 @@ SAFE_ADDRESS_HELP_TEXT = mark_safe(ADDRESS_HELP_TEXT.strip())
 class Restaurant(models.Model, HitCountMixin):
     name = models.CharField(max_length=40, unique=True)
 
-    # address = models.CharField(max_length=200, blank=True, null=True,
-    #                            help_text="주소 생략시 <가게 상호>을 구체적으로 입력해주세요. (예시: 최고다삽겹살 고다역점)")
-
     address = models.CharField(max_length=200, blank=False, null=True,
                                help_text=SAFE_ADDRESS_HELP_TEXT)
 
@@ -106,6 +103,7 @@ class RestaurantComment(models.Model):
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
+    image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True)
     content = models.TextField()
 
     is_anonymous = models.BooleanField(default=True)

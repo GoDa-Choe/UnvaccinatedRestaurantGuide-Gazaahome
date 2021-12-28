@@ -586,7 +586,7 @@ def create_restaurant_comment(request, pk):
         restaurant = get_object_or_404(Restaurant, pk=pk)
 
         if request.method == 'POST':
-            restaurant_comment_form = RestaurantCommentForm(request.POST)
+            restaurant_comment_form = RestaurantCommentForm(request.POST, request.FILES)
 
             if restaurant_comment_form.is_valid():
                 restaurant_comment = restaurant_comment_form.save(commit=False)

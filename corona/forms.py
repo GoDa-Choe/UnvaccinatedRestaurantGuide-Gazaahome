@@ -7,14 +7,15 @@ from corona.models import Post, PostComment
 class RestaurantCommentForm(forms.ModelForm):
     class Meta:
         model = RestaurantComment
-        fields = ('content', 'is_anonymous')
+        fields = ('content', 'image', 'is_anonymous')
         labels = {
             'content': "",
+            'image': "사진",
             'is_anonymous': '익명',
         }
 
         widgets = {
-            'content': forms.Textarea(attrs={'style': "max-height:70px;"}),
+            'content': forms.Textarea(attrs={'style': "max-height:90px;"}),
         }
 
 

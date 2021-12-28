@@ -198,7 +198,11 @@
 
     <!-- Comment-->
     <div class="my-3 p-3 rounded shadow-sm">
-        <h4 class="border-bottom pb-2 mb-0">댓글</h4>
+        <h4 class="h5 border-bottom pb-2 mb-0">
+            댓글<span class="mx-1 badge bg-light text-dark rounded-pill align-text-bottom">
+                {{ restaurant.num_comments }}
+            </span>
+        </h4>
 
         {% if restaurant.restaurantcomment_set.exists %}
 
@@ -240,8 +244,14 @@
                             </div>
                         </div>
 
+                        <!-- image-->
+                        {% if restaurant_comment.image %}
+                            <div class="d-flex justify-content-center mt-2">
+                                <img class="img-fluid rounded rounded-2" src="{{ restaurant_comment.image.url }}" alt="..."/>
+                            </div>
+                        {% endif %}
 
-                        <p class="small lh-sm text-muted">{{ restaurant_comment.content|linebreaks }}</p>
+                        <p class="lh-sm text-muted">{{ restaurant_comment.content|linebreaks }}</p>
 
                         <!-- Update & Delete-->
                         <div class="float-end">
@@ -292,8 +302,8 @@
         <!-- Comments form-->
         <div class="mt-3 p-3 bg-light rounded shadow-sm">
             {% if user.is_authenticated %}
-                <form class="mt-2" id="video-comment-form" method="POST"
-                      action="{{ restaurant.get_absolute_url }}comment/create/">
+                <form class="mt-2" method="POST"
+                      action="{{ restaurant.get_absolute_url }}comment/create/" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">{{ restaurant_comment_form|crispy }}</div>
 
