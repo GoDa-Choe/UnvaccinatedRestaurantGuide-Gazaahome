@@ -158,9 +158,6 @@ class MapView(RestaurantList):
         context = super(MapView, self).get_context_data()
 
         restaurant_list = []
-
-        num = range(1, 200)
-
         for restaurant in context['restaurant_list']:
             data = {
                 'pk': restaurant.pk,
@@ -169,14 +166,56 @@ class MapView(RestaurantList):
                 'latitude': restaurant.latitude,
                 'longitude': restaurant.longitude,
 
-                'url': str(restaurant.url),
-                'category': restaurant.category.name,
-                'tags': [tag.name for tag in restaurant.tags.all()],
-                'unvaccinated_pass': restaurant.unvaccinated_pass.type,
-                'num_likes': restaurant.likes.count(),
-                'num_dislikes': restaurant.num_dislikes(),
-                'num_comments': restaurant.num_comments(),
-                'hits': restaurant.hit_count.hits,
+                ## test
+                'longitude1': restaurant.longitude + 1,
+                'longitude2': restaurant.longitude + 1,
+                'longitude3': restaurant.longitude + 1,
+                'longitude4': restaurant.longitude + 1,
+                'longitude5': restaurant.longitude + 1,
+                'longitude6': restaurant.longitude + 1,
+                'longitude7': restaurant.longitude + 1,
+                'longitude8': restaurant.longitude + 1,
+                'longitude9': restaurant.longitude + 1,
+                'longitude10': restaurant.longitude + 1,
+                'longitude11': restaurant.longitude + 1,
+                'longitude12': restaurant.longitude + 1,
+                'longitude13': restaurant.longitude + 1,
+                'longitude14': restaurant.longitude + 1,
+                'longitude15': restaurant.longitude + 1,
+                'longitude16': restaurant.longitude + 1,
+                'longitude17': restaurant.longitude + 1,
+                'longitude18': restaurant.longitude + 1,
+                'longitude19': restaurant.longitude + 1,
+                'longitude20': restaurant.longitude + 1,
+                'longitude21': restaurant.longitude + 1,
+                'longitude22': restaurant.longitude + 1,
+                'longitude23': restaurant.longitude + 1,
+                'longitude24': restaurant.longitude + 1,
+                'longitude25': restaurant.longitude + 1,
+                'longitude26': restaurant.longitude + 1,
+                'longitude27': restaurant.longitude + 1,
+                'longitude28': restaurant.longitude + 1,
+                'longitude29': restaurant.longitude + 1,
+                'longitude30': restaurant.longitude + 1,
+                'longitude31': restaurant.longitude + 1,
+                'longitude32': restaurant.longitude + 1,
+                'longitude33': restaurant.longitude + 1,
+                'longitude34': restaurant.longitude + 1,
+                'longitude35': restaurant.longitude + 1,
+                'longitude36': restaurant.longitude + 1,
+                'longitude37': restaurant.longitude + 1,
+                'longitude38': restaurant.longitude + 1,
+                'longitude39': restaurant.longitude + 1,
+                'longitude40': restaurant.longitude + 1,
+
+                # 'url': str(restaurant.url),
+                # 'category': restaurant.category.name,
+                # 'tags': [tag.name for tag in restaurant.tags.all()],
+                # 'unvaccinated_pass': restaurant.unvaccinated_pass.type,
+                # 'num_likes': restaurant.likes.count(),
+                # 'num_dislikes': restaurant.num_dislikes(),
+                # 'num_comments': restaurant.num_comments(),
+                # 'hits': restaurant.hit_count.hits,
             }
             restaurant_list.append(data)
 
