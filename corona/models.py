@@ -39,7 +39,7 @@ class RestaurantCategory(models.Model):
 
 
 ADDRESS_HELP_TEXT = """
-    <a href="https://map.naver.com/v5/" class="text-decoration-none small">
+    <a href="https://map.naver.com/v5/" class="text-decoration-none small" target="_blank">
         <img src="https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640650504/static/corona/naver_map_yc6xld.png" 
         style="width: 20px; height: 20px">
         네이버 지도에서 알아보기

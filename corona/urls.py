@@ -5,8 +5,11 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 from corona.views import MapView, SearchedMapView
-from corona.views import RestaurantList, PopularRestaurantList, AvailableRestaurantList, UnavailableRestaurantList, \
+from corona.views import RestaurantList, AvailableRestaurantList, UnavailableRestaurantList, \
     ConfirmRequiredRestaurantList, SearchedRestaurantList
+
+from corona.views import PopularRestaurantList, MostLikesRestaurantList, MostCommentsRestaurantList
+
 from corona.views import RestaurantDetail
 from corona.views import CreateRestaurant, UpdateRestaurant
 from corona.views import RestaurantList, RestaurantDetail, CreateRestaurant, UpdateRestaurant
@@ -38,7 +41,14 @@ urlpatterns = [
          name='searched_restaurant_map'),
 
     path('unvaccinated_restaurant/', RestaurantList.as_view(), name='restaurant_index'),
-    path('unvaccinated_restaurant/popular/', PopularRestaurantList.as_view(), name='popular_restaurant_index'),
+
+    path('unvaccinated_restaurant/mostpopular/', PopularRestaurantList.as_view(),
+         name='most_popular_restaurant_index'),
+    path('unvaccinated_restaurant/mostlikes/', MostLikesRestaurantList.as_view(),
+         name='most_likes_restaurant_index'),
+    path('unvaccinated_restaurant/mostcomments/', MostCommentsRestaurantList.as_view(),
+         name='most_comments_restaurant_index'),
+
     path('unvaccinated_restaurant/available/', AvailableRestaurantList.as_view(), name='available_restaurant_index'),
     path('unvaccinated_restaurant/unavailable/', UnavailableRestaurantList.as_view(),
          name='unavailable_restaurant_index'),
@@ -68,6 +78,7 @@ urlpatterns = [
     path('unvaccinated_restaurant/<int:restaurant_pk>/comment/<int:pk>/like/', like_restaurant_comment,
          name='like_restaurant_comment'),
 
+    ############POST############
     path('post/', PostList.as_view(), name='post_index'),
     path('post/category/<str:name>/', CategoryPostList.as_view(), name='category_post_index'),
 

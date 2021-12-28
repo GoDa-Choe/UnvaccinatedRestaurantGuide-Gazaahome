@@ -340,6 +340,36 @@ class PopularRestaurantList(SearchMixin, ListView):
         return context
 
 
+class MostLikesRestaurantList(SearchMixin, ListView):
+    model = Restaurant
+    template_name = 'corona/unvaccinated_restaurant/index.html'
+    context_object_name = 'restaurant_list'
+    paginate_by = 5
+    queryset = sorted(Restaurant.objects.all(), key=lambda restaurant: (restaurant.num_likes(), restaurant.pk),
+                      reverse=True)[:50]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(MostLikesRestaurantList, self).get_context_data()
+        context.update(get_num_restaurants())
+
+        return context
+
+
+class MostCommentsRestaurantList(SearchMixin, ListView):
+    model = Restaurant
+    template_name = 'corona/unvaccinated_restaurant/index.html'
+    context_object_name = 'restaurant_list'
+    paginate_by = 5
+    queryset = sorted(Restaurant.objects.all(), key=lambda restaurant: (restaurant.num_comments(), restaurant.pk),
+                      reverse=True)[:50]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(MostCommentsRestaurantList, self).get_context_data()
+        context.update(get_num_restaurants())
+
+        return context
+
+
 class AvailableRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
@@ -620,7 +650,7 @@ class PostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = PostCategory.objects.iterator()
-
+        context['num_post'] = Post.objects.count()
         return context
 
 
@@ -634,7 +664,7 @@ class PopularPostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularPostList, self).get_context_data()
         context['categories'] = PostCategory.objects.iterator()
-
+        context['num_post'] = Post.objects.count()
         return context
 
 
@@ -649,6 +679,7 @@ class CategoryPostList(ListView):
         context = super(CategoryPostList, self).get_context_data()
         context['category'] = PostCategory.objects.get(name=self.kwargs['name'])
         context['categories'] = PostCategory.objects.iterator()
+        context['num_post'] = Post.objects.count()
 
         return context
 

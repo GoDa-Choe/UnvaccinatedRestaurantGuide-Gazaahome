@@ -37,13 +37,17 @@
         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
             <h2 class="h2 mb-2">
                 {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
-                    친절 식당 목록
+                    친절식당 목록
                 {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
-                    거부 식당 목록
+                    거부식당 목록
                 {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
-                    궁금 식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/popular/" %}
-                    인기 식당 목록
+                    궁금식당 목록
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostpopular/" %}
+                    인기 순
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostlikes/" %}
+                    좋아요 순
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostcomments/" %}
+                    댓글 순
                 {% else %}
                     모든 식당 목록
                 {% endif %}

@@ -89,11 +89,27 @@
         {% endif %}
 
         <!-- Popular -->
-        {% if request.path == "/corona/unvaccinated_restaurant/popular/" %}
-            <a class="nav-link text-success" href="{% url 'corona:popular_restaurant_index' %}">인기 식당</a>
+        {% if request.path == "/corona/unvaccinated_restaurant/mostpopular/" %}
+            <a class="nav-link text-success" href="{% url 'corona:most_popular_restaurant_index' %}">인기 순</a>
         {% else %}
-            <a class="nav-link" href="{% url 'corona:popular_restaurant_index' %}">인기 식당</a>
+            <a class="nav-link" href="{% url 'corona:most_popular_restaurant_index' %}">인기 순</a>
         {% endif %}
+
+        <!-- Likes -->
+        {% if request.path == "/corona/unvaccinated_restaurant/mostlikes/" %}
+            <a class="nav-link text-success" href="{% url 'corona:most_likes_restaurant_index' %}">좋아요 순</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:most_likes_restaurant_index' %}">좋아요 순</a>
+        {% endif %}
+
+
+        <!-- Comments -->
+        {% if request.path == "/corona/unvaccinated_restaurant/mostcomments/" %}
+            <a class="nav-link text-success" href="{% url 'corona:most_comments_restaurant_index' %}">댓글 순</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'corona:most_comments_restaurant_index' %}">댓글 순</a>
+        {% endif %}
+
 
     </nav>
 
