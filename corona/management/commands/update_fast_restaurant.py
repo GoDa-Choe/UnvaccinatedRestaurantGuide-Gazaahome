@@ -48,10 +48,6 @@ class Command(BaseCommand):
             for restaurant in Restaurant.objects.iterator():
                 self.update_or_create_fast_restaurant(restaurant)
 
-                name = restaurant.name
-                data = self.parsing_restaurant(restaurant)
-                FastRestaurant.objects.update_or_create(name=name, defaults=data)
-
         except CommandError as error:
             self.stdout.write(self.style.ERROR(f'CommandError was raised. {error}'))
             return
