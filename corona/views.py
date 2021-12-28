@@ -165,14 +165,14 @@ class MapView(RestaurantList):
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
                 'longitude': restaurant.longitude,
-                'url': str(restaurant.url),
-                'category': restaurant.category.name,
+                # 'url': str(restaurant.url),
+                # 'category': restaurant.category.name,
                 # 'tags': [tag.name for tag in restaurant.tags.all()],
-                'unvaccinated_pass': restaurant.unvaccinated_pass.type,
+                # 'unvaccinated_pass': restaurant.unvaccinated_pass.type,
                 # 'num_likes': restaurant.likes.count(),
                 # 'num_dislikes': restaurant.num_dislikes(),
                 # 'num_comments': restaurant.num_comments(),
-                'hits': restaurant.hit_count.hits,
+                # 'hits': restaurant.hit_count.hits,
             }
             restaurant_list.append(data)
 
