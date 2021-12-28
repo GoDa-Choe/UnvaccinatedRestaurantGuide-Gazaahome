@@ -15,10 +15,11 @@ from django.utils.text import slugify
 
 from hitcount.views import HitCountDetailView
 
-from corona.models import Restaurant, RestaurantComment, RestaurantTag, RestaurantDeleteRequest
+from corona.models import Restaurant, RestaurantComment, RestaurantTag, RestaurantDeleteRequest, FastRestaurant
 from corona.models import Post, PostComment, PostCategory
 
-from corona.forms import RestaurantForm, RestaurantCommentForm, RestaurantSearchForm, RestaurantDeleteRequestForm
+from corona.forms import RestaurantForm, FastRestaurantSearchForm, RestaurantCommentForm, RestaurantSearchForm, \
+    RestaurantDeleteRequestForm
 from corona.forms import PostForm, PostCommentForm
 
 from typing import List
@@ -134,18 +135,19 @@ class RestaurantList(SearchMixin, ListView):
         return context
 
 
-class MapView(RestaurantList):
+class MapView(FormMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/map.html'
     context_object_name = "restaurant_list"
-    paginate_by = None
+    form_class = FastRestaurantSearchForm
+    total_count = 0
+    model = FastRestaurant
 
-    def get_queryset(self):
-        queryset = super(MapView, self).get_queryset()
-        name_lookup = Q(address__isnull=True)
-        latitude_lookup = Q(latitude__isnull=True)
-        longitude_lookup = Q(longitude__isnull=True)
-        queryset = queryset.exclude(name_lookup | latitude_lookup | longitude_lookup)
-        return queryset
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
         search_string = form.cleaned_data['search_string']
@@ -165,62 +167,73 @@ class MapView(RestaurantList):
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
                 'longitude': restaurant.longitude,
-
-                ## test
-                'longitude1': restaurant.longitude + 1,
-                'longitude2': restaurant.longitude + 1,
-                'longitude3': restaurant.longitude + 1,
-                'longitude4': restaurant.longitude + 1,
-                'longitude5': restaurant.longitude + 1,
-                'longitude6': restaurant.longitude + 1,
-                'longitude7': restaurant.longitude + 1,
-                'longitude8': restaurant.longitude + 1,
-                'longitude9': restaurant.longitude + 1,
-                'longitude10': restaurant.longitude + 1,
-                'longitude11': restaurant.longitude + 1,
-                'longitude12': restaurant.longitude + 1,
-                'longitude13': restaurant.longitude + 1,
-                'longitude14': restaurant.longitude + 1,
-                'longitude15': restaurant.longitude + 1,
-                'longitude16': restaurant.longitude + 1,
-                'longitude17': restaurant.longitude + 1,
-                'longitude18': restaurant.longitude + 1,
-                'longitude19': restaurant.longitude + 1,
-                'longitude20': restaurant.longitude + 1,
-                'longitude21': restaurant.longitude + 1,
-                'longitude22': restaurant.longitude + 1,
-                'longitude23': restaurant.longitude + 1,
-                'longitude24': restaurant.longitude + 1,
-                'longitude25': restaurant.longitude + 1,
-                'longitude26': restaurant.longitude + 1,
-                'longitude27': restaurant.longitude + 1,
-                'longitude28': restaurant.longitude + 1,
-                'longitude29': restaurant.longitude + 1,
-                'longitude30': restaurant.longitude + 1,
-                'longitude31': restaurant.longitude + 1,
-                'longitude32': restaurant.longitude + 1,
-                'longitude33': restaurant.longitude + 1,
-                'longitude34': restaurant.longitude + 1,
-                'longitude35': restaurant.longitude + 1,
-                'longitude36': restaurant.longitude + 1,
-                'longitude37': restaurant.longitude + 1,
-                'longitude38': restaurant.longitude + 1,
-                'longitude39': restaurant.longitude + 1,
-                'longitude40': restaurant.longitude + 1,
-
-                # 'url': str(restaurant.url),
-                # 'category': restaurant.category.name,
-                # 'tags': [tag.name for tag in restaurant.tags.all()],
-                # 'unvaccinated_pass': restaurant.unvaccinated_pass.type,
-                # 'num_likes': restaurant.likes.count(),
-                # 'num_dislikes': restaurant.num_dislikes(),
-                # 'num_comments': restaurant.num_comments(),
-                # 'hits': restaurant.hit_count.hits,
+                'url': restaurant.url,
+                'category': restaurant.category,
+                'tags': [tag for tag in restaurant.tags.split(" ")],
+                'unvaccinated_pass': restaurant.unvaccinated_pass,
+                'num_likes': restaurant.num_likes,
+                'num_dislikes': restaurant.num_dislikes,
+                'num_comments': restaurant.num_comments,
+                'hits': restaurant.num_hits,
             }
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
+        context.update(get_num_restaurants())
         return context
+
+    def get_queryset(self):
+        """
+        :return queryset
+
+        Big-O O(an + nlog(n))
+        an: search by keyword
+        nlong(n): sort by '-pk'
+        """
+
+        # search_string = self.kwargs['search_string']
+        # search_keywords = self.get_keywords(search_string)
+        #
+        # lookups = []
+        #
+        # # O(an) where a = num keywords
+        # for keyword in search_keywords:
+        #     name_lookup = Q(name__contains=keyword)
+        #     address_lookup = Q(address__contains=keyword)
+        #     tag_lookup = Q(tags__name=keyword)
+        #     unvaccinated_lookup = Q(unvaccinated_pass__contains=keyword)
+        #     category_lookup = Q(unvaccinated_lookup=keyword)
+        #
+        #     lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup | category_lookup)
+        #
+        # # O(nlog(n))
+        queryset = super(MapView, self).get_queryset()
+        address_constraints = Q(address__isnull=True)
+        latitude_constraints = Q(latitude__isnull=True)
+        longitude_constraints = Q(longitude__isnull=True)
+        queryset = queryset.exclude(address_constraints | latitude_constraints | longitude_constraints)
+
+        self.total_count = queryset.count()
+
+        return queryset
+
+    @staticmethod
+    def get_keywords(search_string: str) -> List[str]:
+        """
+        :param search_string: str
+        :return keywords: List[str]
+
+        verifieded test cases
+
+        1. "aa bb cc"
+        2. "#aa#bb#cc#"
+        3. "#aa #bb #cc"
+
+        -> ["aa", "bb", "cc"]
+        """
+        keywords = search_string.strip(" #").replace("#", " ").split()
+
+        return keywords
 
 
 class SearchedMapView(SearchedRestaurantList):
@@ -338,7 +351,39 @@ class RestaurantDetail(HitCountDetailView):
         context['restaurant_comment_form'] = RestaurantCommentForm
         context.update(get_num_restaurants())
 
+        self.update_or_create_fast_restaurant(context['restaurant'])
+
         return context
+
+    def update_or_create_fast_restaurant(self, restaurant):
+        name = restaurant.name
+        data = self.parsing_restaurant(restaurant)
+        fast_restaurant, created = FastRestaurant.objects.update_or_create(name=name, defaults=data)
+
+    @staticmethod
+    def parsing_restaurant(restaurant):
+        data = {
+            # 'name': restaurant.name,
+            'address': restaurant.address,
+            'latitude': restaurant.latitude,
+            'longitude': restaurant.longitude,
+
+            'verifieded': restaurant.verifieded,
+
+            'url': restaurant.url,
+
+            'category': restaurant.category.name,
+            'tags': " ".join(restaurant.tags.values_list('name', flat=True)[:4]),
+            'unvaccinated_pass': restaurant.unvaccinated_pass.type,
+
+            # likes and dislikes and comments
+            'num_likes': restaurant.num_likes(),
+            'num_dislikes': restaurant.num_dislikes(),
+            'num_comments': restaurant.num_comments(),
+            'num_hits': restaurant.hit_count.hits,
+        }
+
+        return data
 
 
 class CreateRestaurant(CreateView):

@@ -45,6 +45,11 @@ class RestaurantSearchForm(forms.Form):
     prefix = "restaurant_search_form"
 
 
+class FastRestaurantSearchForm(forms.Form):
+    search_string = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs=SEARCH_ATTRS))
+    prefix = "restaurant_search_form"
+
+
 class RestaurantDeleteRequestForm(forms.ModelForm):
     class Meta:
         model = RestaurantDeleteRequest

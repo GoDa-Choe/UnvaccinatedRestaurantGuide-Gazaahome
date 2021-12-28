@@ -217,3 +217,29 @@ class PostComment(models.Model):
 
     def num_likes(self):
         return self.likes.count()
+
+
+class FastRestaurant(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+
+    address = models.CharField(max_length=200, blank=False, null=True)
+
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    verifieded = models.BooleanField(default=False)
+
+    url = models.URLField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    category = models.CharField(max_length=20)
+    tags = models.CharField(max_length=50, blank=True)
+    unvaccinated_pass = models.CharField(max_length=20)
+
+    # likes and dislikes and comments
+    num_likes = models.IntegerField(default=0)
+    num_dislikes = models.IntegerField(default=0)
+    num_comments = models.IntegerField(default=0)
+    num_hits = models.IntegerField(default=1)

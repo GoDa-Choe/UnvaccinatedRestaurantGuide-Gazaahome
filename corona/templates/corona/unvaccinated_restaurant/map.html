@@ -88,7 +88,7 @@
         {% for restaurant in restaurant_list %}
             positions[{{ forloop.counter0 }}] = {
                 latlng: new kakao.maps.LatLng({{restaurant.latitude}}, {{restaurant.longitude}}),
-                {#unvaccinated_pass: "{{restaurant.unvaccinated_pass}}"#}
+                unvaccinated_pass: "{{restaurant.unvaccinated_pass}}"
             };
         {% endfor %}
 
@@ -117,10 +117,8 @@
             {#var imageSize = new kakao.maps.Size(30, 30);#}
             {#var overImageSize = new kakao.maps.Size(40, 40);#}
 
-            var image = blueMarkerImage;
-            var overImage = blueMarkerOverImage;
-
-            {% comment %}
+            var image = null;
+            var overImage = null;
 
             if (positions[i].unvaccinated_pass == "미접종 친절") {
                 image = blueMarkerImage;
@@ -132,11 +130,7 @@
                 image = greenMarkerImage;
                 overImage = greenMarkerOverImage;
             }
-            {% endcomment %}
 
-            {#// 마커 이미지를 생성합니다#}
-            {#var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);#}
-            {#var markerOverImage = new kakao.maps.MarkerImage(imageSrc, overImageSize);#}
 
             // 마커를 생성합니다
             var marker = new kakao.maps.Marker({
@@ -147,25 +141,25 @@
                 index: i
             });
 
-            marker.overImage = image;
-            marker.normalImage = overImage;
+            marker.normalImage = image;
+            marker.overImage = overImage;
 
-            {#markers[i] = marker;#}
+            markers[i] = marker;
 
-            {% comment %}
+
             // 마커에 표시할 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
                 {#content: positions[i].content, // 인포윈도우에 표시할 내용#}
                 removable: true,
             });
-            {% endcomment %}
+
 
             // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
             // 이벤트 리스너로는 클로저를 만들어 등록합니다
             // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
             kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(marker));
             kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(marker));
-            {#kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow, i));#}
+            kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow, i));
             // 마커에 클릭이벤트를 등록합니다
         }
 
@@ -185,8 +179,8 @@
                 {#marker.setImage(marker.overImage);#}
                 var restaurant = restaurant_list[myindex];
 
-                var borderColor = "primary"
-                var tagColor = "cornflowerblue"
+                var borderColor = ""
+                var tagColor = ""
 
 
                 if (restaurant.unvaccinated_pass == "미접종 친절") {
@@ -210,17 +204,15 @@
 
 
                 var tags = "";
-                {% comment %}
 
-                if (restaurant.tags.length > 0) {
-                    tags = tags + '<i class="fas fa-tags text-muted"></i> ';
+                if (restaurant.tags != "") {
+                    tags = '<i class="fas fa-tags text-muted"></i> ';
+
+                    for (var i = 0; i < restaurant.tags.length; i++) {
+                        tags = tags + '<span class="badge rounded-pill"' +
+                            'style="background-color: darkseagreen">' + restaurant.tags[i] + '</span> ';
+                    }
                 }
-
-                for (var i = 0; i < restaurant.tags.length; i++) {
-                    tags = tags + '<span class="badge rounded-pill"' +
-                        'style="background-color: darkseagreen">' + restaurant.tags[i] + '</span> ';
-                }
-
 
 
                 var content =
@@ -272,7 +264,6 @@
                     '</div>' +
                     '</div>' +
                     ' </div>';
-{% endcomment %}
 
                 infowindow.setContent(content);
                 infowindow.open(map, marker);
