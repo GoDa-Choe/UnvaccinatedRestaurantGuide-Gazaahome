@@ -158,6 +158,9 @@ class MapView(RestaurantList):
         context = super(MapView, self).get_context_data()
 
         restaurant_list = []
+
+        num = range(1, 200)
+
         for restaurant in context['restaurant_list']:
             data = {
                 'pk': restaurant.pk,
@@ -165,14 +168,15 @@ class MapView(RestaurantList):
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
                 'longitude': restaurant.longitude,
-                # 'url': str(restaurant.url),
-                # 'category': restaurant.category.name,
-                # 'tags': [tag.name for tag in restaurant.tags.all()],
-                # 'unvaccinated_pass': restaurant.unvaccinated_pass.type,
-                # 'num_likes': restaurant.likes.count(),
-                # 'num_dislikes': restaurant.num_dislikes(),
-                # 'num_comments': restaurant.num_comments(),
-                # 'hits': restaurant.hit_count.hits,
+
+                'url': str(restaurant.url),
+                'category': restaurant.category.name,
+                'tags': [tag.name for tag in restaurant.tags.all()],
+                'unvaccinated_pass': restaurant.unvaccinated_pass.type,
+                'num_likes': restaurant.likes.count(),
+                'num_dislikes': restaurant.num_dislikes(),
+                'num_comments': restaurant.num_comments(),
+                'hits': restaurant.hit_count.hits,
             }
             restaurant_list.append(data)
 
