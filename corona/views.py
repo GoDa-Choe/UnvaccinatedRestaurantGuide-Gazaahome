@@ -177,7 +177,6 @@ class MapView(RestaurantList):
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
-        context['num_restaurants'] = len(restaurant_list)
         return context
 
 
@@ -223,7 +222,7 @@ class SearchedMapView(SearchedRestaurantList):
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
-        context['num_restaurants'] = len(restaurant_list)
+        context['num_searched'] = len(restaurant_list)
         return context
 
 
