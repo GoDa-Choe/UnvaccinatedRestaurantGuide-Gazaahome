@@ -1,0 +1,112 @@
+{% extends 'corona/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head-title %}
+    식당 삭제 요청
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'corona/sub_banner.html' %}
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h2 class="h4">삭제 요청서 작성</h2>
+
+        <hr>
+
+        <div class="my-3">
+
+            <!-- Title-->
+            <h2 class="h4">
+                {{ restaurant.name }}
+            </h2>
+
+
+            {% if restaurant.address %}
+                <p class="pb-0 mb-1 lh-sm text-muted">
+                    {{ restaurant.address }}
+                </p>
+            {% else %}
+                <p class="pb-0 mb-1 lh-sm text-muted">
+                    주소 확인 중
+                </p>
+            {% endif %}
+
+
+            <div class="d-flex justify-content-between align-items-center small">
+                <div class="d-inline">
+                    <strong class="text-gray-dark">{{ restaurant.category }}</strong>
+                    {% comment %}
+                        {% if restaurant.verifieded %}
+                            <div class="d-inline mx-2 small text-success"> 유선확인 완료</div>
+                        {% else %}
+                            <div class="d-inline mx-2 small text-success"> 유선확인 중</div>
+                        {% endif %}
+                    {% endcomment %}
+                </div>
+
+                <div class="d-inline mb-1 text-muted">
+                    <div class="d-inline"><i
+                            class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }}
+                    </div>
+                    <div class="d-inline"><i
+                            class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }}
+                    </div>
+                    <div class="d-inline"><i class="far fa-comment"></i> {{ restaurant.num_comments }}
+                    </div>
+                    <div class="d-inline"><i class="far fa-eye"></i> {{ restaurant.hit_count.hits }}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between small">
+                <div class="d-inline">
+                    {% if restaurant.unvaccinated_pass.type == "미접종 친절" %}
+                        <span class="badge rounded-pill"
+                              style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>
+                    {% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}
+                        <span class="badge rounded-pill"
+                              style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>
+                    {% else %}
+                        <span class="badge rounded-pill"
+                              style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="d-inline">
+                    {% if restaurant.tags.exists %}
+                        <i class="fas fa-tags text-muted"></i>
+                        {% for tag in restaurant.tags.iterator %}
+                            <span class="badge rounded-pill"
+                                  style="background-color: darkseagreen">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="d-inline">
+                        {% if restaurant.url %}
+                            <a href="{{ restaurant.url }}">
+                                <img src="{% static 'corona/naver_map.png' %}" style="width: 20px; height: 20px">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            {{ form | crispy }}
+
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-primary">보내기</button>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

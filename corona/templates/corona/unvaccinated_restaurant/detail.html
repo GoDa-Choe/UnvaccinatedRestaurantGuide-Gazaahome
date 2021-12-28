@@ -34,10 +34,22 @@
                 <small>수정</small>
             </a>
 
-            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
-               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
-                <small>삭제</small>
-            </a>
+            {% if  restaurant.restaurantdeleterequest_set.exists %}
+                <a class="btn mx-1 btn-sm btn-outline-danger px-1 py-0 disabled"
+                   href="{% url 'corona:restaurant_delete_requset' restaurant.pk %}" role="button">
+                    <small>삭제 요청 중 </small>
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">in progress...</span>
+                    </div>
+                </a>
+            {% else %}
+                <a class="btn mx-1 btn-sm btn-outline-danger px-1 py-0"
+                   href="{% url 'corona:restaurant_delete_requset' restaurant.pk %}" role="button">
+                    <small>삭제</small>
+                </a>
+            {% endif %}
+
+
         </div>
 
         <!-- Title-->
@@ -60,8 +72,8 @@
         <div class="d-flex justify-content-between align-items-center small">
 
             <div class="d-inline">
+                <strong class="text-gray-dark">{{ restaurant.category }}</strong>
                 {% comment %}
-                    <strong class="text-gray-dark">{{ restaurant.category }}</strong>
                     {% if restaurant.verifieded %}
                         <div class="d-inline mx-2 small text-success"> 유선확인 완료</div>
                     {% else %}
@@ -129,22 +141,11 @@
                 <div id="map" class="mx-3 mb-2 rounded shadow-sm" style="height: 250px"></div>
                 <div id="roadview" class="mx-3 rounded shadow-sm" style="height:150px"></div>
             </div>
+
+            <hr>
         {% endif %}
 
-        <!-- Restaurant Eidt-->
-        <div class="d-flex justify-content-center my-0">
-            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
-               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
-                <small>식당 정보 수정</small>
-            </a>
 
-            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
-               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
-                <small>식당 정보 삭제</small>
-            </a>
-        </div>
-
-        <hr>
 
         <!-- Likes and Dislikes -->
         <div class="d-flex justify-content-center my-3">

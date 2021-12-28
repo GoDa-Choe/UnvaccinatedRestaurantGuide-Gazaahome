@@ -1,6 +1,6 @@
 from django import forms
 
-from corona.models import Restaurant, RestaurantComment
+from corona.models import Restaurant, RestaurantComment, RestaurantDeleteRequest
 from corona.models import Post, PostComment
 
 
@@ -43,6 +43,19 @@ SEARCH_ATTRS = {
 class RestaurantSearchForm(forms.Form):
     search_string = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs=SEARCH_ATTRS))
     prefix = "restaurant_search_form"
+
+
+class RestaurantDeleteRequestForm(forms.ModelForm):
+    class Meta:
+        model = RestaurantDeleteRequest
+        fields = ('content',)
+        labels = {
+            'content': '삭제요청 내용',
+        }
+
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': '삭제 요청 승인까지 약간의 시간이 소요될 수 있습니다.'}),
+        }
 
 
 class PostCommentForm(forms.ModelForm):

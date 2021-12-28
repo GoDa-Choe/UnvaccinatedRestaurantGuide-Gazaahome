@@ -13,6 +13,7 @@ from corona.views import RestaurantList, RestaurantDetail, CreateRestaurant, Upd
 from corona.views import like_restaurant, dislike_restaurant
 from corona.views import create_restaurant_comment, delete_restaurant_comment, UpdateRestaurantComment
 from corona.views import like_restaurant_comment
+from corona.views import CreateRestaurantDeleteRequest
 
 from corona.views import PostList, PopularPostList, CategoryPostList
 from corona.views import PostDetail
@@ -45,6 +46,7 @@ urlpatterns = [
     path('unvaccinated_restaurant/create/', CreateRestaurant.as_view(), name='restaurant_create'),
 
     path('unvaccinated_restaurant/<int:pk>/', RestaurantDetail.as_view(), name='restaurant_detail'),
+    path('unvaccinated_restaurant/<int:pk>/create_delete_request/', CreateRestaurantDeleteRequest.as_view(), name='restaurant_delete_requset'),
     path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
 
     path('unvaccinated_restaurant/<int:pk>/like/', like_restaurant, name='like_restaurant'),

@@ -15,10 +15,10 @@ from django.utils.text import slugify
 
 from hitcount.views import HitCountDetailView
 
-from corona.models import Restaurant, RestaurantComment, RestaurantTag
+from corona.models import Restaurant, RestaurantComment, RestaurantTag, RestaurantDeleteRequest
 from corona.models import Post, PostComment, PostCategory
 
-from corona.forms import RestaurantForm, RestaurantCommentForm, RestaurantSearchForm
+from corona.forms import RestaurantForm, RestaurantCommentForm, RestaurantSearchForm, RestaurantDeleteRequestForm
 from corona.forms import PostForm, PostCommentForm
 
 from typing import List
@@ -588,3 +588,32 @@ def like_post_comment(request, post_pk, pk):
         post_comment.likes.add(request.user)
 
     return HttpResponseRedirect(reverse('corona:post_detail', args=(post_pk,)))
+
+
+class CreateRestaurantDeleteRequest(LoginRequiredMixin, CreateView):
+    model = RestaurantDeleteRequest
+    form_class = RestaurantDeleteRequestForm
+    template_name = 'corona/unvaccinated_restaurant/create_delete_request.html'
+
+    def form_valid(self, form):
+        current_user = self.request.user
+
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+
+        restaurant = Restaurant.objects.get(pk=self.kwargs['pk'])
+        form.instance.restaurant = restaurant
+
+        response = super(CreateRestaurantDeleteRequest, self).form_valid(form)
+
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateRestaurantDeleteRequest, self).get_context_data()
+        restaurant = Restaurant.objects.get(pk=self.kwargs['pk'])
+        context['restaurant'] = restaurant
+
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('corona:restaurant_detail', args=(self.kwargs['pk'],))
