@@ -25,6 +25,8 @@ from corona.forms import PostForm, PostCommentForm
 from typing import List
 import operator
 from functools import reduce
+import requests
+from urllib.parse import urlparse
 
 
 def get_num_restaurants():
@@ -427,7 +429,33 @@ class RestaurantDetail(HitCountDetailView):
         return data
 
 
-class CreateRestaurant(CreateView):
+class CoordinateMixin:
+    url = "https://dapi.kakao.com/v2/local/search/address.json"
+    header = {'Authorization': 'KakaoAK 1a1d8745de102eaf124ca7d9d58ed33f'}
+
+    def set_coordinate(self, restaurant):
+        address = restaurant.address
+        query = f"?query={address}"
+        request = self.url + query
+
+        response = requests.get(urlparse(request).geturl(), headers=self.header).json()
+        doc = response['documents']
+
+        if not doc:
+            return None
+
+        first_match = response['documents'][0]['road_address']
+
+        if not first_match:
+            return None
+
+        restaurant.latitude = float(first_match['y'])
+        restaurant.longitude = float(first_match['x'])
+
+        restaurant.save()
+
+
+class CreateRestaurant(CoordinateMixin, CreateView):
     model = Restaurant
     form_class = RestaurantForm
     template_name = 'corona/unvaccinated_restaurant/create.html'
@@ -455,10 +483,12 @@ class CreateRestaurant(CreateView):
                     tag.save()
                 self.object.tags.add(tag)
 
+        self.set_coordinate(self.object)
+
         return response
 
 
-class UpdateRestaurant(LoginRequiredMixin, UpdateView):
+class UpdateRestaurant(LoginRequiredMixin, CoordinateMixin, UpdateView):
     model = Restaurant
     form_class = RestaurantForm
     template_name = 'corona/unvaccinated_restaurant/update.html'
@@ -491,6 +521,8 @@ class UpdateRestaurant(LoginRequiredMixin, UpdateView):
                     tag.slug = slugify(tag, allow_unicode=True)
                     tag.save()
                 self.object.tags.add(tag)
+
+        self.set_coordinate(self.object)
 
         return response
 
