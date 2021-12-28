@@ -356,14 +356,13 @@ class RestaurantDetail(HitCountDetailView):
         return context
 
     def update_or_create_fast_restaurant(self, restaurant):
-        name = restaurant.name
         data = self.parsing_restaurant(restaurant)
-        fast_restaurant, created = FastRestaurant.objects.update_or_create(name=name, defaults=data)
+        fast_restaurant, created = FastRestaurant.objects.update_or_create(base=restaurant, defaults=data)
 
     @staticmethod
     def parsing_restaurant(restaurant):
         data = {
-            # 'name': restaurant.name,
+            'name': restaurant.name,
             'address': restaurant.address,
             'latitude': restaurant.latitude,
             'longitude': restaurant.longitude,

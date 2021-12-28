@@ -243,3 +243,5 @@ class FastRestaurant(models.Model):
     num_dislikes = models.IntegerField(default=0)
     num_comments = models.IntegerField(default=0)
     num_hits = models.IntegerField(default=1)
+
+    base = models.ForeignKey(Restaurant, default=1, on_delete=models.CASCADE)
