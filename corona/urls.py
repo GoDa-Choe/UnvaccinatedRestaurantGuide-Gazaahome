@@ -45,7 +45,7 @@ urlpatterns = [
     path('unvaccinated_restaurant/create/', CreateRestaurant.as_view(), name='restaurant_create'),
 
     path('unvaccinated_restaurant/<int:pk>/', RestaurantDetail.as_view(), name='restaurant_detail'),
-    # path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
+    path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
 
     path('unvaccinated_restaurant/<int:pk>/like/', like_restaurant, name='like_restaurant'),
     path('unvaccinated_restaurant/<int:pk>/dislike/', dislike_restaurant, name='dislike_restaurant'),

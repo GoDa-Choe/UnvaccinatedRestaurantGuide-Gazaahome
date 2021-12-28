@@ -8,6 +8,8 @@ from hitcount.models import HitCountMixin
 from hitcount.settings import MODEL_HITCOUNT
 from django.contrib.contenttypes.fields import GenericRelation
 
+from django.utils.safestring import mark_safe
+
 
 class UnvaccinatedPass(models.Model):
     type = models.CharField(max_length=20, unique=True)
@@ -36,11 +38,25 @@ class RestaurantCategory(models.Model):
         verbose_name_plural = 'RestaurantCategories'
 
 
+ADDRESS_HELP_TEXT = """
+    <a href="https://map.naver.com/v5/" class="text-decoration-none small">
+        <img src="https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640650504/static/corona/naver_map_yc6xld.png" 
+        style="width: 20px; height: 20px">
+        네이버 지도에서 알아보기
+    </a>
+"""
+
+SAFE_ADDRESS_HELP_TEXT = mark_safe(ADDRESS_HELP_TEXT.strip())
+
+
 class Restaurant(models.Model, HitCountMixin):
     name = models.CharField(max_length=40, unique=True)
 
-    address = models.CharField(max_length=200, blank=True, null=True,
-                               help_text="주소 생략시 <가게 상호>을 구체적으로 입력해주세요. (예시: 최고다삽겹살 고다역점)")
+    # address = models.CharField(max_length=200, blank=True, null=True,
+    #                            help_text="주소 생략시 <가게 상호>을 구체적으로 입력해주세요. (예시: 최고다삽겹살 고다역점)")
+
+    address = models.CharField(max_length=200, blank=False, null=True,
+                               help_text=SAFE_ADDRESS_HELP_TEXT)
 
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)

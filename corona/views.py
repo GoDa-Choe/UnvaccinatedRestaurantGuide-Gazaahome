@@ -271,7 +271,7 @@ class CreateRestaurant(CreateView):
         return response
 
 
-class UpdateRestaurant(UpdateView):
+class UpdateRestaurant(LoginRequiredMixin, UpdateView):
     model = Restaurant
     form_class = RestaurantForm
     template_name = 'corona/unvaccinated_restaurant/update.html'

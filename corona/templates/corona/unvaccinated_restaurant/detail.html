@@ -27,6 +27,19 @@
 
     <article class="my-3 p-3 rounded shadow-sm">
 
+        <!-- Restaurant Eidt-->
+        <div class="d-flex justify-content-end my-0">
+            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>수정</small>
+            </a>
+
+            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>삭제</small>
+            </a>
+        </div>
+
         <!-- Title-->
         <h2 class="h4">
             {{ restaurant.name }}
@@ -113,19 +126,23 @@
         <!-- Restaurant Map-->
         {% if restaurant.latitude and restaurant.longitude %}
             <div>
-                <div id="map" class="mx-3" style="height: 300px"></div>
-                <div id="roadview" class="mx-3" style="height:200px"></div>
+                <div id="map" class="mx-3 mb-2 rounded shadow-sm" style="height: 250px"></div>
+                <div id="roadview" class="mx-3 rounded shadow-sm" style="height:150px"></div>
             </div>
-
-
         {% endif %}
-        {#        <!-- Restaurant Eidt-->#}
-        {#        <div class="d-flex justify-content-end my-3">#}
-        {#            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"#}
-        {#               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">#}
-        {#                <small>식당 정보 수정</small>#}
-        {#            </a>#}
-        {#        </div>#}
+
+        <!-- Restaurant Eidt-->
+        <div class="d-flex justify-content-center my-0">
+            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>식당 정보 수정</small>
+            </a>
+
+            <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
+               href="{% url 'corona:restaurant_update' restaurant.pk %}" role="button">
+                <small>식당 정보 삭제</small>
+            </a>
+        </div>
 
         <hr>
 

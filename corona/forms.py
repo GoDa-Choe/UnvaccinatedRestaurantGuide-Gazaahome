@@ -21,12 +21,17 @@ class RestaurantCommentForm(forms.ModelForm):
 class RestaurantForm(forms.ModelForm):
     class Meta:
         model = Restaurant
-        fields = ('name', 'address', 'category', 'unvaccinated_pass',)
+        fields = ('name', 'address', 'category', 'unvaccinated_pass', 'url')
         labels = {
             'name': '가게 상호',
             'address': '주소',
             'category': '업종',
             'unvaccinated_pass': '미접종자 거부 여부',
+            'url': '네이버 지도 바로가기 주소(URL)',
+        }
+
+        widgets = {
+            'url': forms.URLInput(attrs={'placeholder': '생략 가능해요'}),
         }
 
 
