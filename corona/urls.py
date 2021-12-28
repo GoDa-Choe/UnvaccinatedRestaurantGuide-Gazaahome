@@ -27,7 +27,7 @@ app_name = 'corona'
 
 urlpatterns = [
     path('', RedirectView.as_view(url='/corona/unvaccinated_restaurant/'), name='index'),
-    path('unvaccinated_restaurant/map/', RedirectView.as_view(url='/corona/unvaccinated_restaurant/map/search/서울 카페/'), name='restaurant_map'),
+    path('unvaccinated_restaurant/map/', RedirectView.as_view(url='/corona/unvaccinated_restaurant/map/search/카페/'), name='restaurant_map'),
 
     path('unvaccinated_restaurant/map/search/<str:search_string>/', SearchedMapView.as_view(), name='searched_restaurant_map'),
 

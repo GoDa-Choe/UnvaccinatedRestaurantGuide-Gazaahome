@@ -55,7 +55,7 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.SUCCESS(
                         f"      {restaurant.pk} | {restaurant.name} | {restaurant.address} | None,  None."))
                     continue
-                
+
                 restaurant.latitude = float(first_match['y'])
                 restaurant.longitude = float(first_match['x'])
 

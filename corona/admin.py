@@ -10,7 +10,7 @@ class RestaurantAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'unvaccinated_pass', 'verifieded',
                     'author', 'created_at', 'updated_at']
     list_display_links = ['id', 'name', 'author', ]
-    list_filter = ['unvaccinated_pass', 'verifieded', 'created_at']
+    list_filter = ['unvaccinated_pass', 'verifieded', 'created_at',]
     search_fields = ['name', 'address', ]
 
 
