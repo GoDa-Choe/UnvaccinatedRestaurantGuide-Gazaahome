@@ -6,9 +6,8 @@ from corona.models import FastRestaurant, Restaurant
 class Command(BaseCommand):
 
     def update_or_create_fast_restaurant(self, restaurant):
-        base = restaurant
         data = self.parsing_restaurant(restaurant)
-        fast_restaurant, created = FastRestaurant.objects.update_or_create(name=base, defaults=data)
+        fast_restaurant, created = FastRestaurant.objects.update_or_create(base=restaurant, defaults=data)
 
         if created:
             self.stdout.write(self.style.SUCCESS(f"{fast_restaurant.pk} | {fast_restaurant.name} | Created"))
