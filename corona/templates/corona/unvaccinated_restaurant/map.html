@@ -196,11 +196,13 @@
 
 
                 var url = "";
+                {% comment %}
                 if (restaurant.url != "None") {
                     url = '<a href="' + restaurant.url + '? class="card-link d-inline text-decoration-none">' +
                         '<img src="{% static "corona/naver_map.png" %}" style="width: 15px; height: 15px"> ' +
                         '</a>';
                 }
+                {% endcomment %}
 
 
                 var tags = "";
