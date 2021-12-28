@@ -15,7 +15,7 @@
     <script type="text/javascript"
             src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xri0uk8n3k"></script>
     <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a944db919cc44b18664fe04ef31cd301"></script>
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a944db919cc44b18664fe04ef31cd301&libraries=clusterer"></script>
 {% endblock %}
 
 
@@ -82,7 +82,7 @@
             };
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
+        // 마커 클러스터러를 생성합니다
 
         var positions = [];
 
@@ -180,7 +180,8 @@
         var redMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_red_thsqtb.png'
         var greenMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640458945/static/corona/marker_green_uhkmdm.png'
 
-        var pre = null;
+
+        var markers = []
 
         for (var i = 0; i < positions.length; i++) {
 
@@ -203,7 +204,7 @@
 
             // 마커를 생성합니다
             var marker = new kakao.maps.Marker({
-                map: map, // 마커를 표시할 지도
+                {#map: map, // 마커를 표시할 지도#}
                 position: positions[i].latlng, // 마커를 표시할 위치
                 image: markerImage, // 마커 이미지
                 clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
@@ -211,6 +212,8 @@
 
             marker.overImage = markerOverImage;
             marker.normalImage = markerImage;
+
+            markers[i] = marker;
 
             // 마커에 표시할 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
@@ -248,6 +251,17 @@
                 marker.setImage(marker.normalImage);
             };
         }
+
+
+        // 마커 클러스터러를 생성합니다
+        var clusterer = new kakao.maps.MarkerClusterer({
+            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+            minLevel: 10 // 클러스터 할 최소 지도 레벨
+        });
+
+
+        clusterer.addMarkers(markers);
 
 
     </script>

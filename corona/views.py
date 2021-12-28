@@ -137,7 +137,6 @@ class RestaurantList(SearchMixin, ListView):
 class MapView(RestaurantList):
     template_name = 'corona/unvaccinated_restaurant/map.html'
     paginate_by = None
-
     def get_queryset(self):
         queryset = super(MapView, self).get_queryset()
         queryset = queryset.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
