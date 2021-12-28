@@ -83,8 +83,8 @@ class SearchedRestaurantList(SearchMixin, ListView):
             address_lookup = Q(address__contains=keyword)
             tag_lookup = Q(tags__name=keyword)
             unvaccinated_lookup = Q(unvaccinated_pass__type__contains=keyword)
-
-            lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup)
+            category_lookup = Q(category__name__contains=keyword)
+            lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup | category_lookup)
 
         # O(nlog(n))
         queryset = Restaurant.objects.filter(*lookups).order_by('-pk').distinct()
@@ -190,23 +190,6 @@ class MapView(FormMixin, ListView):
         an: search by keyword
         nlong(n): sort by '-pk'
         """
-
-        # search_string = self.kwargs['search_string']
-        # search_keywords = self.get_keywords(search_string)
-        #
-        # lookups = []
-        #
-        # # O(an) where a = num keywords
-        # for keyword in search_keywords:
-        #     name_lookup = Q(name__contains=keyword)
-        #     address_lookup = Q(address__contains=keyword)
-        #     tag_lookup = Q(tags__name=keyword)
-        #     unvaccinated_lookup = Q(unvaccinated_pass__contains=keyword)
-        #     category_lookup = Q(unvaccinated_lookup=keyword)
-        #
-        #     lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup | category_lookup)
-        #
-        # # O(nlog(n))
         queryset = super(MapView, self).get_queryset()
         address_constraints = Q(address__isnull=True)
         latitude_constraints = Q(latitude__isnull=True)
@@ -236,17 +219,19 @@ class MapView(FormMixin, ListView):
         return keywords
 
 
-class SearchedMapView(SearchedRestaurantList):
+class SearchedMapView(FormMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/searched_map.html'
-    paginate_by = None
+    context_object_name = "restaurant_list"
+    form_class = FastRestaurantSearchForm
+    total_count = 0
+    model = FastRestaurant
 
-    def get_queryset(self):
-        queryset = super(SearchedMapView, self).get_queryset()
-        name_lookup = Q(address__isnull=True)
-        latitude_lookup = Q(latitude__isnull=True)
-        longitude_lookup = Q(longitude__isnull=True)
-        queryset = queryset.exclude(name_lookup | latitude_lookup | longitude_lookup)
-        return queryset
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
         search_string = form.cleaned_data['search_string']
@@ -266,20 +251,77 @@ class SearchedMapView(SearchedRestaurantList):
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
                 'longitude': restaurant.longitude,
-                'url': str(restaurant.url),
-                'category': restaurant.category.name,
-                'tags': [tag.name for tag in restaurant.tags.all()],
-                'unvaccinated_pass': restaurant.unvaccinated_pass.type,
-                'num_likes': restaurant.likes.count(),
-                'num_dislikes': restaurant.num_dislikes(),
-                'num_comments': restaurant.num_comments(),
-                'hits': restaurant.hit_count.hits,
+                # 'url': restaurant.url,
+                'category': restaurant.category,
+                'tags': restaurant.tags.split(" "),
+                'unvaccinated_pass': restaurant.unvaccinated_pass,
+                'num_likes': restaurant.num_likes,
+                'num_dislikes': restaurant.num_dislikes,
+                'num_comments': restaurant.num_comments,
+                'hits': restaurant.num_hits,
             }
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
-        context['num_searched'] = len(restaurant_list)
+        context.update(get_num_restaurants())
+        context['search_keywords'] = self.get_keywords(self.kwargs['search_string'])
         return context
+
+    def get_queryset(self):
+        """
+        :return queryset
+
+        Big-O O(an + nlog(n))
+        an: search by keyword
+        nlong(n): sort by '-pk'
+        """
+
+        search_string = self.kwargs['search_string']
+        search_keywords = self.get_keywords(search_string)
+
+        lookups = []
+
+        # O(an) where a = num keywords
+        for keyword in search_keywords:
+            name_lookup = Q(name__contains=keyword)
+            address_lookup = Q(address__contains=keyword)
+            tag_lookup = Q(tags__contains=keyword)
+            unvaccinated_lookup = Q(unvaccinated_pass__contains=keyword)
+            category_lookup = Q(category__contains=keyword)
+
+            lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup | category_lookup)
+
+        # O(nlog(n))
+        queryset = super(SearchedMapView, self).get_queryset()
+        queryset = queryset.filter(*lookups)
+
+        address_constraints = Q(address__isnull=True)
+        latitude_constraints = Q(latitude__isnull=True)
+        longitude_constraints = Q(longitude__isnull=True)
+        queryset = queryset.exclude(address_constraints | latitude_constraints | longitude_constraints).order_by(
+            '-pk').distinct()
+
+        self.total_count = queryset.count()
+
+        return queryset
+
+    @staticmethod
+    def get_keywords(search_string: str) -> List[str]:
+        """
+        :param search_string: str
+        :return keywords: List[str]
+
+        verifieded test cases
+
+        1. "aa bb cc"
+        2. "#aa#bb#cc#"
+        3. "#aa #bb #cc"
+
+        -> ["aa", "bb", "cc"]
+        """
+        keywords = search_string.strip(" #").replace("#", " ").split()
+
+        return keywords
 
 
 class PopularRestaurantList(SearchMixin, ListView):

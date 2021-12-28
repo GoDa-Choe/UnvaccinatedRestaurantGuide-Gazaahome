@@ -26,12 +26,13 @@ from corona.views import like_post_comment
 app_name = 'corona'
 
 urlpatterns = [
+
     path('', RedirectView.as_view(url='/corona/unvaccinated_restaurant/'), name='index'),
-    path('unvaccinated_restaurant/map/', RedirectView.as_view(url='/corona/unvaccinated_restaurant/map/search/카페/'),
+    path('unvaccinated_restaurant/map/', MapView.as_view(),
          name='restaurant_map'),
 
     # Todo
-    path('unvaccinated_restaurant/map/test/', MapView.as_view(), name='restaurant_map_test'),
+    # path('unvaccinated_restaurant/map/test/', MapView.as_view(), name='restaurant_map_test'),
 
     path('unvaccinated_restaurant/map/search/<str:search_string>/', SearchedMapView.as_view(),
          name='searched_restaurant_map'),
