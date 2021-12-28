@@ -103,7 +103,7 @@ class RestaurantComment(models.Model):
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True, null=True)
+    # image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True, null=True)
     content = models.TextField()
 
     is_anonymous = models.BooleanField(default=True)
