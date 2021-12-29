@@ -650,7 +650,7 @@ class PostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = PostCategory.objects.iterator()
-        context['num_post'] = Post.objects.count()
+        context['num_post'] = context['post_list'].count()
         return context
 
 
