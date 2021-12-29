@@ -9,6 +9,7 @@ from hitcount.settings import MODEL_HITCOUNT
 from django.contrib.contenttypes.fields import GenericRelation
 
 from django.utils.safestring import mark_safe
+from cloudinary.models import CloudinaryField
 
 
 class UnvaccinatedPass(models.Model):
@@ -156,7 +157,7 @@ class Post(models.Model, HitCountMixin):
     title = models.CharField(max_length=40)
     content = MarkdownxField()
 
-    head_image = models.ImageField(upload_to='corona/post/images/%Y/%m/%d/', blank=True)
+    head_image = CloudinaryField(upload_to='corona/post/images/%Y/%m/%d/', blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
