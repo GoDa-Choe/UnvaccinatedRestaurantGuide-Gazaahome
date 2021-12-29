@@ -101,8 +101,7 @@ class Restaurant(models.Model, HitCountMixin):
 
 class RestaurantComment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True,
-                              default="/corona/static/corona/kakao_map.png/")
+    image = models.ImageField(null=True, upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True, )
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
