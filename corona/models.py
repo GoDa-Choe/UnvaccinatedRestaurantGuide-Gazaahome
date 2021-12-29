@@ -101,7 +101,8 @@ class Restaurant(models.Model, HitCountMixin):
 
 class RestaurantComment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', null=False, blank=True)
+    image = models.ImageField(upload_to='corona/restaurant/comments/%Y/%m/%d/', blank=True,
+                              default="/corona/static/corona/kakao_map.png/")
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
@@ -157,7 +158,7 @@ class Post(models.Model, HitCountMixin):
     title = models.CharField(max_length=40)
     content = MarkdownxField()
 
-    head_image = CloudinaryField(upload_to='corona/post/images/%Y/%m/%d/', blank=True, null=True)
+    head_image = models.ImageField(upload_to='corona/post/images/%Y/%m/%d/', blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
