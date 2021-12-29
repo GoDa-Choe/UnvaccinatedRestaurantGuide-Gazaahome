@@ -638,6 +638,8 @@ def like_restaurant_comment(request, restaurant_pk, pk):
 
 
 ####################
+def get_num_posts():
+    return Post.objects.count()
 
 
 class PostList(ListView):
@@ -650,7 +652,7 @@ class PostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = PostCategory.objects.iterator()
-        context['num_post'] = Post.objects.all().count()
+        context['num_post'] = get_num_posts
         return context
 
 
