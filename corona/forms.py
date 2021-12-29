@@ -8,11 +8,11 @@ class RestaurantCommentForm(forms.ModelForm):
     class Meta:
         model = RestaurantComment
         fields = ('content',
-                  # 'image',
+                  'image',
                   'is_anonymous')
         labels = {
             'content': "",
-            # 'image': "사진",
+            'image': "사진",
             'is_anonymous': '익명',
         }
 
