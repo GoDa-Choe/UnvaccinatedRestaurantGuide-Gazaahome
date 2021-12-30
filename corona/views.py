@@ -584,9 +584,9 @@ class RegionCoordinateMixin:
         restaurant.longitude = float(first_match['x'])
         region = first_match['region_1depth_name']
 
-        if restaurant.region == "세종특별자치시":
+        if region == "세종특별자치시":
             restaurant.region = "세종"
-        elif restaurant.region == "제주특별자치도":
+        elif region == "제주특별자치도":
             restaurant.region = "제주"
         restaurant.region = region
 
