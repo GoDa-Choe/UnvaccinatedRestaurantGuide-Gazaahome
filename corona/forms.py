@@ -37,11 +37,11 @@ class Restaurant2ndForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = (
-            'content',
+            # 'content',
             'url',
         )
         labels = {
-            'content': '내용',
+            # 'content': '내용',
             'url': '네이버 지도 바로가기 주소(URL)',
         }
 
@@ -70,7 +70,9 @@ class RestaurantUpdateForm(forms.ModelForm):
 class RestaurantUpdateAuthorForm(forms.ModelForm):
     class Meta:
         model = Restaurant
-        fields = ('name', 'address', 'category', 'unvaccinated_pass', 'content', 'url')
+        fields = ('name', 'address', 'category', 'unvaccinated_pass',
+                  'content',
+                  'url')
         labels = {
             'name': '가게 상호',
             'address': '주소',
