@@ -560,11 +560,11 @@ class RestaurantDetail(HitCountDetailView):
         return data
 
 
-class CoordinateMixin:
+class RegionCoordinateMixin:
     url = "https://dapi.kakao.com/v2/local/search/address.json"
     header = {'Authorization': 'KakaoAK 1a1d8745de102eaf124ca7d9d58ed33f'}
 
-    def set_coordinate(self, restaurant):
+    def set_resion_coordinate(self, restaurant):
         address = restaurant.address
         query = f"?query={address}"
         request = self.url + query
@@ -582,11 +582,12 @@ class CoordinateMixin:
 
         restaurant.latitude = float(first_match['y'])
         restaurant.longitude = float(first_match['x'])
+        restaurant.region = first_match['region_1depth_name']
 
         restaurant.save()
 
 
-class CreateRestaurant1st(CoordinateMixin, CreateView):
+class CreateRestaurant1st(RegionCoordinateMixin, CreateView):
     model = Restaurant
     form_class = Restaurant1stForm
     template_name = 'corona/unvaccinated_restaurant/create_1st.html'
@@ -599,7 +600,7 @@ class CreateRestaurant1st(CoordinateMixin, CreateView):
             form.instance.author = current_user
 
         response = super(CreateRestaurant1st, self).form_valid(form)
-        self.set_coordinate(self.object)
+        self.set_resion_coordinate(self.object)
 
         return response
 
@@ -607,7 +608,7 @@ class CreateRestaurant1st(CoordinateMixin, CreateView):
         return reverse_lazy('corona:restaurant_create_2nd', args=(self.object.pk,))
 
 
-class CreateRestaurant2nd(CoordinateMixin, UpdateView):
+class CreateRestaurant2nd(RegionCoordinateMixin, UpdateView):
     model = Restaurant
     form_class = Restaurant2ndForm
     template_name = 'corona/unvaccinated_restaurant/create_2st.html'
@@ -633,12 +634,12 @@ class CreateRestaurant2nd(CoordinateMixin, UpdateView):
                 tag, created = RestaurantTag.objects.get_or_create(name=tag)
                 self.object.tags.add(tag)
 
-        self.set_coordinate(self.object)
+        self.set_resion_coordinate(self.object)
 
         return response
 
 
-class UpdateRestaurant(LoginRequiredMixin, CoordinateMixin, UpdateView):
+class UpdateRestaurant(LoginRequiredMixin, RegionCoordinateMixin, UpdateView):
     model = Restaurant
     form_class = RestaurantUpdateForm
     template_name = 'corona/unvaccinated_restaurant/update.html'
@@ -673,7 +674,7 @@ class UpdateRestaurant(LoginRequiredMixin, CoordinateMixin, UpdateView):
                 tag, created = RestaurantTag.objects.get_or_create(name=tag)
                 self.object.tags.add(tag)
 
-        self.set_coordinate(self.object)
+        self.set_resion_coordinate(self.object)
 
         return response
 
