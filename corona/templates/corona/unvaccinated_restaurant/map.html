@@ -27,6 +27,9 @@
     <!-- Search Bar -->
     {% include 'corona/unvaccinated_restaurant/search_bar.html' %}
 
+    <!-- Region Bar -->
+    {% include 'corona/unvaccinated_restaurant/region_navbar.html' %}
+
     <!-- Scroll Bar -->
     {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
 
@@ -42,7 +45,7 @@
 
             <div class="d-inline">
                 <a role="button" class="btn btn-outline-secondary btn-sm py-1"
-                   href="{% url 'corona:restaurant_create' %}">
+                   href="{% url 'corona:restaurant_create_1st' %}">
                     식당 등록
                 </a>
             </div>

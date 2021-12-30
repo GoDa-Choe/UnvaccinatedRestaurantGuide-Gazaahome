@@ -21,7 +21,36 @@ class RestaurantCommentForm(forms.ModelForm):
         }
 
 
-class RestaurantForm(forms.ModelForm):
+class Restaurant1stForm(forms.ModelForm):
+    class Meta:
+        model = Restaurant
+        fields = ('name', 'address', 'category', 'unvaccinated_pass')
+        labels = {
+            'name': '가게 상호',
+            'address': '주소',
+            'category': '업종',
+            'unvaccinated_pass': '미접종자 거부 여부',
+        }
+
+
+class Restaurant2ndForm(forms.ModelForm):
+    class Meta:
+        model = Restaurant
+        fields = (
+            'content',
+            'url',
+        )
+        labels = {
+            'content': '내용',
+            'url': '네이버 지도 바로가기 주소(URL)',
+        }
+
+        widgets = {
+            'url': forms.URLInput(attrs={'placeholder': '생략 가능합니다'}),
+        }
+
+
+class RestaurantUpdateForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = ('name', 'address', 'category', 'unvaccinated_pass', 'url')
@@ -34,7 +63,26 @@ class RestaurantForm(forms.ModelForm):
         }
 
         widgets = {
-            'url': forms.URLInput(attrs={'placeholder': '생략 가능해요'}),
+            'url': forms.URLInput(attrs={'placeholder': '생략 가능합니다'}),
+        }
+
+
+class RestaurantUpdateAuthorForm(forms.ModelForm):
+    class Meta:
+        model = Restaurant
+        fields = ('name', 'address', 'category', 'unvaccinated_pass', 'content', 'url')
+        labels = {
+            'name': '가게 상호',
+            'address': '주소',
+            'category': '업종',
+            'unvaccinated_pass': '미접종자 거부 여부',
+            'content': '내용',
+            'url': '네이버 지도 바로가기 주소(URL)',
+        }
+
+        widgets = {
+            'url': forms.URLInput(attrs={'placeholder': '생략 가능합니다'}),
+            'content': forms.Textarea(attrs={'style': "max-height:90px;"}),
         }
 
 

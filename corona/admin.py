@@ -7,16 +7,17 @@ from corona.models import Post, PostComment, PostCategory
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'unvaccinated_pass', 'verifieded',
+    list_display = ['id', 'name', 'address', 'region', 'latitude', 'longitude', 'unvaccinated_pass', 'verifieded',
                     'author', 'created_at', 'updated_at']
     list_display_links = ['id', 'name', 'author', ]
-    list_filter = ['unvaccinated_pass', 'verifieded', 'created_at', ]
+    list_filter = ['region', 'unvaccinated_pass', 'verifieded', 'created_at', ]
     search_fields = ['name', 'address', ]
 
 
 @admin.register(FastRestaurant)
 class FastRestaurantAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'tags', 'category', 'unvaccinated_pass', 'verifieded',
+    list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'tags', 'category', 'unvaccinated_pass',
+                    'verifieded',
                     'created_at', 'updated_at']
     list_display_links = ['id', 'name', ]
     list_filter = ['unvaccinated_pass', 'verifieded', 'created_at', ]
@@ -25,7 +26,7 @@ class FastRestaurantAdmin(admin.ModelAdmin):
 
 @admin.register(RestaurantComment)
 class RestaurantCommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'restaurant', 'author', 'content', 'created_at']
+    list_display = ['id', 'restaurant', 'author', 'content', 'image', 'created_at']
     list_display_links = ['id', 'restaurant', ]
 
 

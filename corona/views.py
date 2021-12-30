@@ -1,9 +1,9 @@
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
 
 from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
@@ -11,30 +11,29 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
-from django.utils.text import slugify
-
 from hitcount.views import HitCountDetailView
 
 from corona.models import Restaurant, RestaurantComment, RestaurantTag, RestaurantDeleteRequest, FastRestaurant
 from corona.models import Post, PostComment, PostCategory
 
-from corona.forms import RestaurantForm, FastRestaurantSearchForm, RestaurantCommentForm, RestaurantSearchForm, \
+from corona.forms import Restaurant1stForm, Restaurant2ndForm, RestaurantUpdateForm, RestaurantUpdateAuthorForm, \
+    FastRestaurantSearchForm, \
+    RestaurantCommentForm, \
+    RestaurantSearchForm, \
     RestaurantDeleteRequestForm
 from corona.forms import PostForm, PostCommentForm
 
 from typing import List
-import operator
-from functools import reduce
 import requests
 from urllib.parse import urlparse
 
 
-def get_num_restaurants():
+def get_num_restaurants(queryset):
     context = {
-        'num_restaurants': Restaurant.objects.count(),
-        'num_unvaccinated_available': Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절').count(),
-        'num_unvaccinated_unavailable': Restaurant.objects.filter(unvaccinated_pass__type='미접종 거부').count(),
-        'num_unvaccinated_confirm_required': Restaurant.objects.filter(unvaccinated_pass__type='궁금').count(),
+        'num_restaurants': queryset.count(),
+        'num_unvaccinated_available': queryset.filter(unvaccinated_pass__type='미접종 친절').count(),
+        'num_unvaccinated_unavailable': queryset.filter(unvaccinated_pass__type='미접종 거부').count(),
+        'num_unvaccinated_confirm_required': queryset.filter(unvaccinated_pass__type='궁금').count(),
     }
 
     return context
@@ -114,7 +113,7 @@ class SearchedRestaurantList(SearchMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SearchedRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
+        context.update(get_num_restaurants(queryset=Restaurant.objects.all()))
 
         search_string = self.kwargs['search_string']
         search_keywords = self.get_keywords(search_string)
@@ -132,9 +131,19 @@ class RestaurantList(SearchMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(RestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
-
+        context.update(get_num_restaurants(self.get_queryset()))
+        region = self.kwargs.get('region', None)
+        context['region'] = region
         return context
+
+    def get_queryset(self):
+        queryset = super(RestaurantList, self).get_queryset()
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
+
+        return queryset
 
 
 class MapView(FormMixin, ListView):
@@ -164,7 +173,7 @@ class MapView(FormMixin, ListView):
         restaurant_list = []
         for restaurant in context['restaurant_list']:
             data = {
-                'pk': restaurant.pk,
+                'pk': restaurant.base.pk,
                 'name': restaurant.name,
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
@@ -181,7 +190,7 @@ class MapView(FormMixin, ListView):
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
-        context.update(get_num_restaurants())
+        context.update(get_num_restaurants(Restaurant.objects.all()))
         return context
 
     def get_queryset(self):
@@ -248,7 +257,7 @@ class SearchedMapView(FormMixin, ListView):
         restaurant_list = []
         for restaurant in context['restaurant_list']:
             data = {
-                'pk': restaurant.pk,
+                'pk': restaurant.base.pk,
                 'name': restaurant.name,
                 'address': restaurant.address,
                 'latitude': restaurant.latitude,
@@ -265,7 +274,7 @@ class SearchedMapView(FormMixin, ListView):
             restaurant_list.append(data)
 
         context['restaurant_list'] = restaurant_list
-        context.update(get_num_restaurants())
+        context.update(get_num_restaurants(Restaurant.objects.all()))
         context['search_keywords'] = self.get_keywords(self.kwargs['search_string'])
         return context
 
@@ -331,13 +340,28 @@ class PopularRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
-    queryset = Restaurant.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
+
+        region = self.kwargs.get('region', None)
+        context['region'] = self.kwargs.get('region', None)
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
 
         return context
+
+    def get_queryset(self):
+        queryset = Restaurant.objects.order_by("-hit_count_generic__hits", '-pk')
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
+
+        return queryset[:20]
 
 
 class MostLikesRestaurantList(SearchMixin, ListView):
@@ -345,14 +369,31 @@ class MostLikesRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
-    queryset = sorted(Restaurant.objects.all(), key=lambda restaurant: (restaurant.num_likes(), restaurant.pk),
-                      reverse=True)[:50]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MostLikesRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
+        region = self.kwargs.get('region', None)
+        context['region'] = region
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
 
         return context
+
+    def get_queryset(self):
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = sorted(Restaurant.objects.filter(region=region).all(),
+                              key=lambda restaurant: (restaurant.num_likes(), restaurant.pk),
+                              reverse=True)[:50]
+        else:
+            queryset = sorted(Restaurant.objects.all(), key=lambda restaurant: (restaurant.num_likes(), restaurant.pk),
+                              reverse=True)[:50]
+
+        return queryset
 
 
 class MostCommentsRestaurantList(SearchMixin, ListView):
@@ -360,14 +401,33 @@ class MostCommentsRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
-    queryset = sorted(Restaurant.objects.all(), key=lambda restaurant: (restaurant.num_comments(), restaurant.pk),
-                      reverse=True)[:50]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MostCommentsRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
+        region = self.kwargs.get('region', None)
+        context['region'] = region
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
 
         return context
+
+    def get_queryset(self):
+
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = sorted(Restaurant.objects.filter(region=region).all(),
+                              key=lambda restaurant: (restaurant.num_comments(), restaurant.pk),
+                              reverse=True)[:50]
+
+        else:
+            queryset = sorted(Restaurant.objects.all(),
+                              key=lambda restaurant: (restaurant.num_comments(), restaurant.pk),
+                              reverse=True)[:50]
+        return queryset
 
 
 class AvailableRestaurantList(SearchMixin, ListView):
@@ -375,44 +435,84 @@ class AvailableRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
-    queryset = Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절')
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AvailableRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
-
+        region = self.kwargs.get('region', None)
+        context['region'] = region
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
         return context
+
+    def get_queryset(self):
+        queryset = Restaurant.objects.filter(unvaccinated_pass__type='미접종 친절')
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
+
+        return queryset
 
 
 class UnavailableRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
-    paginate_by = 8
-    queryset = Restaurant.objects.filter(unvaccinated_pass__type='미접종 거부')
+    paginate_by = 5
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UnavailableRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
+        region = self.kwargs.get('region', None)
+        context['region'] = region
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
 
         return context
+
+    def get_queryset(self):
+        queryset = Restaurant.objects.filter(unvaccinated_pass__type='미접종 거부')
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
+
+        return queryset
 
 
 class ConfirmRequiredRestaurantList(SearchMixin, ListView):
     model = Restaurant
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
-    paginate_by = 8
-    queryset = Restaurant.objects.filter(unvaccinated_pass__type='궁금')
+    paginate_by = 5
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ConfirmRequiredRestaurantList, self).get_context_data()
-        context.update(get_num_restaurants())
-
+        region = self.kwargs.get('region', None)
+        context['region'] = region
+        if region:
+            queryset = Restaurant.objects.filter(region=region)
+        else:
+            queryset = Restaurant.objects.all()
+        context.update(get_num_restaurants(queryset))
         return context
+
+    def get_queryset(self):
+        queryset = Restaurant.objects.filter(unvaccinated_pass__type='궁금')
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
+
+        return queryset
 
 
 class RestaurantDetail(HitCountDetailView):
@@ -423,7 +523,8 @@ class RestaurantDetail(HitCountDetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(RestaurantDetail, self).get_context_data()
         context['restaurant_comment_form'] = RestaurantCommentForm
-        context.update(get_num_restaurants())
+        context.update(get_num_restaurants(Restaurant.objects.all()))
+        context['region'] = self.kwargs.get('region', None)
 
         self.update_or_create_fast_restaurant(context['restaurant'])
 
@@ -485,32 +586,51 @@ class CoordinateMixin:
         restaurant.save()
 
 
-class CreateRestaurant(CoordinateMixin, CreateView):
+class CreateRestaurant1st(CoordinateMixin, CreateView):
     model = Restaurant
-    form_class = RestaurantForm
-    template_name = 'corona/unvaccinated_restaurant/create.html'
+    form_class = Restaurant1stForm
+    template_name = 'corona/unvaccinated_restaurant/create_1st.html'
 
     def form_valid(self, form):
-        current_user = self.request.user
+        self.request.session['pp_create'] = True
 
+        current_user = self.request.user
         if current_user.is_authenticated:
             form.instance.author = current_user
 
-        response = super(CreateRestaurant, self).form_valid(form)
+        response = super(CreateRestaurant1st, self).form_valid(form)
+        self.set_coordinate(self.object)
+
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy('corona:restaurant_create_2nd', args=(self.object.pk,))
+
+
+class CreateRestaurant2nd(CoordinateMixin, UpdateView):
+    model = Restaurant
+    form_class = Restaurant2ndForm
+    template_name = 'corona/unvaccinated_restaurant/create_2st.html'
+
+    def get(self, request, *args, **kwargs):
+
+        if request.session.get('pp_create', False):
+            return super(CreateRestaurant2nd, self).get(request, *args, **kwargs)
+        else:
+            return redirect(reverse_lazy('corona:restaurant_detail', args=(kwargs['pk'],)))
+
+    def form_valid(self, form):
+        response = super(CreateRestaurant2nd, self).form_valid(form)
 
         tags_str = self.request.POST.get('tags_str')
+        tags_str = tags_str.strip(' #')
 
         if tags_str:
-            tags_str = tags_str.strip(' #')
-            tags_str = tags_str.replace(',', '#')
-            tags_list = tags_str.split('#')
+            tags_list = tags_str.replace("#", " ").split()
 
             for tag in tags_list:
                 tag = tag.strip()
-                tag, is_tag_created = RestaurantTag.objects.get_or_create(name=tag)
-                if is_tag_created:
-                    tag.slug = slugify(tag, allow_unicode=True)
-                    tag.save()
+                tag, created = RestaurantTag.objects.get_or_create(name=tag)
                 self.object.tags.add(tag)
 
         self.set_coordinate(self.object)
@@ -520,8 +640,14 @@ class CreateRestaurant(CoordinateMixin, CreateView):
 
 class UpdateRestaurant(LoginRequiredMixin, CoordinateMixin, UpdateView):
     model = Restaurant
-    form_class = RestaurantForm
+    form_class = RestaurantUpdateForm
     template_name = 'corona/unvaccinated_restaurant/update.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user == Restaurant.objects.get(pk=kwargs['pk']).author:
+            self.form_class = RestaurantUpdateAuthorForm
+
+        return super(UpdateRestaurant, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(UpdateRestaurant, self).get_context_data()
@@ -540,16 +666,11 @@ class UpdateRestaurant(LoginRequiredMixin, CoordinateMixin, UpdateView):
         tags_str = self.request.POST.get('tags_str')
 
         if tags_str:
-            tags_str = tags_str.strip(' #')
-            tags_str = tags_str.replace(',', '#')
-            tags_list = tags_str.split('#')
+            tags_list = tags_str.replace("#", " ").split()
 
             for tag in tags_list:
-                tag = tag.strip(' #')
-                tag, is_tag_created = RestaurantTag.objects.get_or_create(name=tag)
-                if is_tag_created:
-                    tag.slug = slugify(tag, allow_unicode=True)
-                    tag.save()
+                tag = tag.strip()
+                tag, created = RestaurantTag.objects.get_or_create(name=tag)
                 self.object.tags.add(tag)
 
         self.set_coordinate(self.object)

@@ -1,7 +1,14 @@
 {% extends 'corona/base.html' %}
 {% load crispy_forms_filters %}
-
 {% load crispy_forms_tags %}
+
+{% block head_script %}
+    <style>
+        .asteriskField {
+            display: none;
+        }
+    </style>
+{% endblock %}
 
 {% block head-title %}
     식당 등록
@@ -13,20 +20,19 @@
     {% include 'corona/sub_banner.html' %}
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h2>새로운 식당 등록</h2>
+        <h2 class="h3">새로운 식당 등록</h2>
+
+        <p class="small text-muted"><small>허위 기재는 자제해주시면 감사하겠습니다.</small></p>
 
         <hr>
 
         <form method="post" enctype="multipart/form-data"> {% csrf_token %}
             {{ form | crispy }}
-            <div id="div_id_tags_str">
-                <label for="id_tags_str">태그</label>
-                <input type="text" name="tags_str" id="id_tags_str" placeholder="#PCR음성필요#한식#삼겹살"
-                       class="textinput textInput form-control">
-            </div>
+
             <div class="d-flex justify-content-end my-3">
-                <button type="submit" class="btn btn-primary">등록</button>
+                <button type="submit" class="btn btn-primary">다음</button>
             </div>
+
         </form>
     </div>
 {% endblock %}

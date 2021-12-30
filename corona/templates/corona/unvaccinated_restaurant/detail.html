@@ -22,6 +22,9 @@
     <!-- Sub Banner -->
     {% include 'corona/sub_banner.html' %}
 
+    <!-- Region Bar -->
+    {% include 'corona/unvaccinated_restaurant/region_navbar.html' %}
+
     <!-- Scroll Bar -->
     {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
 
@@ -132,6 +135,8 @@
 
         </div>
 
+        <!-- Restaurant Content-->
+        <p class="small text-muted">{{ restaurant.content|linebreaks }}</p>
 
         <hr>
 

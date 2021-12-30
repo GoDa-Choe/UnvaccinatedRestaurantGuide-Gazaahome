@@ -9,7 +9,6 @@ from hitcount.settings import MODEL_HITCOUNT
 from django.contrib.contenttypes.fields import GenericRelation
 
 from django.utils.safestring import mark_safe
-from cloudinary.models import CloudinaryField
 
 
 class UnvaccinatedPass(models.Model):
@@ -22,7 +21,8 @@ class UnvaccinatedPass(models.Model):
 
 class RestaurantTag(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    # slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
 
     def __str__(self):
         return self.name
@@ -56,6 +56,10 @@ class Restaurant(models.Model, HitCountMixin):
     address = models.CharField(max_length=200, blank=False, null=True,
                                help_text=SAFE_ADDRESS_HELP_TEXT)
 
+    region = models.CharField(max_length=10, blank=True, null=True)
+
+    content = models.TextField(null=True, blank=True)
+
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
 
@@ -72,7 +76,7 @@ class Restaurant(models.Model, HitCountMixin):
                                  help_text="PCR 음성 필요 여부는 <태그>를 통해 작성해주시면 감사하겠습니다.")
     tags = models.ManyToManyField(RestaurantTag, blank=True, )
     unvaccinated_pass = models.ForeignKey(UnvaccinatedPass, null=True, on_delete=models.SET_NULL,
-                                          help_text="이용가능 여부 확인이 필요하시면 <궁금>으로 설정해주세요")
+                                          help_text="이용가능 여부가 궁금하시면 <궁금>으로 설정해주세요")
 
     # likes and dislikes
     likes = models.ManyToManyField(User, blank=True, related_name="restaurant_likers")

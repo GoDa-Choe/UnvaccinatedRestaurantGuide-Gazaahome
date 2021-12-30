@@ -11,8 +11,7 @@ from corona.views import RestaurantList, AvailableRestaurantList, UnavailableRes
 from corona.views import PopularRestaurantList, MostLikesRestaurantList, MostCommentsRestaurantList
 
 from corona.views import RestaurantDetail
-from corona.views import CreateRestaurant, UpdateRestaurant
-from corona.views import RestaurantList, RestaurantDetail, CreateRestaurant, UpdateRestaurant
+from corona.views import CreateRestaurant1st, CreateRestaurant2nd, UpdateRestaurant
 from corona.views import like_restaurant, dislike_restaurant
 from corona.views import create_restaurant_comment, delete_restaurant_comment, UpdateRestaurantComment
 from corona.views import like_restaurant_comment
@@ -55,10 +54,27 @@ urlpatterns = [
     path('unvaccinated_restaurant/confirm_required/', ConfirmRequiredRestaurantList.as_view(),
          name='confirm_required_restaurant_index'),
 
+    path('unvaccinated_restaurant/region/<str:region>/', RestaurantList.as_view(), name='region_restaurant_index'),
+
+    path('unvaccinated_restaurant/region/<str:region>/mostpopular/', PopularRestaurantList.as_view(),
+         name='most_popular_region_restaurant_index'),
+    path('unvaccinated_restaurant/region/<str:region>/mostlikes/', MostLikesRestaurantList.as_view(),
+         name='most_likes_region_restaurant_index'),
+    path('unvaccinated_restaurant/region/<str:region>/mostcomments/', MostCommentsRestaurantList.as_view(),
+         name='most_comments_region_restaurant_index'),
+
+    path('unvaccinated_restaurant/region/<str:region>/available/', AvailableRestaurantList.as_view(),
+         name='available_region_restaurant_index'),
+    path('unvaccinated_restaurant/region/<str:region>/unavailable/', UnavailableRestaurantList.as_view(),
+         name='unavailable_region_restaurant_index'),
+    path('unvaccinated_restaurant/region/<str:region>/confirm_required/', ConfirmRequiredRestaurantList.as_view(),
+         name='confirm_required_region_restaurant_index'),
+
     path('unvaccinated_restaurant/search/<str:search_string>/', SearchedRestaurantList.as_view(),
          name='searched_restaurant_index'),
 
-    path('unvaccinated_restaurant/create/', CreateRestaurant.as_view(), name='restaurant_create'),
+    path('unvaccinated_restaurant/create/', CreateRestaurant1st.as_view(), name='restaurant_create_1st'),
+    path('unvaccinated_restaurant/<int:pk>/create/', CreateRestaurant2nd.as_view(), name='restaurant_create_2nd'),
 
     path('unvaccinated_restaurant/<int:pk>/', RestaurantDetail.as_view(), name='restaurant_detail'),
     path('unvaccinated_restaurant/<int:pk>/create_delete_request/', CreateRestaurantDeleteRequest.as_view(),

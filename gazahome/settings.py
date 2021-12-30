@@ -84,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_simple_ip_restrict.middleware.ip_filter",
 ]
 
 ROOT_URLCONF = 'gazahome.urls'
@@ -200,3 +201,7 @@ SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT', False))
 # Site Register Code
 GOOGLE_SITE_REGISTER_CODE = os.environ.get('GOOGLE_SITE_REGISTER_CODE', "")
 NAVER_SITE_REGISTER_CODE = os.environ.get('NAVER_SITE_REGISTER_CODE', "")
+
+IP_PROTECTED_NAMESPACES = ['admin', os.environ.get('IP_PROTECTED_NAMESPACE', None)]
+
+IP_NETWORKS_WHITELIST = ['192.168.35.215', ]

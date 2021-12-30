@@ -3,6 +3,12 @@
 
 
 {% block head-title %}
+    {% if region %}
+        {{ region }}
+    {% else %}
+        전국
+    {% endif %}
+
     {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
         친절
     {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
@@ -27,6 +33,8 @@
     <!-- Search Bar -->
     {% include 'corona/unvaccinated_restaurant/search_bar.html' %}
 
+    <!-- Region Bar -->
+    {% include 'corona/unvaccinated_restaurant/region_navbar.html' %}
 
     <!-- Scroll Bar -->
     {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
@@ -35,26 +43,36 @@
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
-            <h2 class="h2 mb-2">
-                {% if request.path == "/corona/unvaccinated_restaurant/available/" %}
-                    친절식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" %}
-                    거부식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" %}
-                    궁금식당 목록
-                {% elif request.path == "/corona/unvaccinated_restaurant/mostpopular/" %}
+            <h2 class="h4 mb-2">
+
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {% if region %}
+                        {{ region }}
+                    {% else %}
+                        전국
+                    {% endif %}
+                </span>
+
+                {% if request.path == "/corona/unvaccinated_restaurant/available/" or request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/available/" %}
+                    친절 식당
+                {% elif request.path == "/corona/unvaccinated_restaurant/unavailable/" or request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/unavailable/" %}
+                    거부 식당
+                {% elif request.path == "/corona/unvaccinated_restaurant/confirm_required/" or request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/confirm_required/" %}
+                    궁금 식당
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostpopular/" or request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/mostpopular/" %}
                     인기 순
-                {% elif request.path == "/corona/unvaccinated_restaurant/mostlikes/" %}
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostlikes/" or request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/mostlikes/" %}
                     좋아요 순
-                {% elif request.path == "/corona/unvaccinated_restaurant/mostcomments/" %}
+                {% elif request.path == "/corona/unvaccinated_restaurant/mostcomments/" or request.path  == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/mostcomments/" %}
                     댓글 순
+
                 {% else %}
-                    모든 식당 목록
+                    모든 식당
                 {% endif %}
             </h2>
 
 
-            <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url 'corona:restaurant_create' %}">
+            <a role="button" class="btn btn-outline-secondary btn-sm" href="{% url 'corona:restaurant_create_1st' %}">
                 식당 등록
             </a>
 
