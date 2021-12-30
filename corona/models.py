@@ -59,6 +59,7 @@ class Restaurant(models.Model, HitCountMixin):
     region = models.CharField(max_length=10, blank=True, null=True)
 
     content = models.TextField(null=True, blank=True)
+    # content2 = models.TextField(null=True, blank=True)
 
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
