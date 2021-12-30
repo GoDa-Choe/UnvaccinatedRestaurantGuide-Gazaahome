@@ -587,7 +587,7 @@ class RegionCoordinateMixin:
         restaurant.save()
 
 
-class CreateRestaurant1st(RegionCoordinateMixin, CreateView):
+class CreateRestaurant1st(LoginRequiredMixin, RegionCoordinateMixin, CreateView):
     model = Restaurant
     form_class = Restaurant1stForm
     template_name = 'corona/unvaccinated_restaurant/create_1st.html'
@@ -608,7 +608,7 @@ class CreateRestaurant1st(RegionCoordinateMixin, CreateView):
         return reverse_lazy('corona:restaurant_create_2nd', args=(self.object.pk,))
 
 
-class CreateRestaurant2nd(RegionCoordinateMixin, UpdateView):
+class CreateRestaurant2nd(LoginRequiredMixin, RegionCoordinateMixin, UpdateView):
     model = Restaurant
     form_class = Restaurant2ndForm
     template_name = 'corona/unvaccinated_restaurant/create_2st.html'

@@ -160,7 +160,7 @@
                       method="POST">{% csrf_token %}
                     <button type="submit"
                             class="btn btn-sm btn-outline-primary position-relative border-1">
-                        좋아요
+                        맞아요
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
                             <i class="far fa-thumbs-up text-primary"></i>
                             <div class="d-inline text-dark">{{ restaurant.num_likes }}</div>
@@ -172,7 +172,7 @@
                       method="POST">{% csrf_token %}
                     <button type="submit"
                             class="btn btn-sm btn-outline-danger position-relative border-1">
-                        싫어요
+                        틀려요
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
                             <i class="far fa-thumbs-down text-danger"></i>
                             <div class="d-inline text-dark">{{ restaurant.num_dislikes }}</div>
@@ -182,14 +182,14 @@
             {% else %}
                 <a class="btn btn-sm btn-outline-primary position-relative border-1 mx-3"
                    href="{% url 'account_login' %}?next={{ request.path }}">
-                    좋아요
+                    맞아요
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
                         <i class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }}
                     </span>
                 </a>
                 <a class="btn btn-sm btn-outline-danger position-relative border-1 mx-3"
                    href="{% url 'account_login' %}?next={{ request.path }}">
-                    싫어요
+                    틀려요
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
                         <i class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }}
                     </span>
