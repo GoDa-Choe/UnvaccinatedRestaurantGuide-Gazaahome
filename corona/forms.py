@@ -37,11 +37,11 @@ class Restaurant2ndForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = (
-            # 'content',
+            'content',
             'url',
         )
         labels = {
-            # 'content': '내용',
+            'content': '내용',
             'url': '네이버 지도 바로가기 주소(URL)',
         }
 
