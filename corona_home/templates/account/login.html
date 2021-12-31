@@ -1,0 +1,141 @@
+{% extends "account/sign_base.html" %}
+
+{% load widget_tweaks %}
+{% load account socialaccount %}
+{% load static %}
+{% load i18n %}
+
+
+{% block title %}로그인{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main class="form-signin">
+        <form class="login" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+
+            <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}" alt="" width="240"
+                 height="150">
+
+            <div class="d-flex  justify-content-center">
+                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
+                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
+                         width="120" height="54">
+                </a>
+                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                         width="120" height="60">
+                </a>
+            </div>
+
+            <p class="text-muted small mb-3"> click me!</p>
+
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-error px-0 py-0 my-1">
+                            <strong class="small">{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-error px-0 py-0 my-1">
+                        <strong class="small">{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <div class="form-floating">
+                {% render_field form.login type="text" class="form-control" id="ID" placeholder="example" %}
+                <label for="ID">아이디</label>
+            </div>
+
+            <div class="form-floating">
+                {% render_field form.password type="password" class="form-control" id="Password" placeholder="password" %}
+                <label for="Password">비밀번호</label>
+            </div>
+
+            <div class="checkbox my-1">
+                <label>
+                    {% render_field form.remember type="checkbox" value="remember-me" %}
+                    아이디 저장
+                </label>
+            </div>
+
+            <a href="{% url 'account_reset_password' %}">비밀번호를 잊으셨나요?</a>
+
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+
+            <button class="primaryAction w-100 btn btn-lg btn-primary mt-2" type="submit">로그인</button>
+        </form>
+
+        <div class="row row-cols-1 mt-3 mb-4">
+
+            <div class="col">
+                <a href="{% provider_login_url 'kakao' %}" role="button"
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/kakaolink_btn_small.png' %}" alt="이미지 오류"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 카카오톡으로 로그인</div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="{% provider_login_url 'google' %}" role="button"
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/g-logo.png' %}"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 구글계정으로 로그인</div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="{% provider_login_url 'facebook' %}" role="button"
+                   class="btn btn-outline-secondary btn-sm my-1 w-100 d-flex align-items-center justify-content-center">
+                    <img src="{% static 'home/images/facebook.png' %}"
+                         style="width: 2rem">
+                    <div class="d-inline align-items-center">&nbsp; 페이스북으로 로그인</div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="{% url 'account_signup' %}" role="button"
+                   class="btn btn-outline-dark btn-sm my-1 w-100">
+                    <i class="fas fa-user-plus text-muted"></i>&nbsp; 회원가입
+                </a>
+            </div>
+        </div>
+
+        <div class="d-flex mt-2 justify-content-between">
+            <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
+            <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
+            <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
+        </div>
+
+
+    </main>
+
+{% endblock %}

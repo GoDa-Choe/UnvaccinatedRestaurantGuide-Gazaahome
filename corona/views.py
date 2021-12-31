@@ -561,6 +561,7 @@ class RestaurantDetail(HitCountDetailView):
             'num_dislikes': restaurant.num_dislikes(),
             'num_comments': restaurant.num_comments(),
             'num_hits': restaurant.hit_count.hits,
+
             'base_pk': restaurant.pk,
         }
 
@@ -592,9 +593,9 @@ class RegionCoordinateMixin:
         region = first_match['region_1depth_name']
 
         if region == "세종특별자치시":
-            restaurant.region = "세종"
+            region = "세종"
         elif region == "제주특별자치도":
-            restaurant.region = "제주"
+            region = "제주"
         restaurant.region = region
 
         restaurant.save()

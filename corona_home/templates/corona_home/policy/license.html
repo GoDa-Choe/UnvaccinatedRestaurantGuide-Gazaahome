@@ -1,0 +1,254 @@
+{% extends "account/sign_base.html" %}
+
+{% load widget_tweaks %}
+{% load account socialaccount %}
+{% load static %}
+{% load i18n %}
+
+
+{% block title %}라이센스{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main class="form-signin">
+
+        <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}"
+                 alt="Goda Soft Studio" width="240" height="150">
+
+            <div class="d-flex mb-3 justify-content-center">
+                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
+                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
+                         width="120" height="54">
+                </a>
+                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                         width="120" height="60">
+                </a>
+            </div>
+
+        <p>This application is <br>
+            <strong>Copyright © Goda Soft Studio.</strong><br>
+            All rights reserved.</p>
+        <p>This application uses various open source software. You can find the source code of these open source
+            projects, along
+            with applicable license information for detail, below. We are deeply thankful to these developers for source
+            and
+            contributions.</p>
+
+        <hr>
+
+        <p class="fw-bold my-0">Django</p>
+        <p class="small my-0"><small>Copyright (c) Django Software Foundation and individual contributors.</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/django/django/blob/main/LICENSE">
+                    The Django License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">Bootstrap</p>
+        <p class="small my-0"><small>Copyright (c) 2011-2021 Twitter, Inc.</small></p>
+        <p class="small my-0"><small>Copyright (c) 2011-2021 The Bootstrap Authors</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/twbs/bootstrap/blob/v5.0.0/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+
+        <p class="fw-bold my-0">Chart.js</p>
+        <p class="small my-0"><small>Copyright (c) 2014-2021 Chart.js Contributors</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/chartjs/Chart.js/blob/master/LICENSE.md">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">Heroku-CLI</p>
+        <p class="small my-0"><small>Copyright © Heroku 2017</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/heroku/cli/blob/master/LICENSE">
+                    The ISC License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">Font-Awesome</p>
+        <p class="small my-0"><small>Font Awesome Icons Free License</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://creativecommons.org/licenses/by/4.0/">
+                    CC BY 4.0 License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">Pillow</p>
+        <p class="small my-0"><small>Copyright © 2010-2021 by Alex Clark and contributors</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/python-pillow/Pillow/blob/master/LICENSE">
+                    The HPND License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-allauth</p>
+        <p class="small my-0"><small>Copyright (c) 2010-2021 Raymond Penners and contributors</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted" href="https://github.com/pennersr/django-allauth/blob/master/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-crispy-forms</p>
+        <p class="small my-0"><small>Copyright (c) 2009-2021 Miguel Araujo, Daniel Feldroy and contributors.</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/django-crispy-forms/django-crispy-forms/blob/main/LICENSE.txt">
+                    The django-crispy-forms License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-markdownx</p>
+        <p class="small my-0"><small>Copyright (c) 2016, Adrian Drzewicki (adriandrzewicki@gmail.com)</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/neutronX/django-markdownx/blob/master/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-hitcount</p>
+        <p class="small my-0"><small>Copyright (c) 2009-2015 Damon Timm</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/thornomad/django-hitcount/blob/master/LICENSE">
+                    The django-hitcount License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-widget-tweaks</p>
+        <p class="small my-0"><small>Copyright (c) 2011-2015 Mikhail Korobov</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/jazzband/django-widget-tweaks/blob/master/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-admin-honeypot</p>
+        <p class="small my-0"><small>Copyright (c) Derek Payton(derek.payton@gmail.com)</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/dmpayton/django-admin-honeypot/blob/develop/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">django-embed-video</p>
+        <p class="small my-0"><small>Copyright (c) 2012 Juda Kaleta (http://www.judakaleta.cz)</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/jazzband/django-embed-video/blob/master/LICENSE">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+        <p class="fw-bold my-0">ranking</p>
+        <p class="small my-0"><small>Copyright (c) 2012-2020 by Heungsub Lee.</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/sublee/ranking/blob/master/LICENSE">
+                    The BSD License
+                </a>
+            </small>
+        </p>
+
+
+        <p class="fw-bold my-0">facenet-pytorch</p>
+        <p class="small my-0"><small>Copyright (c) 2019 Timothy Esler.</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/timesler/facenet-pytorch/blob/master/LICENSE.md">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+
+        <p class="fw-bold my-0">pytorch</p>
+        <p class="small my-0"><small>Copyright (c) 2016~ Facebook, Inc</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://github.com/pytorch/pytorch/blob/master/LICENSE">
+                    BSD-style License
+                </a>
+            </small>
+        </p>
+
+
+        <p class="fw-bold my-0">openpyxl</p>
+        <p class="small my-0"><small>Copyright (c) 2010 openpyxl</small></p>
+        <p class="small mt-0">
+            <small>
+                <a class="text-muted"
+                   href="https://foss.heptapod.net/openpyxl/openpyxl/-/blob/branch/3.0/LICENCE.rst">
+                    The MIT License
+                </a>
+            </small>
+        </p>
+
+
+        <a class="text-decoration-none"
+           href="{% url 'home:profile' %}">
+            Home
+        </a>
+
+
+    </main>
+
+{% endblock %}

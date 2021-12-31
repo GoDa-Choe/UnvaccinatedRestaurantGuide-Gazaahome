@@ -1,0 +1,100 @@
+{% load static %}
+<!--suppress CheckEmptyScriptTag -->
+<div class="p-3 rounded text-success bg-light mb-3">
+    <div class="row">
+
+        <div class="col">
+            <div class="row row-cols-1 row-cols-lg-2">
+                <p class="my-1 text-dark">휴가/휴일을 제외한 실출근을 확인해보세요!</p>
+
+                <div class="d-flex justify-content-between align-content-center">
+                    <a href="#howtouse" class="icon-link text-dark fw-bold mx-1">
+                        How to use
+                        <svg class="bi" width="1em" height="1em">
+                            <use xlink:href="#question"/>
+                        </svg>
+                    </a>
+
+                    {#                    <a href='https://play.google.com/store/apps/details?id=com.hustay.swing.d6cf5a98e91a94ddfb08b1c9a7644b9a8&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img#}
+                    {#                            alt='다운로드하기 Google Play'#}
+                    {#                            src='{% static 'home/images/play_download.png' %}'#}
+                    {#                            class=""#}
+                    {#                            style="height: 40px">#}
+                    {#                    </a>#}
+
+                    <a href="https://open.kakao.com/o/gV6L2Ged"
+                       class="icon-link text-primary text-decoration-none mx-1 fw-bold">
+                        <img src="{% static 'home/images/kakaolink_btn_small_ov.png' %}" alt="이미지 오류"
+                             style="width: 20px; height: 20px">
+                        <small>오픈카톡 문의</small>
+                        <svg class="bi" width="1em" height="1em">
+                            <use xlink:href="#chevron-right"/>
+                        </svg>
+                    </a>
+
+                </div>
+
+                <!-- Troop Review Update-->
+                <div class="col">
+                    <div class="p-2 mt-1 text-white rounded bg-success small">
+                        <h3 class="h5 mb-0"><small>New Update 부대리뷰</small></h3>
+                        <p class="my-0 fw-bold text-black-50"><small>부대리뷰부터 별점까지 모두 한번에</small></p>
+
+                        <a href="{% url "troop_review:detail" 1 %}"
+                           class="icon-link text-white text-decoration-none small">
+                            <i class="fas fa-edit"></i>&nbsp; 리뷰 구경하기
+                            <svg class="bi" width="1em" height="1em">
+                                <use xlink:href="#chevron-right"/>
+                            </svg>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Ranking Update-->
+                <div class="col">
+                    <div class="p-2 mt-1 text-white rounded bg-warning small">
+                        <h3 class="h5 mb-0"><small>랭킹</small></h3>
+                        <p class="my-0 fw-bold text-muted"><small>실출근 계산기로 나의 D-day 랭킹을 알아보자</small></p>
+                        {% if user.is_authenticated %}
+                            <a href="{% url "rank:index" %}" class="icon-link text-white text-decoration-none small">
+                                <i class="fas fa-chart-line"></i>&nbsp; 랭킹 알아보기
+                                <svg class="bi" width="1em" height="1em">
+                                    <use xlink:href="#chevron-right"/>
+                                </svg>
+                            </a>
+                        {% else %}
+                            <a class="icon-link text-white text-decoration-none small" href="#" data-bs-toggle="modal"
+                               data-bs-target="#loginModal">
+                                <i class="fas fa-chart-line"></i>&nbsp; 랭킹 알아보기
+                                <svg class="bi" width="1em" height="1em">
+                                    <use xlink:href="#chevron-right"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                <!-- Open Kakaotalk-->
+                <div class="col"></div>
+{#                <div class="col d-flex justify-content-end mt-1">#}
+{#                    <a href="https://open.kakao.com/o/gV6L2Ged"#}
+{#                       class="icon-link text-primary text-decoration-none mx-1 fw-bold">#}
+{#                        <img src="{% static 'home/images/kakaolink_btn_small_ov.png' %}" alt="이미지 오류"#}
+{#                             style="width: 20px; height: 20px">#}
+{#                        <small>오픈카톡 문의</small>#}
+{#                        <svg class="bi" width="1em" height="1em">#}
+{#                            <use xlink:href="#chevron-right"/>#}
+{#                        </svg>#}
+{#                    </a>#}
+{#                </div>#}
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+

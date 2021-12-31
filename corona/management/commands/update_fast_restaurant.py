@@ -23,7 +23,7 @@ class Command(BaseCommand):
             'longitude': restaurant.longitude,
 
             'verifieded': restaurant.verifieded,
-
+            'region': restaurant.region,
             'url': restaurant.url,
 
             'category': restaurant.category.name,
@@ -35,14 +35,16 @@ class Command(BaseCommand):
             'num_dislikes': restaurant.num_dislikes(),
             'num_comments': restaurant.num_comments(),
             'num_hits': restaurant.hit_count.hits,
+
+            'base_pk': restaurant.pk,
         }
 
         return data
 
     def handle(self, *args, **options):
         try:
-            for fast in FastRestaurant.objects.iterator():
-                fast.delete()
+            # for fast in FastRestaurant.objects.iterator():
+            #     fast.delete()
 
             for restaurant in Restaurant.objects.iterator():
                 self.update_or_create_fast_restaurant(restaurant)

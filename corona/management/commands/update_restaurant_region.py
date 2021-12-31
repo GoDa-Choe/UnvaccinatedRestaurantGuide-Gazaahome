@@ -55,7 +55,12 @@ class Command(BaseCommand):
                         f"      {restaurant.pk} | {restaurant.name} | None."))
                     continue
 
-                restaurant.region = first_match['region_1depth_name']
+                region = first_match['region_1depth_name']
+                if region == "세종특별자치시":
+                    region = "세종"
+                elif region == "제주특별자치도":
+                    region = "제주"
+                restaurant.region = region
 
                 self.stdout.write(self.style.SUCCESS(
                     f"      {restaurant.pk} | {restaurant.name} | {restaurant.address} | {restaurant.region}."))

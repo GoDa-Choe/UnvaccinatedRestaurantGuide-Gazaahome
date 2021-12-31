@@ -1,0 +1,82 @@
+{% extends 'corona/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block head-title %}
+    Contributors
+{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+
+{% block main-area %}
+
+    <!-- Sub Banner -->
+    {% include 'corona/sub_banner.html' %}
+
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <div class="container">
+            <h5 class="mb-4 text-success"><i class="fas fa-award"></i> Contributors :</h5>
+
+
+            <div class="m-2 mb-5">
+                <p class="text-muted m-0"><i class="far fa-edit"></i> 정보 수정에 도움을 주신 분</p>
+                <p class="small m-3 mt-1 fw-bold">
+                    박양민 <i class="fas fa-feather-alt" style="color: navy"></i>
+                </p>
+
+                <p class="text-muted m-0"><i class="fas fa-users"></i> 정책 수립에 도움을 주신 분</p>
+                <p class="text-muted mx-3 m-0 small"><small>제1회 사용자 간담회(2021.12.30)</small></p>
+                <p class="small mx-3 mt-1 my-0 fw-bold">
+                    박양민 <i class="far fa-handshake" style="color:cadetblue"></i>
+                </p>
+                <p class="small mx-3 mt-1 my-0 fw-bold">
+                    유승아 <i class="far fa-handshake" style="color:cadetblue"></i>
+                </p>
+                <p class="small mx-3 mt-1 my-0 fw-bold">
+                    Seok <i class="far fa-handshake" style="color:cadetblue"></i>
+                </p>
+            </div>
+
+            <div class="small mb-4 mx-3">
+                <p class="text-muted m-0 mb-2 small">
+                    오늘 방문자
+                    <span class="badge small bg-light rounded-pill text-dark">
+                        {{ today.num_users|intcomma }}
+                    </span>
+
+                    오늘 조회수
+                    <span class="badge bg-light rounded-pill text-dark">
+                        {{ today.num_pageviews|intcomma }}
+                    </span>
+                </p>
+
+                <p class="text-muted m-0 mb-4 small">
+                    전체 방문자
+                    <span class="badge small bg-light rounded-pill text-dark">
+                        {{ total.num_users|intcomma }}
+                    </span>
+
+                    전체 조회수
+                    <span class="badge bg-light rounded-pill text-dark">
+                        {{ total.num_pageviews|intcomma }}
+                    </span>
+                </p>
+            </div>
+
+            <p class="small m-2 mt-4">
+                <small class="text-muted">
+                    안녕하세요, 고다입니다.
+                    커뮤니티 발전에 도움을 주신 분께 조금이라도 선물을 드리고자 이렇게 Contributors 페이지를 오픈하게 되었습니다.
+                    뿐만 아니라 미접종 식당 가이드에 참여해주신 모든 분께
+                    다시 한번 진심으로 감사드립니다.
+                </small>
+            </p>
+
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,12 +24,16 @@ from corona.views import PostList, PostDetail, CreatePost, UpdatePost, DeletePos
 from corona.views import like_post, dislike_post
 from corona.views import create_post_comment, delete_post_comment, UpdatePostComment
 from corona.views import like_post_comment
+from corona_home.views import ContributorView
 
 app_name = 'corona'
 
 urlpatterns = [
 
     path('', RedirectView.as_view(url='/corona/unvaccinated_restaurant/'), name='index'),
+    path('contributors/', ContributorView.as_view(), name='contributor'),
+    # path('', include('corona_home.urls')),
+
     path('unvaccinated_restaurant/map/', MapView.as_view(),
          name='restaurant_map'),
 

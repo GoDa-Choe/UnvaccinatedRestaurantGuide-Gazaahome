@@ -16,7 +16,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="미접종 식당 가이드">
     <meta property="og:description" content="미접종 식당 가이드와 지도를 모두 한번에">
-    <meta property="og:image" content="https://www.gazaahome.com/{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}">
+    <meta property="og:image"
+          content="https://www.gazaahome.com/{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}">
     <meta property="og:url" content="https://www.gazaahome.com/corona/">
 
     <!-- Site Register-->
@@ -89,23 +90,51 @@
     {% block head_script %}{% endblock %}
 
 </head>
-
 <body class="d-flex flex-column h-100">
-
 
 <div class="container">
     <!-- Navigation Bar -->
     {% include 'corona/navbar.html' %}
 
-    <!-- main-area -->
-    {% block main-area %}{% endblock %}
+    <main class="container px-0">
+        {% include 'corona_home/home_banner.html' %}
+
+
+        <div class="row mb-2">
+
+            <!-- Videos  -->
+            <div class="col-md-6">
+                {% include 'home/home_videos.html' %}
+            </div>
+
+            <!-- Posts & Reviews & Barracks -->
+            <div class="col-md-6">
+                {% include 'home/home_carousel.html' %}
+            </div>
+
+        </div>
+
+
+        <div class="container py-3 mb-3 rounded shadow-sm">
+            <div class="row">
+                <!-- Main -->
+                <div class="col-md-9">
+
+                    {% include 'home/features.html' %}
+
+                </div>
+
+                <!-- Side -->
+                {% include 'home/home_side.html' %}
+
+            </div>
+        </div>
+    </main>
+
 </div>
 
-
-<!-- Footer -->
 {% include 'forum/footer.html' %}
 
-<!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>
@@ -113,9 +142,5 @@
         integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ"
         crossorigin="anonymous"></script>
 
-{% block script %}{% endblock %}
-
-{% block chart %}{% endblock %}
 </body>
-
 </html>

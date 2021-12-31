@@ -1,0 +1,85 @@
+{% extends "account/sign_base.html" %}
+
+{% load widget_tweaks %}
+{% load account socialaccount %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}프로필{% endblock %}
+
+{% block custom_style %}
+    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+
+    <main class="form-signin">
+        <form class="login" method="POST" action="{% url  'home:delete_account' user.id %}">
+            {% csrf_token %}
+
+            <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}"
+                 alt="Goda Soft Studio" width="240"                 height="150">
+
+            <div class="d-flex  justify-content-center">
+                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
+                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
+                         width="120" height="54">
+                </a>
+                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                         width="120" height="60">
+                </a>
+            </div>
+
+            <p class="text-muted small mb-3"> click me!</p>
+
+            <p class="my-4">
+                <strong>{{ user }}</strong>님, 정말로 계정을<br> 삭제 하시겠습니까?
+                <br>즉시 관련 정보가 파기되며<br>
+                <strong>이후 복구할 수 없습니다.</strong>
+            </p>
+
+            {% if user.has_usable_password %}
+                <p class="mt-3 mb-1 text-muted">비밀번호 확인</p>
+            {% else %}
+                <p class="mt-3 mb-1 text-muted">이메일 확인</p>
+            {% endif %}
+
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-danger btn-sm">계정 삭제</button>
+
+        </form>
+        <div class="mt-5">
+            <a class="text-decoration-none" href="{% url 'home:goda_soft_studio' %}">home</a>
+
+            <div class="d-flex mt-3 justify-content-between">
+                <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
+                <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
+                <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
+            </div>
+        </div>
+
+
+    </main>
+
+{% endblock %}

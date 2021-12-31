@@ -1,28 +1,24 @@
-<!DOCTYPE html>
 {% load static %}
 
-<html lang="ko" class="h-100">
+<!doctype html>
+<html lang="ko h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="미접종 식당 가이드와 지도를 모두 한번에">
+    <meta name="description" content="집에가자 전역일 계산기로 복무율과 실출근을 모두 한번에 알아보세요.">
     <meta name="author" content="Goda Soft Studio">
-    <meta name="version" content="v1.0.0">
-
-    <!-- Robots -->
-    <meta name="robots" content="index,follow">
+    <meta name="version" content="v1.3.2">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="미접종 식당 가이드">
-    <meta property="og:description" content="미접종 식당 가이드와 지도를 모두 한번에">
-    <meta property="og:image" content="https://www.gazaahome.com/{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}">
-    <meta property="og:url" content="https://www.gazaahome.com/corona/">
+    <meta property="og:title" content="집에가자">
+    <meta property="og:description" content="집에가자 전역일 계산기로 복무율과 실출근을 모두 한번에 알아보세요.">
+    <meta property="og:image" content="https://www.gazaahome.com/{% static 'home/images/logo.png' %}">
+    <meta property="og:url" content="https://www.gazaahome.com/">
 
-    <!-- Site Register-->
-    <meta name="google-site-verification" content="{{ google_site_register_code }}"/>
 
-    <title>{% block head-title %}미접종 식당 가이드{% endblock %}</title>
+    <!--Title-->
+    <title>{% block title %}{% endblock %}</title>
 
     <!-- Favicon-->
     {% include 'home/favicon.html' %}
@@ -33,16 +29,13 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'forum/bootstrap/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
 
-    <!-- Footer CSS style-->
-    <link href="{% static 'forum/css/footer.css' %}" rel="stylesheet" type="text/css" media="screen">
 
     <!-- Custom styles for this template-->
-    <style>
-        body {
-            padding-top: 5rem;
-        }
-    </style>
     {% block custom_style %}{% endblock %}
+
+    <!-- Site Register -->
+    <meta name="google-site-verification" content="{{ google_site_register_code }}"/>
+    <meta name="naver-site-verification" content="{{ naver_site_register_code }}"/>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-203346109-1"></script>
@@ -86,26 +79,13 @@
         gtag('config', 'AW-329024456');
     </script>
 
-    {% block head_script %}{% endblock %}
-
 </head>
-
-<body class="d-flex flex-column h-100">
-
-
-<div class="container">
-    <!-- Navigation Bar -->
-    {% include 'corona/navbar.html' %}
-
-    <!-- main-area -->
-    {% block main-area %}{% endblock %}
-</div>
+<body class="d-flex flex-column h-100 text-center">
 
 
-<!-- Footer -->
-{% include 'forum/footer.html' %}
+{% block content %}{% endblock %}
 
-<!-- Bootstrap core JS-->
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>
@@ -113,9 +93,5 @@
         integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ"
         crossorigin="anonymous"></script>
 
-{% block script %}{% endblock %}
-
-{% block chart %}{% endblock %}
 </body>
-
 </html>
