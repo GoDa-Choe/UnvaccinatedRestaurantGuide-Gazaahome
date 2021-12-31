@@ -22,7 +22,8 @@ class RestaurantAdmin(admin.ModelAdmin):
 class FastRestaurantAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'address', 'latitude', 'longitude', 'tags', 'category', 'unvaccinated_pass',
                     'verifieded',
-                    'created_at', 'updated_at']
+                    'created_at', 'updated_at',
+                    'num_likes','num_dislikes','num_comments','num_hits']
     list_display_links = ['id', 'name', ]
     list_filter = ['unvaccinated_pass', 'verifieded', 'created_at', ]
     search_fields = ['name', 'address', ]

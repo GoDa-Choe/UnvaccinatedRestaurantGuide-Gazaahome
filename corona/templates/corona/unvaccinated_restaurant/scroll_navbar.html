@@ -84,11 +84,11 @@
             {% endif %}
 
             <!-- Likes -->
-            {% if request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/mostpopular/" %}
-                <a class="nav-link text-success" href="{% url 'corona:most_likes_region_restaurant_index' region %}">맞아요
+            {% if request.path == "/corona/unvaccinated_restaurant/region/"|add:region|add:"/mostlikes/" %}
+                <a class="nav-link text-success" href="{% url 'corona:most_likes_region_restaurant_index' region %}">좋아요
                     순</a>
             {% else %}
-                <a class="nav-link" href="{% url 'corona:most_likes_region_restaurant_index' region %}">맞아요 순</a>
+                <a class="nav-link" href="{% url 'corona:most_likes_region_restaurant_index' region %}">좋아요 순</a>
             {% endif %}
 
 
@@ -182,9 +182,9 @@
 
             <!-- Likes -->
             {% if request.path == "/corona/unvaccinated_restaurant/mostlikes/" %}
-                <a class="nav-link text-success" href="{% url 'corona:most_likes_restaurant_index' %}">맞아요 순</a>
+                <a class="nav-link text-success" href="{% url 'corona:most_likes_restaurant_index' %}">좋아요 순</a>
             {% else %}
-                <a class="nav-link" href="{% url 'corona:most_likes_restaurant_index' %}">맞아요 순</a>
+                <a class="nav-link" href="{% url 'corona:most_likes_restaurant_index' %}">좋아요 순</a>
             {% endif %}
 
 

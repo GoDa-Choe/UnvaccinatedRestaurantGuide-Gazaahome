@@ -234,7 +234,7 @@ class FastRestaurant(models.Model):
     verifieded = models.BooleanField(default=False)
 
     url = models.URLField(blank=True, null=True)
-
+    region = models.CharField(max_length=10, blank=True, null=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -249,3 +249,4 @@ class FastRestaurant(models.Model):
     num_hits = models.IntegerField(default=1)
 
     base = models.ForeignKey(Restaurant, default=1, on_delete=models.CASCADE)
+    base_pk = models.IntegerField(Restaurant, null=True, blank=True)

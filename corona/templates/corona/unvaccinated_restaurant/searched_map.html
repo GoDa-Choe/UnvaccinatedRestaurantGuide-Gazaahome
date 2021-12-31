@@ -98,7 +98,6 @@
 {% block script %}
 
     <script>
-
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(36.534985733600344, 127.89984154337944), // 지도의 중심좌표
@@ -107,16 +106,6 @@
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
         // 마커 클러스터러를 생성합니다
-
-        var positions = [];
-
-        {% for restaurant in restaurant_list %}
-            positions[{{ forloop.counter0 }}] = {
-                latlng: new kakao.maps.LatLng({{restaurant.latitude}}, {{restaurant.longitude}}),
-                unvaccinated_pass: "{{restaurant.unvaccinated_pass}}"
-            };
-        {% endfor %}
-
 
         // 마커 이미지의 이미지 주소입니다
         var blueMarker = 'https://res.cloudinary.com/hyzq6bxmk/image/upload/v1640300541/static/corona/marker_blue_jrf7fx.png'
@@ -135,20 +124,19 @@
         var greenMarkerOverImage = new kakao.maps.MarkerImage(greenMarker, overImageSize);
 
         var markers = []
+        var restaurant_list = {{ restaurant_list|safe }};
 
-        for (var i = 0; i < positions.length; i++) {
+        for (var i = 0; i < restaurant_list.length; i++) {
 
-            // 마커 이미지의 이미지 크기 입니다
-            {#var imageSize = new kakao.maps.Size(30, 30);#}
-            {#var overImageSize = new kakao.maps.Size(40, 40);#}
+            var restaurant = restaurant_list[i]
 
             var image = null;
             var overImage = null;
 
-            if (positions[i].unvaccinated_pass == "미접종 친절") {
+            if (restaurant.unvaccinated_pass == "미접종 친절") {
                 image = blueMarkerImage;
                 overImage = blueMarkerOverImage;
-            } else if (positions[i].unvaccinated_pass == "미접종 거부") {
+            } else if (restaurant.unvaccinated_pass == "미접종 거부") {
                 image = redMarkerImage;
                 overImage = redMarkerrOverImage;
             } else {
@@ -156,11 +144,10 @@
                 overImage = greenMarkerOverImage;
             }
 
-
             // 마커를 생성합니다
             var marker = new kakao.maps.Marker({
                 {#map: map, // 마커를 표시할 지도#}
-                position: positions[i].latlng, // 마커를 표시할 위치
+                position: new kakao.maps.LatLng(restaurant.latitude, restaurant.longitude), // 마커를 표시할 위치
                 image: image, // 마커 이미지
                 {#clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다#}
                 index: i
@@ -195,7 +182,7 @@
             };
         }
 
-        var restaurant_list = {{ restaurant_list|safe }};
+        {#var restaurant_list = {{ restaurant_list|safe }};#}
 
         // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
 
@@ -221,13 +208,13 @@
 
 
                 var url = "";
-                {% comment %}
+                {% comment %}{% endcomment %}
+
                 if (restaurant.url != "None") {
                     url = '<a href="' + restaurant.url + '? class="card-link d-inline text-decoration-none">' +
                         '<img src="{% static "corona/naver_map.png" %}" style="width: 15px; height: 15px"> ' +
                         '</a>';
                 }
-                {% endcomment %}
 
 
                 var tags = "";
@@ -245,7 +232,7 @@
                 var content =
                     '<div class="card rounded rounded-2 shadow-lg' + borderColor + ' style="width: 15em;">' +
                     '<div class="card-header d-flex justify-content-between align-items-center">' +
-                    '<a class="text-decoration-none text-dark fw-bold h6 my-0" href="http://gazaahome.com/corona/unvaccinated_restaurant/' + restaurant.pk + '/"' + '>' +
+                    '<a class="text-decoration-none text-dark fw-bold h6 my-0" href="http://gazaahome.com/corona/unvaccinated_restaurant/' + restaurant.base_pk + '/"' + '>' +
                     restaurant.name +
                     '<i class="fas fa-external-link-alt text-muted mx-2"></i>' +
                     '</a>' +

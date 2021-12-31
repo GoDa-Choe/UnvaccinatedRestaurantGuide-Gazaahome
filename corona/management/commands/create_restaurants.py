@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('file_name', type=str)
-        parser.add_argument('type', type=str, help='available or unavailable')
+        # parser.add_argument('type', type=str, help='available or unavailable')
 
     def handle(self, *args, **options):
         count = 0
@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
             load_wb = load_workbook(file_path, data_only=True)
 
-            load_ws = load_wb[options['type']]
+            load_ws = load_wb['available']
 
             for row in load_ws.rows:
 
@@ -38,17 +38,15 @@ class Command(BaseCommand):
                 longitude = row[4].value
                 verifieded = True if row[5].value == "TRUE" else False
                 url = row[6].value
-
+                type = row[8].value
                 author = self.goda
+                region = row[11].value
 
                 category, _ = RestaurantCategory.objects.get_or_create(
                     name=row[7].value,
-                    defaults={
-                        'slug': slugify(row[7].value, allow_unicode=True)
-                    }
                 )
 
-                if options['type'] == "available":
+                if type:
                     unvaccinated_pass = UnvaccinatedPass.objects.get(type="미접종 친절")
                 else:
                     unvaccinated_pass = UnvaccinatedPass.objects.get(type="미접종 거부")
@@ -60,6 +58,7 @@ class Command(BaseCommand):
                         'latitude': latitude,
                         'longitude': longitude,
                         'verifieded': verifieded,
+                        'region': region,
                         'url': url,
                         'author': author,
                         'category': category,
@@ -73,15 +72,12 @@ class Command(BaseCommand):
                 tags_str = row[10].value
                 if tags_str:
                     tags_str = tags_str.strip(' #')
-                    tags_str = tags_str.replace(',', '#')
-                    tags_list = tags_str.split('#')
+                    tags_str = tags_str.replace('#', ' ')
+                    tags_list = tags_str.split()
 
                     for tag in tags_list:
                         tag = tag.strip()
                         tag, is_tag_created = RestaurantTag.objects.get_or_create(name=tag)
-                        if is_tag_created:
-                            tag.slug = slugify(tag, allow_unicode=True)
-                            tag.save()
                         restaurant.tags.add(tag)
 
                 self.stdout.write(self.style.SUCCESS(f"{name} is created and updated."))
