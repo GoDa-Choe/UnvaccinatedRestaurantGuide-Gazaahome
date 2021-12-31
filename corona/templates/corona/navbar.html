@@ -32,14 +32,23 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'video_forum:index' %}">
+                        <i class="fas fa-video"></i> 비디오
+                        <div class="spinner-grow spinner-grow-sm text-warning" role="status">
+                            <span class="visually-hidden">Click me</span>
+                        </div>
+                    </a>
+                </li>
+
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user"></i> {{ user.username }} |
-                            {% if user.calculator_set.first %}
-                                {{ user.calculator_set.first.name }}
-                            {% endif %}
+                            <i class="fas fa-user"></i> {{ user.username }}
+                            {#                            {% if user.calculator_set.first %}#}
+                            {#                                | {{ user.calculator_set.first.name }}#}
+                            {#                            {% endif %}#}
 
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -66,57 +75,15 @@
                 {% endif %}
             </ul>
 
-            {#            <a href="{% url "home:contributor" %}" class="nav-link ps-0" style="color: rgba(0,0,0,.55)">#}
-            {#                <i class="fas fa-award"></i> Contributors#}
-            {#            </a>#}
+            <a href="{% url "home:contributor" %}" class="nav-link ps-0" style="color: rgba(0,0,0,.55)">
+                <i class="fas fa-award"></i> Contributors
+            </a>
+
         </div>
     </div>
 </nav>
 
 
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="logInModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel"><i class="fas fa-sign-in-alt"></i>&nbsp Log In</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="{% provider_login_url 'google' %}" role="button"
-                           class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="fab fa-google" style="color: green"></i>&nbsp; 구글 계정으로 로그인
-                        </a>
-                        <a href="{% provider_login_url 'facebook' %}" role="button"
-                           class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="fab fa-facebook-square" style="color: blue"></i>&nbsp; 페이스북으로 로그인
-                        </a>
-
-                    </div>
-                    <div class="col-md-6">
-                        <a href="{% url 'account_login' %}" role="button"
-                           class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="fas fa-sign-in-alt text-muted"></i>&nbsp; 아이디로 로그인
-                        </a>
-                        <a href="{% url 'account_signup' %}" role="button"
-                           class="btn btn-outline-dark btn-block btn-sm my-1 w-100">
-                            <i class="fas fa-user-plus text-muted"></i>&nbsp; 회원가입
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer d-flex justify-content-between">
-                <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
-                <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
-                <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 

@@ -10,16 +10,26 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 class VideoTag(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
 
     def __str__(self):
         return self.name
 
 
+class VideoCategory(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_num_videos(self):
+        return self.video_set.count()
+
+
 class Video(models.Model, HitCountMixin):
     title = models.CharField(max_length=40)
     url = EmbedVideoField()
-
+    content = models.TextField(null=True, blank=True)
+    is_anonymous = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -34,14 +44,13 @@ class Video(models.Model, HitCountMixin):
     # ForeignKeys
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     tags = models.ManyToManyField(VideoTag, blank=True)
-
-    is_anonymous = models.BooleanField(default=False)
+    category = models.ForeignKey(VideoCategory, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"[비디오]::{self.pk}::{self.author}::{self.title[:20]}"
 
     def get_absolute_url(self):
-        return f"/video_forum/{self.pk}/"
+        return f"/corona/video_forum/{self.pk}/"
 
     def num_likes(self):
         return self.likes.count()
@@ -52,7 +61,7 @@ class Video(models.Model, HitCountMixin):
 
 class VideoComment(models.Model):
     content = models.TextField()
-    is_anonymous = models.BooleanField(default=False)
+    is_anonymous = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

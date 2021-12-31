@@ -1,4 +1,4 @@
-{% extends 'forum/base.html' %}
+{% extends 'corona/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load embed_video_tags %}
@@ -14,11 +14,10 @@
 {% block main-area %}
 
     <!-- Sub Banner -->
-    {% include 'home/home_sub_banner.html' %}
+    {% include 'corona/sub_banner.html' %}
 
-    <!-- Category Scroll Bar -->
+    <!-- Scroll Bar -->
     {% include 'video_forum/scroll_navbar.html' %}
-
 
 
     <article class="my-3 p-3 rounded shadow-sm">
@@ -26,25 +25,24 @@
 
         <!-- Title-->
         <div>
-            <div class="d-flex justify-content-end mb-2">
-                <!-- Video Eidt-->
+            <div class="d-flex justify-content-end mb-1">
+                <!-- Video eidt-->
                 {% if user.is_authenticated and user == video.author %}
-                    <a class="btn mx-1 btn-sm btn-outline-primary"
+                    <a class="btn mx-1 btn-sm btn-outline-secondary px-1 py-0"
                        href="{% url 'video_forum:update_video' video.pk %}" role="button">
                         <small>수정</small>
                     </a>
-                    <a class="btn btn-sm btn-outline-danger"
+                    <a class="btn btn-sm btn-outline-secondary px-1 py-0"
                        href="{% url 'video_forum:delete_video' video.pk %}" role="button">
                         <small>삭제</small>
                     </a>
                 {% endif %}
             </div>
 
-            <h2 class="h4">
+            <h2 class="h5 fw-bold">
                 {{ video.title }}
             </h2>
         </div>
-
 
         <div class="d-flex justify-content-between align-items-center small">
             <div class="d-inline">
@@ -59,59 +57,105 @@
                     {{ video.created_at|date:'Y-m-d H:i' }}
                 </p>
             </div>
-            <div class="d-inline small text-muted">
-                <div class="d-inline "><i class="fas fa-heart text-danger"></i> {{ video.num_likes }}</div>
-                <div class="d-inline"><i class="fas fa-comment text-success"></i> {{ video.num_comments }}</div>
-                <div class="d-inline"><i class="far fa-eye text-muted"></i> {{ video.hit_count.hits }}</div>
+
+            <div class="d-inline mb-1 text-muted">
+                <div class="d-inline">
+                    <i class="fas fa-heart text-danger"></i> {{ video.num_likes }}
+                </div>
+                {% comment %}
+                    <div class="d-inline">
+                        <i class="far fa-thumbs-down text-danger"></i> {{ post.num_dislikes }}
+                    </div>
+                {% endcomment %}
+                <div class="d-inline">
+                    <i class="far fa-comment"></i> {{ video.num_comments }}
+                </div>
+                <div class="d-inline">
+                    <i class="far fa-eye"></i> {{ video.hit_count.hits }}
+                </div>
             </div>
         </div>
 
+        <!-- Content-->
+        {% if video.content %}
+            <p>{{ video.content|linebreaks }}</p>
+        {% endif %}
 
-        <hr>
 
-        <!-- Video URL-->
-        <div class="d-flex justify-content-center">
-            {% video video.url '' %}
-        </div>
-
-        <hr>
-
-        <!-- Tags-->
-        <div class="d-inline">
+        <div class="d-flex justify-content-start small mt-1">
             {% if video.tags.exists %}
-                <i class="fas fa-tags text-muted"></i>
+                <i class="fas fa-tags text-muted small"></i>
                 {% for tag in video.tags.iterator %}
-                    <span class="badge rounded-pill"
-                          style="background-color: darkseagreen">{{ tag }}</span>
+                    <span class="badge rounded-pill ms-1 small"
+                          style="background-color: darkseagreen">
+                        {{ tag }}
+                    </span>
                 {% endfor %}
             {% endif %}
         </div>
 
+        <hr>
 
+        <!-- Video -->
+        <div class="d-flex justify-content-center">
+            {% video video.url '' %}
+        </div>
+
+
+        <hr>
+
+        <!-- Likes and Dislikes -->
         <div class="d-flex justify-content-center my-3">
-            <!-- Likes -->
+
             {% if user.is_authenticated %}
-                <form action="{% url 'video_forum:like_video' video.pk %}" method="POST">{% csrf_token %}
+                <form class="mx-3" action="{% url 'video_forum:like_video' video.pk %}"
+                      method="POST">{% csrf_token %}
                     <button type="submit"
-                            class="btn btn-sm btn-outline-success position-relative border-1"
-                            style="background-color: #aacfaa">
-                        특급
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                            <i class="fas fa-award text-warning"></i> {{ video.num_likes }}
+                            class="btn btn-sm btn-outline-primary position-relative border-1">
+                        좋아요
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
+                            <i class="far fa-thumbs-up text-primary"></i>
+                            <div class="d-inline text-dark">{{ video.num_likes }}</div>
                         </span>
                     </button>
                 </form>
+                {% comment %}
+                    <form class="mx-3" action="{% url 'corona:dislike_post' post.pk %}"
+                          method="POST">{% csrf_token %}
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-danger position-relative border-1">
+                            싫어요
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light">
+                                <i class="far fa-thumbs-down text-danger"></i>
+                                <div class="d-inline text-dark">{{ post.num_dislikes }}</div>
+                            </span>
+                        </button>
+                    </form>
+                {% endcomment %}
+
             {% else %}
-                <a class="btn btn-sm btn-outline-success position-relative border-1"
-                   style="background-color: #aacfaa" href="{% url 'account_login' %}">
-                    특급
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                        <i class="fas fa-award text-warning"></i> {{ video.num_likes }}
+
+                <a class="btn btn-sm btn-outline-primary position-relative border-1 mx-3"
+                   href="{% url 'account_login' %}?next={{ request.path }}">
+                    좋아요
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+                        <i class="far fa-thumbs-up text-primary"></i> {{ post.num_likes }}
                     </span>
                 </a>
+                {% comment %}
+                    <a class="btn btn-sm btn-outline-danger position-relative border-1 mx-3 text-dark"
+                       href="{% url 'account_login' %}?next={{ request.path }}">
+                        싫어요
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+                            <i class="far fa-thumbs-down text-danger"></i> {{ post.num_dislikes }}
+                        </span>
+                    </a>
+                {% endcomment %}
+
             {% endif %}
 
         </div>
+
     </article>
 
 
@@ -141,10 +185,10 @@
                                 </div>
                             </div>
 
-                            <!-- Likes -->
+                            <!-- Comments Likes -->
                             <div class="d-inline mx-1">
                                 {% if user.is_authenticated %}
-                                    <form action="{% url 'video_forum:like_video_comment' video.pk video_comment.pk %}"
+                                    <form action="{% url 'video_forum:like_video_comment'  video.pk video_comment.pk %}"
                                           method="POST">{% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-outline-success p-0 px-1">
                                             <small>추천</small>
@@ -161,10 +205,10 @@
 
                         <p class="small lh-sm text-muted">{{ video_comment.content|linebreaks }}</p>
 
-                        <!-- Update&Delete-->
+                        <!-- Update & Delete-->
                         <div class="float-end">
                             {% if user.is_authenticated and video_comment.author == user %}
-                                <a href="{% url 'video_forum:update_video_comment' video_comment.pk %}"
+                                <a href="{% url 'video_forum:update_video_comment' video.pk video_comment.pk %}"
                                    class="text-primary text-decoration-none mx-1">
                                     <small>수정</small>
                                 </a>
@@ -199,7 +243,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
                                 </button>
                                 <a role="button" class="btn btn-danger"
-                                   href="{% url 'comment_delete'  video_comment.pk %}">삭제</a>
+                                   href="{% url 'video_forum:delete_video_comment' video.pk video_comment.pk %}">삭제</a>
                             </div>
                         </div>
                     </div>
@@ -211,7 +255,7 @@
         <div class="mt-3 p-3 bg-light rounded shadow-sm">
             {% if user.is_authenticated %}
                 <form class="mt-2" id="video-comment-form" method="POST"
-                      action="{{ video.get_absolute_url }}create_video_comment/">
+                      action="{{ video.get_absolute_url }}comment/create/">
                     {% csrf_token %}
                     <div class="form-group">{{ video_comment_form|crispy }}</div>
 
@@ -222,9 +266,11 @@
 
 
             {% else %}
-                <a role="button" class="btn btn-outline-secondary btn-sm w-100 text-center"
-                   href="{% url 'account_login' %}">
-                    로그인 후 댓글을 작성할 수 있습니다.</a>
+                <div class="d-flex justify-content-center">
+                    <a role="button" class="btn btn-outline-secondary btn-sm text-center"
+                       href="{% url 'account_login' %}?next={{ request.path }}">
+                        로그인 후 댓글을 작성할 수 있습니다.</a>
+                </div>
             {% endif %}
         </div>
     </div>

@@ -18,9 +18,13 @@ class VideoCommentForm(forms.ModelForm):
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
-        fields = ('title', 'url', 'is_anonymous')
+        fields = ('title', 'url', 'content', 'is_anonymous')
         labels = {
             'title': '제목',
-            'url': "유튜브 동영상 주소(url)",
+            'url': "유튜브 동영상 주소(URL)",
+            'content': "내용",
             'is_anonymous': "익명",
+        }
+        widgets = {
+            'content': forms.Textarea(attrs={'style': "max-height:100px;"}),
         }

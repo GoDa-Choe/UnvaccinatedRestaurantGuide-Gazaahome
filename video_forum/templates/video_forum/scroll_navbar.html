@@ -3,7 +3,7 @@
 
     <nav class="nav nav-underline" aria-label="Secondary navigation">
 
-        {% if request.path == "/video_forum/" %}
+        {% if request.path == "/corona/video_forum/" %}
             <a class="nav-link text-success" href="{% url 'video_forum:index' %}">
                 전체
                 <span class="badge text-white rounded-pill align-text-bottom" style="background-color: darkseagreen">
@@ -19,17 +19,42 @@
             </a>
         {% endif %}
 
-        {% if request.path == "/video_forum/likes/" %}
-            <a class="nav-link text-success" href="{% url 'video_forum:likes_video' %}">특급</a>
+        {% for category in category_list %}
+            {% if request.path == "/corona/video_forum/category/"|add:category.name|add:"/" %}
+                <a class="nav-link text-success" href="{% url 'video_forum:category_video' category.name %}">
+                    {{ category.name }}
+                    <span class="badge text-white rounded-pill align-text-bottom"
+                          style="background-color: darkseagreen">
+                    {{ category.get_num_videos }}
+                </span>
+                </a>
+            {% else %}
+                <a class="nav-link" href="{% url 'video_forum:category_video' category.name %}">
+                    {{ category.name }}
+                    <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ category.get_num_videos }}
+                </span>
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if request.path == "/corona/video_forum/mostlikes/" %}
+            <a class="nav-link text-success" href="{% url 'video_forum:likes_video' %}">좋아요 순</a>
         {% else %}
-            <a class="nav-link" href="{% url 'video_forum:likes_video' %}">특급</a>
+            <a class="nav-link" href="{% url 'video_forum:likes_video' %}">좋아요 순</a>
         {% endif %}
 
-        {% if request.path == "/video_forum/popular/" %}
-            <a class="nav-link text-success" href="{% url 'video_forum:popular_video' %}">인기</a>
+        {% if request.path == "/corona/video_forum/mostcomments/" %}
+            <a class="nav-link text-success" href="{% url 'video_forum:popular_video' %}">댓글 순</a>
         {% else %}
-            <a class="nav-link" href="{% url 'video_forum:popular_video' %}">인기</a>
+            <a class="nav-link" href="{% url 'video_forum:popular_video' %}">댓글 순</a>
         {% endif %}
+
+        {% if request.path == "/corona/video_forum/mostpopular/" %}
+            <a class="nav-link text-success" href="{% url 'video_forum:popular_video' %}">인기 순</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'video_forum:popular_video' %}">인기 순</a>
+        {% endif %}
+
     </nav>
-
 </div>

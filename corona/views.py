@@ -630,10 +630,9 @@ class CreateRestaurant2nd(LoginRequiredMixin, RegionCoordinateMixin, UpdateView)
         response = super(CreateRestaurant2nd, self).form_valid(form)
 
         tags_str = self.request.POST.get('tags_str')
-        tags_str = tags_str.strip(' #')
 
         if tags_str:
-            tags_list = tags_str.replace("#", " ").split()
+            tags_list = tags_str.strip(' #').replace("#", " ").split()
 
             for tag in tags_list:
                 tag = tag.strip()
@@ -673,7 +672,7 @@ class UpdateRestaurant(LoginRequiredMixin, RegionCoordinateMixin, UpdateView):
         tags_str = self.request.POST.get('tags_str')
 
         if tags_str:
-            tags_list = tags_str.replace("#", " ").split()
+            tags_list = tags_str.strip(' #').replace("#", " ").split()
 
             for tag in tags_list:
                 tag = tag.strip()
@@ -779,7 +778,7 @@ class PostList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList, self).get_context_data()
-        context['categories'] = PostCategory.objects.iterator()
+        context['categories'] = PostCategory.objects.all()
         context['num_post'] = get_num_posts
         return context
 
@@ -793,7 +792,7 @@ class PopularPostList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularPostList, self).get_context_data()
-        context['categories'] = PostCategory.objects.iterator()
+        context['categories'] = PostCategory.objects.all()
         context['num_post'] = Post.objects.count()
         return context
 
@@ -808,7 +807,7 @@ class CategoryPostList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CategoryPostList, self).get_context_data()
         context['category'] = PostCategory.objects.get(name=self.kwargs['name'])
-        context['categories'] = PostCategory.objects.iterator()
+        context['categories'] = PostCategory.objects.all()
         context['num_post'] = Post.objects.count()
 
         return context
@@ -826,7 +825,7 @@ class PostDetail(HitCountDetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostDetail, self).get_context_data()
         context['post_comment_form'] = PostCommentForm
-        context['categories'] = PostCategory.objects.iterator()
+        context['categories'] = PostCategory.objects.all()
         context['num_post'] = Post.objects.count()
 
         return context

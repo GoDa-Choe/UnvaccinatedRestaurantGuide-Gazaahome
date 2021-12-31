@@ -2,14 +2,24 @@
 {% load static %}
 
 {% block head-title %}
-    {% if request.path == '/corona/post/category/자유/' %}
-        자유
-    {% elif request.path == '/corona/post/category/정보/' %}
-        정보
-    {% elif request.path == '/corona/post/category/문의/' %}
-        문의
+    게시판 -
+    {% if  "category" in request.path %}
+        {% for category in categories %}
+            {% if request.path == "/corona/post/category/"|add:category.name|add:"/" %}
+                {{ category.name }}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% if request.path == "/corona/post/mostlikes/" %}
+            좋아요 순
+        {% elif request.path == "/corona/post/mostcomments/" %}
+            댓글 순
+        {% elif request.path == "/corona/post/mostpopular/" %}
+            인기 순
+        {% else %}
+            전체
+        {% endif %}
     {% endif %}
-    게시판
 {% endblock %}
 
 {% block custom_style %}

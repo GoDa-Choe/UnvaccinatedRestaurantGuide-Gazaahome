@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.utils.text import slugify
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -11,22 +10,41 @@ from django.views.decorators.http import require_POST
 from hitcount.views import HitCountDetailView
 
 from video_forum.forms import VideoCommentForm, VideoForm
-from video_forum.models import Video, VideoTag, VideoComment
-
-
+from video_forum.models import Video, VideoTag, VideoComment, VideoCategory
 
 
 class LikesVideoList(ListView):
     model = Video
     template_name = 'video_forum/index.html'
     paginate_by = 5
-    queryset = sorted(Video.objects.all(), key=lambda video: (video.num_likes(), video.pk), reverse=True)[:20]
     context_object_name = 'video_list'
+
+    def get_queryset(self):
+        return sorted(Video.objects.all(), key=lambda video: (video.num_likes(), video.pk), reverse=True)[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(LikesVideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
         context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
+
+        return context
+
+
+class CommentsVideoList(ListView):
+    model = Video
+    template_name = 'video_forum/index.html'
+    paginate_by = 5
+    context_object_name = 'video_list'
+
+    def get_queryset(self):
+        return sorted(Video.objects.all(), key=lambda video: (video.num_comments(), video.pk), reverse=True)[:20]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CommentsVideoList, self).get_context_data()
+        context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
 
         return context
 
@@ -36,12 +54,36 @@ class PopularVideoList(ListView):
     template_name = 'video_forum/index.html'
     context_object_name = 'video_list'
     paginate_by = 5
-    queryset = Video.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
+
+    def get_queryset(self):
+        return Video.objects.order_by("-hit_count_generic__hits", '-pk')[:20]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PopularVideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
         context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
+
+        return context
+
+
+class CateogryVideoList(ListView):
+    model = Video
+    template_name = 'video_forum/index.html'
+    context_object_name = 'video_list'
+    paginate_by = 5
+    ordering = '-pk'
+
+    def get_queryset(self):
+        queryset = Video.objects.filter(category__name=self.kwargs['category']).order_by('-pk')
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CateogryVideoList, self).get_context_data()
+        context['video_comment_form'] = VideoCommentForm
+        context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
+
         return context
 
 
@@ -56,6 +98,8 @@ class VideoList(ListView):
         context = super(VideoList, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
         context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
+
         return context
 
 
@@ -68,6 +112,7 @@ class VideoDetail(HitCountDetailView):
         context = super(VideoDetail, self).get_context_data()
         context['video_comment_form'] = VideoCommentForm
         context['num_video'] = Video.objects.count()
+        context['category_list'] = VideoCategory.objects.all()
 
         return context
 
@@ -78,29 +123,20 @@ class CreateVideo(LoginRequiredMixin, CreateView):
     template_name = 'video_forum/create_video.html'
 
     def form_valid(self, form):
-        current_user = self.request.user
-        if current_user.is_authenticated:
-            form.instance.author = current_user
-            response = super(CreateVideo, self).form_valid(form)
+        form.instance.author = self.request.user
+        response = super(CreateVideo, self).form_valid(form)
 
-            tags_str = self.request.POST.get('tags_str')
+        tags_str = self.request.POST.get('tags_str')
 
-            if tags_str:
-                tags_str = tags_str.strip(' #')
-                tags_str = tags_str.replace(',', '#')
-                tags_list = tags_str.split('#')
+        if tags_str:
+            tags_list = tags_str.strip(' #').replace("#", " ").split()
 
-                for tag in tags_list:
-                    tag = tag.strip()
-                    tag, is_tag_created = VideoTag.objects.get_or_create(name=tag)
-                    if is_tag_created:
-                        tag.slug = slugify(tag, allow_unicode=True)
-                        tag.save()
-                    self.object.tags.add(tag)
+            for tag in tags_list:
+                tag = tag.strip()
+                tag, created = VideoTag.objects.get_or_create(name=tag)
+                self.object.tags.add(tag)
 
-            return response
-        else:
-            return redirect(reverse_lazy('video_forum:index'))
+        return response
 
 
 class DeleteVideo(LoginRequiredMixin, DeleteView):
@@ -154,16 +190,11 @@ class UpdateVideo(LoginRequiredMixin, UpdateView):
         tags_str = self.request.POST.get('tags_str')
 
         if tags_str:
-            tags_str = tags_str.strip(' #')
-            tags_str = tags_str.replace(',', '#')
-            tags_list = tags_str.split('#')
+            tags_list = tags_str.strip(' #').replace("#", " ").split()
 
             for tag in tags_list:
-                tag = tag.strip(' #')
-                tag, is_tag_created = VideoTag.objects.get_or_create(name=tag)
-                if is_tag_created:
-                    tag.slug = slugify(tag, allow_unicode=True)
-                    tag.save()
+                tag = tag.strip()
+                tag, created = VideoTag.objects.get_or_create(name=tag)
                 self.object.tags.add(tag)
 
         return response
@@ -199,37 +230,33 @@ class UpdateVideoComment(LoginRequiredMixin, UpdateView):
     template_name = 'video_forum/update_video_comment.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user == self.get_object().author:
+        if request.user == self.get_object().author:
             return super(UpdateVideoComment, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
 
 
-def delete_video_comment(request, pk):
+@login_required
+def delete_video_comment(request, video_pk, pk):
     video_comment = get_object_or_404(VideoComment, pk=pk)
     video = video_comment.video
-    if request.user.is_authenticated and request.user == video_comment.author:
+    if request.user == video_comment.author:
         video_comment.delete()
         return redirect(video.get_absolute_url())
     else:
         raise PermissionDenied
 
 
-def create_video_comment(request, pk):
-    if request.user.is_authenticated:
-        video = get_object_or_404(Video, pk=pk)
+@require_POST
+@login_required
+def create_video_comment(request, video_pk):
+    video = get_object_or_404(Video, pk=video_pk)
+    video_comment_form = VideoCommentForm(request.POST)
 
-        if request.method == 'POST':
-            video_comment_form = VideoCommentForm(request.POST)
+    if video_comment_form.is_valid():
+        video_comment = video_comment_form.save(commit=False)
+        video_comment.video = video
+        video_comment.author = request.user
+        video_comment.save()
 
-            if video_comment_form.is_valid():
-                video_comment = video_comment_form.save(commit=False)
-                video_comment.video = video
-                video_comment.author = request.user
-                video_comment.save()
-
-                return redirect(video_comment.get_absolute_url())
-        else:
-            return redirect(video.get_absolute_url())
-    else:
-        raise PermissionDenied
+        return redirect(video_comment.get_absolute_url())

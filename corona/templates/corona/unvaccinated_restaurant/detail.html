@@ -136,7 +136,9 @@
         </div>
 
         <!-- Restaurant Content-->
-        <p class="small text-muted">{{ restaurant.content|linebreaks }}</p>
+        {% if restaurant.content %}
+            <p class="small text-muted">{{ restaurant.content|linebreaks }}</p>
+        {% endif %}
 
         <hr>
 
