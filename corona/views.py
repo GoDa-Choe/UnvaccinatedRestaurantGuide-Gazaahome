@@ -651,6 +651,27 @@ class CreateRestaurant2nd(LoginRequiredMixin, RegionCoordinateMixin, UpdateView)
         return response
 
 
+class DeleteRestaurant(LoginRequiredMixin, DeleteView):
+    model = Restaurant
+    template_name = 'corona/unvaccinated_restaurant/delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        restaurant = Restaurant.objects.get(pk=self.kwargs['pk'])
+        if restaurant.author and restaurant.author == self.request.user:
+            return super(DeleteRestaurant, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteRestaurant, self).get_context_data(**kwargs)
+        restaurant = Restaurant.objects.get(pk=self.kwargs['pk'])
+        context['restaurant'] = restaurant
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('corona:post_index')
+
+
 class UpdateRestaurant(LoginRequiredMixin, RegionCoordinateMixin, UpdateView):
     model = Restaurant
     form_class = RestaurantUpdateForm

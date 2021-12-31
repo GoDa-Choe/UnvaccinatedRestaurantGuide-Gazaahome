@@ -46,10 +46,17 @@
                     </div>
                 </a>
             {% else %}
-                <a class="btn mx-1 btn-sm btn-outline-danger px-1 py-0"
-                   href="{% url 'corona:restaurant_delete_requset' restaurant.pk %}" role="button">
-                    <small>삭제</small>
-                </a>
+                {% if restaurant.author and restaurant.author == request.user %}
+                    <a class="btn mx-1 btn-sm btn-outline-danger px-1 py-0"
+                       href="{% url 'corona:restaurant_delete' restaurant.pk %}" role="button">
+                        <small>삭제</small>
+                    </a>
+                {% else %}
+                    <a class="btn mx-1 btn-sm btn-outline-danger px-1 py-0"
+                       href="{% url 'corona:restaurant_delete_requset' restaurant.pk %}" role="button">
+                        <small>삭제 요청</small>
+                    </a>
+                {% endif %}
             {% endif %}
 
 

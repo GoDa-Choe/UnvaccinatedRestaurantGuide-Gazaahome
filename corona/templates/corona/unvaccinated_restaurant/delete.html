@@ -1,7 +1,7 @@
 {% extends 'corona/base.html' %}
 {% load crispy_forms_filters %}
-{% load static %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block head_script %}
     <style>
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block head-title %}
-    식당 삭제 요청
+    식당 삭제
 {% endblock %}
 
 {% block main-area %}
@@ -21,7 +21,7 @@
     {% include 'corona/sub_banner.html' %}
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h2 class="h4">식당 삭제 요청서 작성</h2>
+        <h2 class="h4">식당 삭제</h2>
 
         <hr>
 
@@ -106,10 +106,11 @@
         </div>
 
         <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-            {{ form | crispy }}
+
+            <p>정말로 <strong>삭제</strong>하시겠습니까?"</p>
 
             <div class="d-flex justify-content-end my-3">
-                <button type="submit" class="btn btn-primary">보내기</button>
+                <button type="submit" class="btn btn-danger">삭제</button>
             </div>
         </form>
 

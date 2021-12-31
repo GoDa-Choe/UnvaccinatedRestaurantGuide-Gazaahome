@@ -11,7 +11,7 @@ from corona.views import RestaurantList, AvailableRestaurantList, UnavailableRes
 from corona.views import PopularRestaurantList, MostLikesRestaurantList, MostCommentsRestaurantList
 
 from corona.views import RestaurantDetail
-from corona.views import CreateRestaurant1st, CreateRestaurant2nd, UpdateRestaurant
+from corona.views import CreateRestaurant1st, CreateRestaurant2nd, UpdateRestaurant, DeleteRestaurant
 from corona.views import like_restaurant, dislike_restaurant
 from corona.views import create_restaurant_comment, delete_restaurant_comment, UpdateRestaurantComment
 from corona.views import like_restaurant_comment
@@ -80,6 +80,7 @@ urlpatterns = [
     path('unvaccinated_restaurant/<int:pk>/create_delete_request/', CreateRestaurantDeleteRequest.as_view(),
          name='restaurant_delete_requset'),
     path('unvaccinated_restaurant/<int:pk>/update/', UpdateRestaurant.as_view(), name='restaurant_update'),
+    path('unvaccinated_restaurant/<int:pk>/delete/', DeleteRestaurant.as_view(), name='restaurant_delete'),
 
     path('unvaccinated_restaurant/<int:pk>/like/', like_restaurant, name='like_restaurant'),
     path('unvaccinated_restaurant/<int:pk>/dislike/', dislike_restaurant, name='dislike_restaurant'),
