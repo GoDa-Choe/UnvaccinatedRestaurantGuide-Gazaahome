@@ -13,7 +13,7 @@ from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_COD
 from corona.models import Restaurant, Post
 from video_forum.models import Video
 
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 
