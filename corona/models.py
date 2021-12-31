@@ -21,8 +21,7 @@ class UnvaccinatedPass(models.Model):
 
 class RestaurantTag(models.Model):
     name = models.CharField(max_length=20, unique=True)
-
-    # slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+    slug = models.SlugField(max_length=200, unique=True, null=True, allow_unicode=True)
 
     def __str__(self):
         return self.name
