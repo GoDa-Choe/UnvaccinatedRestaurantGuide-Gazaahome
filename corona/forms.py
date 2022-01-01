@@ -71,7 +71,7 @@ class RestaurantUpdateAuthorForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = ('name', 'address', 'category', 'unvaccinated_pass',
-                  # 'content',
+                  'content',
                   'url')
         labels = {
             'name': '가게 상호',
