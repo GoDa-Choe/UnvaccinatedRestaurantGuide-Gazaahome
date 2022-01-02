@@ -301,7 +301,7 @@ class SearchedMapView(FormMixin, ListView):
             restaurant_list.append(data)
         context = {'form': self.get_form()}
         context['restaurant_list'] = restaurant_list
-        context.update(get_num_restaurants(Restaurant.objects.all()))
+        context.update(get_num_fast_restaurants(self.get_queryset()))
         context['search_keywords'] = self.get_keywords(self.kwargs['search_string'])
         context['num_searched'] = len(restaurant_list)
         return context

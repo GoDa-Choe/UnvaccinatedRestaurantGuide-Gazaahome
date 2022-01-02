@@ -1,4 +1,4 @@
-{% extends "account/sign_base.html" %}
+{% extends "account/corona_sign_base.html" %}
 
 {% load widget_tweaks %}
 {% load account socialaccount %}
@@ -9,7 +9,7 @@
 {% block title %}로그인{% endblock %}
 
 {% block custom_style %}
-    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'corona_home/css/signin.css' %}" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -38,17 +38,11 @@
                  height="150">
 
             <div class="d-flex  justify-content-center">
-                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
-                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
-                         width="120" height="54">
-                </a>
-                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
+                <a class="text-decoration-none mx-2" href="{% url "corona:corona_home:home" %}">
                     <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
-                         width="120" height="60">
+                         width="200" height="100">
                 </a>
             </div>
-
-            <p class="text-muted small mb-3"> click me!</p>
 
             {% if form.errors %}
                 {% for field in form %}
@@ -130,9 +124,9 @@
         </div>
 
         <div class="d-flex mt-2 justify-content-between">
-            <a class="small text-muted text-decoration-none" href="{% url "home:policy" %}">이용약관</a>
-            <a class="small text-muted text-decoration-none" href="{% url "home:privacy" %}">개인정보처리방침</a>
-            <a class="small text-muted text-decoration-none" href="{% url "home:license" %}">라이센스</a>
+            <a class="small text-muted text-decoration-none" href="{% url "corona:corona_home:policy" %}">이용약관</a>
+            <a class="small text-muted text-decoration-none" href="{% url "corona:corona_home:privacy" %}">개인정보처리방침</a>
+            <a class="small text-muted text-decoration-none" href="{% url "corona:corona_home:license" %}">라이센스</a>
         </div>
 
 

@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 
     # apps
     'forum',
-    'video_forum',
+
     'home',
     'workday',
     'barracks',
@@ -76,6 +76,8 @@ INSTALLED_APPS = [
 
     'corona',
     'corona_home',
+    'chat',
+    'video_forum',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +96,10 @@ ROOT_URLCONF = 'gazahome.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'home/templates'],
+        'DIRS': [
+            BASE_DIR / 'home/templates',
+            # BASE_DIR / 'corona_home/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,8 +199,8 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-LOGIN_REDIRECT_URL = "/profile/"
-LOGOUT_REDIRECT_URL = "/goda_soft_studio/"
+LOGIN_REDIRECT_URL = "/corona/"
+LOGOUT_REDIRECT_URL = "/corona/"
 
 # SSL
 SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT', False))

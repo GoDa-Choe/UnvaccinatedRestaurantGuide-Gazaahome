@@ -1,4 +1,4 @@
-{% extends "account/sign_base.html" %}
+{% extends "account/corona_sign_base.html" %}
 
 {% load widget_tweaks %}
 {% load account socialaccount %}
@@ -9,7 +9,7 @@
 {% block title %}라이센스{% endblock %}
 
 {% block custom_style %}
-    <link href="{% static 'home/css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'corona_home/css/signin.css' %}" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -33,18 +33,14 @@
     <main class="form-signin">
 
         <img class="" src="{% static 'home/images/logo/goda_soft_studio_logo_400_250.png' %}"
-                 alt="Goda Soft Studio" width="240" height="150">
+             alt="Goda Soft Studio" width="240" height="150">
 
-            <div class="d-flex mb-3 justify-content-center">
-                <a class="text-decoration-none mx-2" href="{% url "home:home" %}">
-                    <img src="{% static 'home/images/logo/gazaahome_logo_400_180.png' %}" alt="집에가자"
-                         width="120" height="54">
-                </a>
-                <a class="text-decoration-none mx-2" href="{% url "corona:index" %}">
-                    <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
-                         width="120" height="60">
-                </a>
-            </div>
+        <div class="d-flex mb-3 justify-content-center">
+            <a class="text-decoration-none mx-2" href="{% url "corona:corona_home:home" %}">
+                <img src="{% static 'home/images/logo/unvaccinated_restaurant_400_200.png' %}" alt="미접종 식당 가이드"
+                     width="200" height="100">
+            </a>
+        </div>
 
         <p>This application is <br>
             <strong>Copyright © Goda Soft Studio.</strong><br>
@@ -244,7 +240,7 @@
 
 
         <a class="text-decoration-none"
-           href="{% url 'home:profile' %}">
+           href="{% url 'corona:corona_home:home' %}">
             Home
         </a>
 

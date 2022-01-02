@@ -3,15 +3,15 @@
 
         <!-- All -->
         {% if region %}
-            <a class="nav-link text-muted disabled" href="{% url 'corona:region_restaurant_index' region %}">
+            <a class="nav-link text-muted disabled" href="#">
                 {{ region }}
                 <span class="badge bg-light text-dark rounded-pill align-text-bottom">
                     {{ num_restaurants }}
                 </span>
             </a>
         {% else %}
-            <a class="nav-link text-muted disabled" href="{% url 'corona:region_restaurant_index' region %}">
-                전국
+            <a class="nav-link text-muted disabled" href="#">
+                전체
                 <span class="badge bg-light text-dark rounded-pill align-text-bottom">
                     {{ num_restaurants }}
                 </span>
@@ -19,7 +19,7 @@
         {% endif %}
 
         <!-- Available -->
-        <a class="nav-link disabled" href="{% url 'corona:available_region_restaurant_index' region %}">
+        <a class="nav-link disabled" href="#">
             친절 식당
             <span class="badge bg-light text-dark rounded-pill align-text-bottom">
                 {{ num_unvaccinated_available }}
@@ -27,7 +27,7 @@
         </a>
 
         <!-- Unavailable -->
-        <a class="nav-link disabled" href="{% url 'corona:unavailable_region_restaurant_index' region %}">
+        <a class="nav-link disabled" href="#">
             거부 식당
             <span class="badge bg-light text-dark rounded-pill align-text-bottom">
                 {{ num_unvaccinated_unavailable }}
@@ -35,7 +35,7 @@
         </a>
 
         <!-- Confirm Required -->
-        <a class="nav-link disabled" href="{% url 'corona:confirm_required_region_restaurant_index' region %}">
+        <a class="nav-link disabled" href="#">
             궁금 식당
             <span class="badge bg-light text-dark rounded-pill align-text-bottom">
                 {{ num_unvaccinated_confirm_required }}

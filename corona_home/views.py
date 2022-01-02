@@ -1,14 +1,19 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-
 from django.db.models import Count
 
 from django.conf import settings
 
 from corona.models import Restaurant, Post
+
+from django.views.generic import TemplateView, FormView
+
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.core.exceptions import PermissionDenied
+
 from video_forum.models import Video
 
-from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_CODE
+from home.forms import CheckPasswordForm
 
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
@@ -133,46 +138,34 @@ class HomeView(TemplateView):
         return context
 
 
-def home(request):
-    popular_posts = Post.objects.order_by("-pk")[:5]
+class GodaSoftStudioView(TemplateView):
+    template_name = 'corona_home/goda_soft_studio.html'
 
-    most_likes_posts = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)
-    most_likes_posts = most_likes_posts[:4]
-    most_recently_posts = Post.objects.order_by('-pk')[:4]
 
-    most_recently_videos = Video.objects.order_by('-pk')[:3]
+class RobotView(TemplateView):
+    template_name = 'corona_home/robots.txt'
+    content_type = 'text/plain'
 
-    # popular_troops = Troop.objects.order_by("-hit_count_generic__hits", '-pk')[:3]
 
-    # popular_barracks = Barracks.objects.exclude(is_close=True).order_by("-hit_count_generic__hits", '-pk')[:2]
+class PrivacyView(TemplateView):
+    template_name = 'corona_home/policy/privacy.html'
 
-    context = {
-        'popular_posts': popular_posts,
-        'most_likes_posts': most_likes_posts,
-        'most_recently_posts': most_recently_posts,
 
-        'most_recently_videos': most_recently_videos,
+class PolicyView(TemplateView):
+    template_name = 'corona_home/policy/policy.html'
 
-        # 'popular_troops': popular_troops,
 
-        # 'popular_barracks': popular_barracks,
+class LicenseView(TemplateView):
+    template_name = 'corona_home/policy/license.html'
 
-        # 'categories': Category.objects.order_by('priority'),
-        'google_site_register_code': GOOGLE_SITE_REGISTER_CODE,
-        'naver_site_register_code': NAVER_SITE_REGISTER_CODE,
-        # 'now': str(timezone.now())
-    }
 
-    # if request.user.is_authenticated:
-    #     calculator = Calculator.objects.filter(author=request.user).first()
-    #     if calculator:
-    #         context['calculator'] = calculator
-    #         new = calculator_lib.get_workday_from_calculator_light(calculator)
-    #         context.update(new)
-    #         return render(request, 'home/home.html', context)
+class PofileView(LoginRequiredMixin, TemplateView):
+    template_name = 'account/corona_profile.html'
 
-    return render(
-        request,
-        'corona_home/home.html',
-        context
-    )
+    def get_context_data(self, **kwargs):
+        context = super(PofileView, self).get_context_data(**kwargs)
+        password_form = CheckPasswordForm(self.request.user)
+        context['password_form'] = password_form
+        return context
+
+

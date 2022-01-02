@@ -17,10 +17,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from home import views
+from django.views.generic import RedirectView
 
 app_name = 'home'
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', RedirectView.as_view(url='corona'), name='home'),
     path('goda_soft_studio/', views.GodaSoftStudioView.as_view(), name='goda_soft_studio'),
     path('profile/', views.PofileView.as_view(), name='profile'),
     path('profile/delete_account/<int:pk>/', views.AccountDeleteView.as_view(), name='delete_account'),
@@ -32,6 +33,7 @@ urlpatterns = [
     path('policy/license/', views.LicenseView.as_view(), name='license'),
 
     path('robots.txt/', views.RobotView.as_view(), name='robot'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -27,7 +27,7 @@ def home(request):
     most_likes_posts = most_likes_posts[:4]
     most_recently_posts = Post.objects.order_by('-pk')[:4]
 
-    most_recently_videos = Video.objects.order_by('-pk')[:3]
+    # most_recently_videos = Video.objects.order_by('-pk')[:3]
 
     popular_troops = Troop.objects.order_by("-hit_count_generic__hits", '-pk')[:2]
 
@@ -140,4 +140,4 @@ class AccountDeleteView(LoginRequiredMixin, FormView):
         return super(AccountDeleteView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('home:goda_soft_studio')
+        return reverse_lazy('corona:corona_home:home')

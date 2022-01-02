@@ -28,19 +28,20 @@ urlpatterns = [
 
     path('', include('home.urls')),
 
-    path('forum/', include('forum.urls')),
+    # path('forum/', include('forum.urls')),
 
     path('corona/', include('corona.urls')),
+    path('corona/chat/', include('chat.urls')),
 
     # Todo
-    path('corona_home/', include('corona_home.urls')),
+    # path('corona_home/', include('corona_home.urls')),
 
     path('corona/video_forum/', include('video_forum.urls')),
 
-    path('workday/', include('workday.urls')),
-    path('barracks/', include('barracks.urls')),
-    path('ranking/', include('rank.urls')),
-    path('troop_review/', include('troop_review.urls')),
+    # path('workday/', include('workday.urls')),
+    # path('barracks/', include('barracks.urls')),
+    # path('ranking/', include('rank.urls')),
+    # path('troop_review/', include('troop_review.urls')),
     # path('beauty/', include('beauty.urls')),
 
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),

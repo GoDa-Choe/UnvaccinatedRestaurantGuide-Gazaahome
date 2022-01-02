@@ -30,8 +30,9 @@ app_name = 'corona'
 
 urlpatterns = [
 
-    path('', RedirectView.as_view(url='/corona/unvaccinated_restaurant/'), name='index'),
-    path('contributors/', ContributorView.as_view(), name='contributor'),
+    path('', include('corona_home.urls')),
+
+    # path('contributors/', ContributorView.as_view(), name='contributor'),
     # path('', include('corona_home.urls')),
 
     path('unvaccinated_restaurant/map/', MapView.as_view(),

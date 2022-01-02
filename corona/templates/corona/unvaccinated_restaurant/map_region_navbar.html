@@ -1,24 +1,48 @@
 <ul class="nav nav-tabs">
-
     <!-- Map -->
-    <li class="nav-item">
-        <a class="nav-link active text-success" href="{% url 'corona:restaurant_map' %}">
-            지도
-            <span class="badge bg-light rounded-pill align-text-bottom text-muted">
+    {% if region %}
+        <li class="nav-item">
+            <a class="nav-link active text-success" href="{% url 'corona:region_restaurant_map' region %}">
+                지도
+                <span class="badge bg-light rounded-pill align-text-bottom text-muted">
                 <i class="fas fa-map-marked-alt"></i>
             </span>
-        </a>
-    </li>
+            </a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link active text-success" href="{% url 'corona:restaurant_map' %}">
+                지도
+                <span class="badge bg-light rounded-pill align-text-bottom text-muted">
+                <i class="fas fa-map-marked-alt"></i>
+            </span>
+            </a>
+        </li>
+    {% endif %}
+
 
     <!-- List -->
-    <li class="nav-item">
-        <a class="nav-link text-muted" href="{% url 'corona:restaurant_index' %}">
-            목록
-            <span class="badge bg-light text-muted rounded-pill align-text-bottom">
+    {% if region %}
+        <li class="nav-item">
+            <a class="nav-link text-muted" href="{% url 'corona:region_restaurant_index' region %}">
+                목록
+                <span class="badge bg-light text-muted rounded-pill align-text-bottom">
                 <i class="fas fa-list-ol"></i>
             </span>
-        </a>
-    </li>
+            </a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-muted" href="{% url 'corona:restaurant_index' %}">
+                목록
+                <span class="badge bg-light text-muted rounded-pill align-text-bottom">
+                <i class="fas fa-list-ol"></i>
+            </span>
+            </a>
+        </li>
+    {% endif %}
+
+
 
     <!-- Region Button -->
     <li class="nav-item">
