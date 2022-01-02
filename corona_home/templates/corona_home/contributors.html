@@ -4,12 +4,22 @@
 {% block head-title %}
     Contributors
 {% endblock %}
+{% block head_script %}
+    <script src="https://asset.talkplus.io/talkplus-js-0.2.8.js"></script>
+{% endblock %}
+
 
 {% block custom_style %}
     <link href="{% static 'forum/css/scroll_nav.css' %}" rel="stylesheet" type="text/css" media="screen">
 {% endblock %}
 
 {% block main-area %}
+
+
+
+
+
+
 
     <!-- Sub Banner -->
     {% include 'corona/sub_banner.html' %}
@@ -76,7 +86,98 @@
             </p>
 
         </div>
+
+
+        <!-- container element in which TalkJS will display a chat UI -->
+        <div id="talkjs-container" style="width: 90%; margin: 30px; height: 500px">
+            <i>Loading chat...</i>
+        </div>
     </div>
 
 
 {% endblock %}
+
+{% block script %}
+    <!-- minified snippet to load TalkJS without delaying your page -->
+    <script>
+        (function (t, a, l, k, j, s) {
+            s = a.createElement('script');
+            s.async = 1;
+            s.src = "https://cdn.talkjs.com/talk.js";
+            a.head.appendChild(s)
+            ;k = t.Promise;
+            t.Talk = {
+                v: 3, ready: {
+                    then: function (f) {
+                        if (k) return new k(function (r, e) {
+                            l.push([f, r, e])
+                        });
+                        l
+                            .push([f])
+                    }, catch: function () {
+                        return k && new k()
+                    }, c: l
+                }
+            };
+        })(window, document, []);
+
+
+        Talk.ready.then(function () {
+            var me = new Talk.User({
+                id: '123456',
+                name: 'Alice',
+                email: 'alice@example.com',
+                photoUrl: 'https://demo.talkjs.com/img/alice.jpg',
+                welcomeMessage: 'Hey there! How are you? :-)',
+                role: "admin"
+            });
+            window.talkSession = new Talk.Session({
+                appId: 'tsLI8nZv',
+                me: me,
+            });
+            var other1 = new Talk.User({
+                id: "654321",
+                name: "Sebastian",
+                email: "sebastian@example.com",
+                role: "general"
+            });
+
+            var other2 = new Talk.User({
+                id: "456789",
+                name: "Steve",
+                email: "steve@example.com",
+                role: "general"
+            });
+
+            var other3 = new Talk.User({
+                id: "124141",
+                name: "asdw",
+                email: "steve@example.com",
+                role: "general"
+            });
+
+            var conversation = window.talkSession.getOrCreateConversation("CONVERSATION_ID");
+            conversation.setParticipant(me);
+            conversation.setParticipant(other1);
+            conversation.setParticipant(other2);
+            conversation.setParticipant(other3);
+            conversation.setAttributes({
+                photoUrl: "https://demo.talkjs.com/img/11.jpg",
+                subject: "Beautiful Steel Preserve for rent!"
+            });
+
+            {#var inbox = talkSession.createInbox({selected: conversation});#}
+            {#inbox.mount(document.getElementById('talkjs-container'));#}
+
+            var chatbox = window.talkSession.createChatbox();
+            chatbox.select(conversation);
+            chatbox.mount(document.getElementById('talkjs-container'));
+
+        });
+    </script>
+
+
+{% endblock %}
+
+
+
