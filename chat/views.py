@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 import random
+import requests
 
 
 # Create your views here.
@@ -30,3 +31,22 @@ class TestChatView(TemplateView):
 
         context.update(user)
         return context
+
+
+def leave(request, id):
+    url = f'https://api.talkjs.com/v1/tsLI8nZv/conversations/TEST004/participants/{id}'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sk_test_QR6RsbOJ3A8rW1ZnNlGrZui7a8D5OZ4S'
+    }
+    reponse = requests.delete(url=url, headers=headers)
+
+    context = {
+        'reponse': reponse.content
+    }
+
+    return render(
+        request,
+        'chat/leave.html',
+        context
+    )

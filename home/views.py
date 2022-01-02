@@ -38,7 +38,7 @@ def home(request):
         'most_likes_posts': most_likes_posts,
         'most_recently_posts': most_recently_posts,
 
-        'most_recently_videos': most_recently_videos,
+        # 'most_recently_videos': most_recently_videos,
 
         'popular_troops': popular_troops,
 

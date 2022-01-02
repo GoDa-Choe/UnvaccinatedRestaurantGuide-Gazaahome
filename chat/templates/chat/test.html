@@ -83,7 +83,7 @@
                 me: me,
             });
 
-            var conversation = window.talkSession.getOrCreateConversation("TEST003");
+            var conversation = window.talkSession.getOrCreateConversation("TEST004");
             conversation.setParticipant(me);
             conversation.setAttributes({
                 photoUrl: "https://res.cloudinary.com/hyzq6bxmk/image/upload/v1641144411/static/goda%20soft%20studio/logo_godo_kftbb0.png",
@@ -104,14 +104,18 @@
             {% endif %}
         };
 
+        {#request.open('DELETE', url, true)#}
+        {#request.setRequestHeader('Content-Type', 'application/json');#}
+        {#request.setRequestHeader('Authorization', 'Bearer sk_test_QR6RsbOJ3A8rW1ZnNlGrZui7a8D5OZ4S');#}
+        {#request.send();#}
+        {# const url = 'https://gazaahome.com/corona/chat/' + id + '/'; #}
+
         function leaveChat(id) {
             const request = new XMLHttpRequest();
-            const url = 'https://api.talkjs.com/v1/tsLI8nZv/conversations/TEST003/participants/' + id
-            request.open('DELETE', url, true)
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Authorization', 'Bearer sk_test_QR6RsbOJ3A8rW1ZnNlGrZui7a8D5OZ4S');
-            request.send();
+            const url = 'https://gazaahome.com/corona/chat/leave/' + id + '/';
 
+            request.open('GET', url, true)
+            request.send();
             console.log(request.response);
             return request.response;
         }
