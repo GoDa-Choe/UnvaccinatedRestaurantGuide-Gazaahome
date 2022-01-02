@@ -1,7 +1,5 @@
 {% extends 'corona/base.html' %}
 {% load static %}
-{#{% load crispy_forms_tags %}#}
-{#{% load embed_video_tags %}#}
 
 {% block head-title %}
     미접종 식당 가이드 - 지도
@@ -28,15 +26,15 @@
     {% include 'corona/unvaccinated_restaurant/search_bar.html' %}
 
     <!-- Region Bar -->
-    {% include 'corona/unvaccinated_restaurant/region_navbar.html' %}
+    {% include 'corona/unvaccinated_restaurant/map_region_navbar.html' %}
 
     <!-- Scroll Bar -->
-    {% include 'corona/unvaccinated_restaurant/scroll_navbar.html' %}
+        {% include 'corona/unvaccinated_restaurant/map_scroll_navbar.html' %}
 
-    <div class="my-3 p-3 bg-body rounded shadow-sm">
+    <div class="my-3 p-3 bg-body rounded shadow-sm border-top-0">
 
         <!-- Header -->
-        <img src="{% static 'corona/map.png' %}" style="width: 30px; height: 30px" class="me-1 d-flex float-start">
+        {#        <img src="{% static 'corona/map.png' %}" style="width: 30px; height: 30px" class="me-1 d-flex float-start">#}
         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
 
             <h2 class="h2 mb-2">
@@ -120,11 +118,20 @@
 
 
     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+
+        {% if region %}
+            var mapOption = {
+                center: new kakao.maps.LatLng({{avg_latitude}}, {{avg_logitude}}), // 지도의 중심좌표
+                level: 10 // 지도의 확대 레벨
+            };
+        {% else %}
+            var mapOption = {
                 center: new kakao.maps.LatLng(36.534985733600344, 127.89984154337944), // 지도의 중심좌표
                 level: 13 // 지도의 확대 레벨
             };
+        {% endif %}
+
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
         // 마커 클러스터러를 생성합니다
@@ -331,7 +338,6 @@
             averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
             minLevel: 7// 클러스터 할 최소 지도 레벨
         });
-
 
         clusterer.addMarkers(markers);
 

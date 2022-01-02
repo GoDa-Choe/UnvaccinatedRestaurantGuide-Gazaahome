@@ -37,6 +37,8 @@ urlpatterns = [
     path('unvaccinated_restaurant/map/', MapView.as_view(),
          name='restaurant_map'),
 
+    path('unvaccinated_restaurant/map/region/<str:region>/', MapView.as_view(), name='region_restaurant_map'),
+
     # Todo
     # path('unvaccinated_restaurant/map/test/', MapView.as_view(), name='restaurant_map_test'),
 

@@ -1,22 +1,22 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <!-- Map -->
-        {% if request.path == "/corona/unvaccinated_restaurant/map/" %}
-            <a class="nav-link text-muted active" href="{% url 'corona:restaurant_map' %}">
-                지도
-                <span class="badge text-white rounded-pill align-text-bottom"
-                      style="background-color: darkseagreen">
-                    <i class="fas fa-map-marked-alt"></i>
-                </span>
-            </a>
-        {% else %}
-            <a class="nav-link text-muted active" href="{% url 'corona:restaurant_map' %}">
-                지도
-                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
-                    <i class="fas fa-map-marked-alt"></i>
-                </span>
-            </a>
-        {% endif %}
+        <a class="nav-link text-muted" href="{% url 'corona:restaurant_map' %}">
+            지도
+            <span class="badge bg-light text-muted rounded-pill align-text-bottom">
+                <i class="fas fa-map-marked-alt"></i>
+            </span>
+        </a>
+    </li>
+
+    <!-- List -->
+    <li class="nav-item">
+        <a class="nav-link text-success active" href="{% url 'corona:restaurant_index' %}">
+            목록
+            <span class="badge bg-light text-muted rounded-pill align-text-bottom">
+                <i class="fas fa-list-ol"></i>
+            </span>
+        </a>
     </li>
 
     <li class="nav-item">
@@ -30,7 +30,7 @@
             {% else %}
                 전국
             {% endif %}
-            <i class="far fa-compass"></i>
+            <i class="fas fa-chevron-down"></i>
         </a>
 
 

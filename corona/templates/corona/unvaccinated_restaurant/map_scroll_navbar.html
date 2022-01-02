@@ -1,0 +1,46 @@
+<div class="nav-scroller shadow-sm border-top-0">
+    <nav class="nav nav-underline" aria-label="Secondary navigation">
+
+        <!-- All -->
+        {% if region %}
+            <a class="nav-link text-muted disabled" href="{% url 'corona:region_restaurant_index' region %}">
+                {{ region }}
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_restaurants }}
+                </span>
+            </a>
+        {% else %}
+            <a class="nav-link text-muted disabled" href="{% url 'corona:region_restaurant_index' region %}">
+                전국
+                <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                    {{ num_restaurants }}
+                </span>
+            </a>
+        {% endif %}
+
+        <!-- Available -->
+        <a class="nav-link disabled" href="{% url 'corona:available_region_restaurant_index' region %}">
+            친절 식당
+            <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                {{ num_unvaccinated_available }}
+            </span>
+        </a>
+
+        <!-- Unavailable -->
+        <a class="nav-link disabled" href="{% url 'corona:unavailable_region_restaurant_index' region %}">
+            거부 식당
+            <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                {{ num_unvaccinated_unavailable }}
+            </span>
+        </a>
+
+        <!-- Confirm Required -->
+        <a class="nav-link disabled" href="{% url 'corona:confirm_required_region_restaurant_index' region %}">
+            궁금 식당
+            <span class="badge bg-light text-dark rounded-pill align-text-bottom">
+                {{ num_unvaccinated_confirm_required }}
+            </span>
+        </a>
+
+    </nav>
+</div>

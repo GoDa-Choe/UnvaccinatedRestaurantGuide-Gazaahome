@@ -175,11 +175,13 @@ class MapView(FormMixin, ListView):
         return redirect(reverse_lazy('corona:searched_restaurant_map', args=(search_string,)))
 
     def form_invalid(self, form):
-        return redirect(reverse_lazy('corona:restaurant_index'))
+        return redirect(reverse_lazy('corona:restaurant_map'))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         # context = super(MapView, self).get_context_data()
 
+        sum_latitude = 0
+        sum_longitude = 0
         restaurant_list = []
         for restaurant in self.get_queryset().iterator():
             data = {
@@ -198,9 +200,18 @@ class MapView(FormMixin, ListView):
                 'hits': restaurant.num_hits,
             }
             restaurant_list.append(data)
-        context = {'form': self.get_form()}
-        context['restaurant_list'] = restaurant_list
-        context.update(get_num_restaurants(Restaurant.objects.all()))
+            sum_latitude += restaurant.latitude
+            sum_longitude += restaurant.longitude
+
+        context = {
+            'form': self.get_form(),
+            'restaurant_list': restaurant_list,
+            'region': self.kwargs.get('region', None),
+            'avg_latitude': sum_latitude / len(restaurant_list),
+            'avg_logitude': sum_longitude / len(restaurant_list)
+        }
+
+        context.update(get_num_fast_restaurants(self.get_queryset()))
 
         return context
 
@@ -217,6 +228,11 @@ class MapView(FormMixin, ListView):
         latitude_constraints = Q(latitude__isnull=True)
         longitude_constraints = Q(longitude__isnull=True)
         queryset = queryset.exclude(address_constraints | latitude_constraints | longitude_constraints)
+
+        region = self.kwargs.get('region', None)
+
+        if region is not None:
+            queryset = queryset.filter(region=region)
 
         return queryset
 
@@ -260,7 +276,6 @@ class SearchedMapView(FormMixin, ListView):
         return redirect(reverse_lazy('corona:restaurant_index'))
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
         return render(self.request, template_name=self.template_name, context=self.get_context_data())
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -1025,3 +1040,25 @@ class CreateRestaurantDeleteRequest(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('corona:restaurant_detail', args=(self.kwargs['pk'],))
+
+
+REGION_LIST = [
+    "전국",
+    "서울",
+    "경기",
+    "인천",
+    "부산",
+    "대구",
+    "울산",
+    "경북",
+    "경남",
+    "충북",
+    "충남",
+    "세종",
+    "대전",
+    "전북",
+    "전남",
+    "광주",
+    "강원",
+    "제주",
+]

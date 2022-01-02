@@ -1,0 +1,66 @@
+<ul class="nav nav-tabs">
+
+    <!-- Map -->
+    <li class="nav-item">
+        <a class="nav-link active text-success" href="{% url 'corona:restaurant_map' %}">
+            지도
+            <span class="badge bg-light rounded-pill align-text-bottom text-muted">
+                <i class="fas fa-map-marked-alt"></i>
+            </span>
+        </a>
+    </li>
+
+    <!-- List -->
+    <li class="nav-item">
+        <a class="nav-link text-muted" href="{% url 'corona:restaurant_index' %}">
+            목록
+            <span class="badge bg-light text-muted rounded-pill align-text-bottom">
+                <i class="fas fa-list-ol"></i>
+            </span>
+        </a>
+    </li>
+
+    <!-- Region Button -->
+    <li class="nav-item">
+        <a class="nav-link btn btn-primary text-dark" data-bs-toggle="collapse" href="#collapseExample"
+           role="button"
+           aria-expanded="false"
+           aria-controls="collapseExample">
+            {% if region %}
+                {{ region }}
+            {% else %}
+                전국
+            {% endif %}
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </li>
+
+
+</ul>
+
+
+<!-- Region Scroll -->
+<div class="collapse" id="collapseExample">
+    <div class="nav-scroller shadow-sm border-top-0">
+        <nav class="nav nav-underline" aria-label="Secondary navigation">
+            <a class="nav-link" href="{% url 'corona:restaurant_map' %}">전국</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "서울" %}">서울</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "경기" %}">경기</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "인천" %}">인천</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "부산" %}">부산</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "대구" %}">대구</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "울산" %}">울산</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "경북" %}">경북</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "경남" %}">경남</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "충북" %}">충북</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "충남" %}">충남</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "세종" %}">세종</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "대전" %}">대전</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "전북" %}">전북</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "전남" %}">전남</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "광주" %}">광주</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "강원" %}">강원</a>
+            <a class="nav-link" href="{% url 'corona:region_restaurant_map' "제주" %}">제주</a>
+        </nav>
+    </div>
+</div>
