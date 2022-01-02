@@ -1,0 +1,43 @@
+{% load static %}
+
+
+<div class="position-sticky" style="top: 4.5rem;">
+
+    <!-- Quarantine Pass Poster -->
+    <div class="container p-1" id="QuarantinePass">
+        <h4 class="h3 pb-2 border-bottom text-shadow-1">방역패스 안내</h4>
+
+        <div class="card rounded">
+            <img src="{% static 'corona_home/quarantine_pass_poster.jpg' %}" class="card-img-top" alt="박영패스 안내">
+            <div class="card-footer text-muted">
+                <p class="card-text my-1 small">
+                    &middot; 식당/카페는 방역패스가 없어도 미접종자 단독(1인) 이용이 가능합니다.
+                </p>
+                <p class="card-text my-1 small">
+                    &middot; 백화점/대형마트는 1월 3일부터 방역패스가 의무화되었습니다.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Greetings -->
+    <div class="p-1 py-2">
+        <div class="bg-light rounded p-4">
+            <p class="small">
+                <small class="text-muted">
+                    안녕하세요, 개발자 고다입니다.
+                    <br><br>
+                    모두가 함께 만들어가는 <span class="text-success">미접종 식당 가이드</span>가 되고자합니다.
+                    개선점과 버그 등을 자유롭게
+                    <a href="{% url 'corona:category_post_index' '아이디어' %}"
+                       class="text-decoration-none text-primary">아이디어
+                        게시판</a>에
+                    올려주시면 감사하겠습니다.<br><br>
+                    고다 올림.
+                </small>
+            </p>
+        </div>
+    </div>
+
+</div>

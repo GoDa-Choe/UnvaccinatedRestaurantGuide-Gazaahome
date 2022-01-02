@@ -1,0 +1,161 @@
+{% load cache %}
+{% load embed_video_tags %}
+
+<!-- Posts & Videos -->
+<div id="carouselPostVideo" class="carousel carousel-dark slide border rounded shadow-sm mb-3"
+     data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselPostVideo" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselPostVideo" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    </div>
+
+
+    <div class="carousel-inner">
+
+        <!-- Most Recent Post -->
+        <div class="carousel-item active" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static" style="min-height: 582px">
+
+                    <!-- Most Recent Post Header -->
+                    <a href="{% url 'corona:post_index' %}" class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-secondary">최근 게시글</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Recent Post List -->
+                    <div class="list-group-flush">
+                        {% for post in mostrecent_post_list %}
+                            <a href="{% url 'corona:post_detail' post.pk %}"
+                               class="list-group-item list-group-item-action"
+                               style="border: 0">
+                                <div class="d-flex text-muted">
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                                        <h3 class="h6 text-dark">{{ post.title|truncatechars:35 }}</h3>
+
+                                        <p class="pb-0 mb-1 lh-sm">
+                                            {{ post.content|cut:"#"|cut:"`"|truncatechars:25|safe }}
+                                        </p>
+
+                                        <div class="d-flex text-muted justify-content-start">
+                                            <div class="d-inline">
+                                                {% if post.is_anonymous %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ post.author }}</strong>
+                                                {% endif %}
+                                                <div class="d-inline"> {{ post.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex text-muted justify-content-between">
+                                            <div class="d-inline">
+                                                <span class="badge rounded-pill" style="background-color: mediumpurple">
+                                                    {{ post.category.name }}
+                                                </span>
+                                            </div>
+
+                                            <div class="d-inline mb-1">
+                                                <div class="d-inline"><i
+                                                        class="far fa-thumbs-up text-primary"></i> {{ post.num_likes }}
+                                                </div>
+
+                                                {% comment %}
+                                                    <div class="d-inline"><i
+                                                            class="far fa-thumbs-down text-danger"></i> {{ post.num_dislikes }}
+                                                    </div>
+                                                {% endcomment %}
+
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment"></i> {{ post.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ post.hit_count.hits }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Recent Video -->
+        <div class="carousel-item" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+
+                    <!-- Most Recent Video Header -->
+                    <a href="{% url 'video_forum:index' %}" class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-success">최근 비디오</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Recent Video List -->
+                    {% cache 120 mostrecent_video_list %}
+                        <div class="list-group-flush">
+                            {% for video in mostrecent_video_list %}
+                                <a href="{% url 'video_forum:detail' video.pk %}"
+                                   class="list-group-item list-group-item-action"
+                                   style="border: 0">
+
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                        <h3 class="h6 text-dark">{{ video.title|truncatechars:30 }}</h3>
+
+                                        <div class="d-block">
+                                            {% video video.url '100% x 50%' %}
+                                        </div>
+
+                                        <div class="d-flex text-muted justify-content-between small mt-1">
+                                            <div class="d-inline">
+
+                                                {% if video.is_anonymous %}
+                                                    <strong class="text-gray-dark">익명</strong>
+                                                {% else %}
+                                                    <strong class="text-gray-dark">{{ video.author }}</strong>
+                                                {% endif %}
+
+                                                <div class="d-inline"> {{ video.created_at|date:'m-d H:i' }} </div>
+                                            </div>
+                                            <div class="d-inline">
+                                                <div class="d-inline"><i
+                                                        class="fas fa-heart text-danger"></i> {{ video.num_likes }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-comment text-success"></i> {{ video.num_comments }}
+                                                </div>
+                                                <div class="d-inline"><i
+                                                        class="far fa-eye"></i> {{ video.hit_count.hits }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-inline small">
+                                            {% if video.tags.exists %}
+                                                <i class="fas fa-tags small"></i>
+                                                {% for tag in video.tags.iterator %}
+                                                    <span class="badge rounded-pill small"
+                                                          style="background-color: darkseagreen">{{ tag }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endcache %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

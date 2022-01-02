@@ -1,0 +1,101 @@
+<!-- Restaurants -->
+<div id="carouselExampleDark" class="carousel carousel-dark slide border rounded shadow-sm mb-3"
+     data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+
+    <div class="carousel-inner">
+
+        <!-- Most Recent Restaurants-->
+        <div class="carousel-item active" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static" style="min-height: 582px">
+
+                    <!-- Most Recent Restaurant Header-->
+                    <a href="{% url 'corona:restaurant_index' %}"
+                       class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-muted">최근 등록 식당</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Recent Restaurant List-->
+                    {% with mostrecent_restuarant_list as restuarant_list %}
+                        {% include 'corona_home/home/restaurant_list.html' %}
+                    {% endwith %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Popular Restaurants-->
+        <div class="carousel-item" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static" style="min-height: 582px">
+
+                    <!-- Most Popular Restaurant Header-->
+                    <a href="{% url 'corona:most_popular_restaurant_index' %}"
+                       class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-primary">인기 식당</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Popular Restaurant List-->
+                    {% with mostpopular_restuarant_list as restuarant_list %}
+                        {% include 'corona_home/home/restaurant_list.html' %}
+                    {% endwith %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Likes Restaurants-->
+        <div class="carousel-item" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static" style="min-height: 582px">
+
+                    <!-- Most Likes Restaurant Header-->
+                    <a href="{% url 'corona:most_likes_restaurant_index' %}"
+                       class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-success">좋아요 많은 식당</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Likes Restaurant List-->
+                    {% with mostlikes_restuarant_list as restuarant_list %}
+                        {% include 'corona_home/home/restaurant_list.html' %}
+                    {% endwith %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Comments Restaurants-->
+        <div class="carousel-item" data-bs-interval="7000">
+            <div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-300 position-relative">
+                <div class="col p-4 d-flex flex-column position-static" style="min-height: 582px">
+
+                    <!-- Most Comments Restaurant Header-->
+                    <a href="{% url 'corona:most_comments_restaurant_index' %}"
+                       class="text-decoration-none d-flex justify-content-between">
+                        <strong class="d-inline-block mb-2 text-dark">댓글 많은 식당</strong>
+                        <small class="d-inline-block mb-2 text-muted"><small>더 알아보기</small></small>
+                    </a>
+
+                    <!-- Most Comments Restaurant List-->
+                    {% with mostcomments_restuarant_list as restuarant_list %}
+                        {% include 'corona_home/home/restaurant_list.html' %}
+                    {% endwith %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

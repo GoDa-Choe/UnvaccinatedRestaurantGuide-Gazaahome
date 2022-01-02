@@ -1,0 +1,102 @@
+{% load static %}
+
+<div class="p-3 rounded text-success bg-light mb-3">
+
+    <div class="row row-cols-1 row-cols-lg-2">
+        <p class="col my-1 text-dark">2022년 새해 복 많이 받으세요</p>
+
+        <div class="col d-flex justify-content-between align-content-center">
+
+            {% comment %}
+                <a href='https://play.google.com/store/apps/details?id=com.hustay.swing.d6cf5a98e91a94ddfb08b1c9a7644b9a8&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img
+                        alt='다운로드하기 Google Play'
+                        src='{% static 'home/images/play_download.png' %}'
+                        class=""
+                        style="height: 40px">
+                </a>
+            {% endcomment %}
+
+        </div>
+
+    </div>
+
+    <div class="row row-cols-1 row-cols-lg-2">
+
+        <!-- Restaurant Map Link -->
+        <div class="col">
+            <div class="card">
+                <img src="{% static 'corona_home/map_link.png' %}" class="card-img-top" alt="지도"
+                     style="max-height: 140px">
+                <a href="{% url 'corona:restaurant_map' %}" class="text-decoration-none">
+                    <div class="card-body small p-2">
+                        <p class="card-text small my-0 text-muted">미접종자 이용 가능 식당을 한눈에 확인해보세요.</p>
+                        <p class="card-text my-0" style="color: mediumpurple">
+                            <i class="fas fa-map-marked-alt"></i>
+                            지도 구경하기
+                            <span class="spinner-grow spinner-grow-sm" role="status" style="color: cadetblue;">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Restaurant Create & Customer Service & About & Quarantine Pass   -->
+        <div class="col">
+
+            <!-- Restaurant Create -->
+
+            <div class="p-2 mt-1 text-white rounded small" style="background-color: #86b7fe">
+                <h3 class="h5 mb-0"><small>식당 정보 등록 하기</small></h3>
+
+                <a href="{% url 'corona:restaurant_create_1st' %}" class="text-decoration-none">
+                    <p class="my-0 fw-bold text-black-50"><small>모두가 공유할 수 있게 식당 이용 경험을 등록해주세요</small></p>
+
+                    <div class="d-inline text-white">
+                        <i class="fas fa-utensils"></i>
+                        지금 등록 하기
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+
+                </a>
+            </div>
+
+
+            <!-- Customer Service -->
+            <div class="p-2 mt-1 bg-warning text-white rounded small">
+                <h3 class="h5 mb-0"><small>문의 하기</small></h3>
+                <p class="my-0 fw-bold text-black-50"><small>잘못된 식당 정보를 확인하셨나요?</small></p>
+                <div class="d-flex justify-content-between">
+                    <a href="https://open.kakao.com/o/si9UGgRd" class="text-white text-decoration-none small me-2">
+                        사용자 문의
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+
+                    <a href="https://open.kakao.com/o/sdvztdSd" class="text-white text-decoration-none small me-2">
+                        업주 문의
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- About & Quarantine Pass -->
+            <div class="d-flex justify-content-between align-content-center">
+                <a href="#About" class="icon-link text-dark fw-bold mx-1">
+                    미접종 식당 가이드란?
+                </a>
+
+                <a href="#QuarantinePass"
+                   class="text-primary text-decoration-none mx-1">
+
+                    <small>방역패스 확인하기</small>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+

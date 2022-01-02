@@ -1,21 +1,17 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from corona.models import Restaurant
-
-import datetime
-import requests
-from urllib.parse import urlparse
+from django.db.models import Count
 
 from django.conf import settings
-from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_CODE
 
 from corona.models import Restaurant, Post
 from video_forum.models import Video
 
+from gazahome.settings import GOOGLE_SITE_REGISTER_CODE, NAVER_SITE_REGISTER_CODE
+
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
-from pprint import pprint
 
 
 def get_service(api_name, api_version, scopes, key_file_location):
@@ -102,8 +98,43 @@ class ContributorView(TemplateView):
         return result
 
 
+class HomeView(TemplateView):
+    template_name = 'corona_home/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        restaurant_list = Restaurant.objects.annotate(
+            num_likes=Count('likes')).annotate(
+            num_comments=Count('restaurantcomment')
+        )
+
+        num_restaurants = 4
+
+        mostrecent_restuarant_list = restaurant_list.order_by('-pk')[:num_restaurants]
+        mostpopular_restuarant_list = restaurant_list.order_by('-hit_count_generic__hits', '-pk')[:num_restaurants]
+        mostlikes_restuarant_list = restaurant_list.order_by('-num_likes', '-pk')[:num_restaurants]
+        mostcomments_restuarant_list = restaurant_list.order_by('-num_comments', '-pk')[:num_restaurants]
+
+        mostrecent_post_list = Post.objects.order_by('-pk')[:4]
+        mostrecent_video_list = Video.objects.order_by('-pk')[:2]
+
+        extension = {
+            "mostrecent_restuarant_list": mostrecent_restuarant_list,
+            "mostpopular_restuarant_list": mostpopular_restuarant_list,
+            "mostlikes_restuarant_list": mostlikes_restuarant_list,
+            "mostcomments_restuarant_list": mostcomments_restuarant_list,
+
+            "mostrecent_post_list": mostrecent_post_list,
+            "mostrecent_video_list": mostrecent_video_list
+        }
+
+        context.update(extension)
+
+        return context
+
+
 def home(request):
-    popular_posts = Post.objects.order_by("-hit_count_generic__hits", '-pk')[:4]
+    popular_posts = Post.objects.order_by("-pk")[:5]
 
     most_likes_posts = sorted(Post.objects.all(), key=lambda post: (post.num_likes(), post.pk), reverse=True)
     most_likes_posts = most_likes_posts[:4]

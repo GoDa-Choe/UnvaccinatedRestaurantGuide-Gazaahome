@@ -31,6 +31,10 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
 
     path('corona/', include('corona.urls')),
+
+    # Todo
+    path('corona_home/', include('corona_home.urls')),
+
     path('corona/video_forum/', include('video_forum.urls')),
 
     path('workday/', include('workday.urls')),

@@ -97,38 +97,40 @@
     {% include 'corona/navbar.html' %}
 
     <main class="container px-0">
-        {% include 'corona_home/home_banner.html' %}
+        {% include 'corona_home/banner.html' %}
 
-
+        <!-- Carousel -->
         <div class="row mb-2">
 
-            <!-- Videos  -->
+            <!-- Restaurants -->
             <div class="col-md-6">
-                {% include 'home/home_videos.html' %}
+                {% include 'corona_home/home/restaurant_carousel.html' %}
             </div>
 
-            <!-- Posts & Reviews & Barracks -->
+            <!-- Posts & Videos -->
             <div class="col-md-6">
-                {% include 'home/home_carousel.html' %}
+                {% include 'corona_home/home/post_video_carousel.html' %}
             </div>
 
         </div>
 
-
-        <div class="container py-3 mb-3 rounded shadow-sm">
+        <!-- Main -->
+        <div class="container pb-3 mb-3 rounded shadow-sm">
             <div class="row">
-                <!-- Main -->
-                <div class="col-md-9">
 
-                    {% include 'home/features.html' %}
-
+                <!-- About -->
+                <div class="col-md-8">
+                    {% include 'corona_home/about.html' %}
                 </div>
 
                 <!-- Side -->
-                {% include 'home/home_side.html' %}
+                <div class="col-md-4">
+                    {% include 'corona_home/side.html' %}
+                </div>
 
             </div>
         </div>
+
     </main>
 
 </div>

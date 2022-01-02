@@ -1,0 +1,81 @@
+<div class="list-group-flush">
+    {% for restaurant in mostrecent_restuarant_list %}
+
+        <a href="{% url 'corona:restaurant_detail' restaurant.pk %}"
+           class="list-group-item list-group-item-action" style="border: 0">
+            <div class="d-flex text-muted">
+                <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+
+                    <h3 class="h6 fw-bold text-dark">{{ restaurant.name }}</h3>
+
+                    {% if restaurant.address %}
+                        <p class="pb-0 mb-1 lh-sm text-muted">
+                            {{ restaurant.address }}
+                        </p>
+                    {% else %}
+                        <p class="pb-0 mb-1 lh-sm text-muted">
+                            주소 확인 중
+                        </p>
+                    {% endif %}
+
+                    <div class="d-flex text-muted justify-content-between">
+                        <div class="d-inline">
+                            <strong class="text-gray-dark">{{ restaurant.category }}</strong>
+                            {% comment %}
+                                {% if restaurant.verifieded %}
+                                    <div class="d-inline mx-2 small text-success"> 유선확인 완료</div>
+                                {% else %}
+                                    <div class="d-inline mx-2 small text-success"> 유선확인 중</div>
+                                {% endif %}
+                            {% endcomment %}
+                        </div>
+
+
+                        <div class="d-inline mb-1">
+                            <div class="d-inline"><i
+                                    class="far fa-thumbs-up text-primary"></i> {{ restaurant.num_likes }}
+                            </div>
+                            <div class="d-inline"><i
+                                    class="far fa-thumbs-down text-danger"></i> {{ restaurant.num_dislikes }}
+                            </div>
+                            <div class="d-inline"><i
+                                    class="far fa-comment"></i> {{ restaurant.num_comments }}
+                            </div>
+                            <div class="d-inline"><i
+                                    class="far fa-eye"></i> {{ restaurant.hit_count.hits }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div class="d-inline">
+                            {% if restaurant.unvaccinated_pass.type == "미접종 친절" %}
+                                <span class="badge rounded-pill"
+                                      style="background-color: cornflowerblue">{{ restaurant.unvaccinated_pass }}</span>
+                            {% elif restaurant.unvaccinated_pass.type == "미접종 거부" %}
+                                <span class="badge rounded-pill"
+                                      style="background-color: indianred">{{ restaurant.unvaccinated_pass }}</span>
+                            {% else %}
+                                <span class="badge rounded-pill"
+                                      style="background-color: darkgreen">{{ restaurant.unvaccinated_pass }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-inline">
+                            {% if restaurant.tags.exists %}
+                                <i class="fas fa-tags"></i>
+                                {% for tag in restaurant.tags.iterator %}
+                                    <span class="badge rounded-pill"
+                                          style="background-color: darkseagreen">{{ tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </a>
+
+    {% endfor %}
+</div>

@@ -16,11 +16,11 @@ Including another URLconf
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from corona_home.views import ContributorView, home
+from corona_home.views import ContributorView, HomeView
 
 app_name = 'corona_home'
 urlpatterns = [
-    # path('', home, name='home'),
+    path('', HomeView.as_view(), name='home'),
 
     # path('goda_soft_studio/', views.GodaSoftStudioView.as_view(), name='goda_soft_studio'),
     # path('profile/', views.PofileView.as_view(), name='profile'),
