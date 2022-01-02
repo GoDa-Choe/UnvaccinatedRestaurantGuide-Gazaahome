@@ -109,8 +109,8 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         restaurant_list = Restaurant.objects.annotate(
-            num_likes=Count('likes')).annotate(
-            num_comments=Count('restaurantcomment')
+            num_likes=Count('likes', distinct=True)).annotate(
+            num_comments=Count('restaurantcomment', distinct=True)
         )
 
         num_restaurants = 4
@@ -167,5 +167,3 @@ class PofileView(LoginRequiredMixin, TemplateView):
         password_form = CheckPasswordForm(self.request.user)
         context['password_form'] = password_form
         return context
-
-
