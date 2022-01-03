@@ -8,7 +8,7 @@ def get_corona_decided_count(request):
     today_yesterday = Corona.objects.order_by("-state_date")[:2]
     id = os.environ.get('NOTIFICATION_ID', None)
 
-    notification = Post.objects.get(pk=8) if id is not None else None
+    notification = Post.objects.get(pk=int(id)) if id is not None else None
 
     if len(today_yesterday) == 2:
         today, yesterday = today_yesterday
