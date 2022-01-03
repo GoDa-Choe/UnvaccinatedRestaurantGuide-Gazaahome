@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load static %}
 
-<div class="d-flex justify-content-between align-items-center p-2 mb-3 rounded shadow-sm text-white"
+<div class="d-flex justify-content-between align-items-center p-2 mb-1 rounded shadow-sm text-white"
      style="background-color: #86b7fe">
 
     <div class="lh-1">
@@ -26,5 +26,53 @@
         {{ decided_count|intcomma }}(&#9652;{{ today_decided_count|intcomma }})</small>
     </div>
 
-
 </div>
+
+{% if notification %}
+    <div class="bg-light p-2 mb-3 rounded shadow-sm">
+
+
+        <a href="{% url 'corona:post_detail' notification.pk %}" class="text-decoration-none small">
+            <div class="d-flex text-muted pt-0 small">
+                <div class="pb-0 mb-0 small lh-sm w-100 small">
+
+                    <h3 class="h6 text-dark">
+                        <small>
+                            <strong>공지 - </strong>
+                            {{ notification.title|truncatechars:35 }}
+                        </small>
+                    </h3>
+
+                    <p class="pb-0 mb-1 lh-sm">
+                        {{ notification.content|cut:"#"|cut:"`"|truncatechars:55|safe }}
+                    </p>
+
+                    <div class="d-flex text-muted justify-content-between">
+                        <div class="d-inline">
+
+                            <strong class="text-gray-dark">{{ notification.author }}</strong>
+
+                            <div class="d-inline"> {{ notification.created_at|date:'m-d H:i' }} </div>
+                        </div>
+
+                        <div class="d-inline mb-1">
+                            <div class="d-inline"><i
+                                    class="far fa-thumbs-up text-primary"></i> {{ notification.num_likes }}
+                            </div>
+
+                            <div class="d-inline"><i class="far fa-comment"></i> {{ notification.num_comments }}
+                            </div>
+                            <div class="d-inline"><i class="far fa-eye"></i> {{ notification.hit_count.hits }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </a>
+
+
+    </div>
+{% endif %}
+
