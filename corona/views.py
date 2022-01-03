@@ -99,7 +99,7 @@ class SearchedRestaurantList(SearchMixin, ListView):
             lookups.append(name_lookup | address_lookup | tag_lookup | unvaccinated_lookup | category_lookup)
 
         # O(nlog(n))
-        queryset = Restaurant.objects.filter(*lookups).order_by('-pk').distinct()
+        queryset = Restaurant.objects.filter(*lookups).order_by("-hit_count_generic__hits", '-pk').distinct()
         self.total_count = queryset.count()
 
         return queryset
@@ -449,7 +449,6 @@ class AvailableRestaurantList(SearchMixin, ListView):
     template_name = 'corona/unvaccinated_restaurant/index.html'
     context_object_name = 'restaurant_list'
     paginate_by = 5
-    ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AvailableRestaurantList, self).get_context_data()
@@ -469,7 +468,7 @@ class AvailableRestaurantList(SearchMixin, ListView):
         if region is not None:
             queryset = queryset.filter(region=region)
 
-        return queryset
+        return queryset.order_by('-pk')
 
 
 class UnavailableRestaurantList(SearchMixin, ListView):
@@ -498,7 +497,7 @@ class UnavailableRestaurantList(SearchMixin, ListView):
         if region is not None:
             queryset = queryset.filter(region=region)
 
-        return queryset
+        return queryset.order_by('-pk')
 
 
 class ConfirmRequiredRestaurantList(SearchMixin, ListView):
@@ -526,7 +525,7 @@ class ConfirmRequiredRestaurantList(SearchMixin, ListView):
         if region is not None:
             queryset = queryset.filter(region=region)
 
-        return queryset
+        return queryset.order_by('-pk')
 
 
 class RestaurantDetail(HitCountDetailView):
