@@ -125,12 +125,14 @@
             {% if region %}
                 var mapOption = {
                     center: new kakao.maps.LatLng({{avg_latitude}}, {{avg_logitude}}), // 지도의 중심좌표
+                    {#level: 3 // 지도의 확대 레벨#}
                     level: 10 // 지도의 확대 레벨
                 };
             {% else %}
                 var mapOption = {
-                    center: new kakao.maps.LatLng(36.534985733600344, 127.89984154337944), // 지도의 중심좌표
-                    level: 13 // 지도의 확대 레벨
+                    center: new kakao.maps.LatLng(37.57657761080134, 126.97689542216614), // 지도의 중심좌표
+                    level: 5 // 지도의 확대 레벨
+                    {#level: 13 // 지도의 확대 레벨#}
                 };
             {% endif %}
 
